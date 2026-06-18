@@ -1,0 +1,19 @@
+# Environment variables — never commit
+.env
+**/.env
+
+# Dependencies
+**/node_modules
+
+# Build outputs
+**/dist
+**/dist-ssr
+
+# Logs
+*.log
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
