@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+/* Match original `darkMode: "class"` — never auto-activate from OS preference */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* ── Colors (Material Design tokens) ─────────────────────────────────── */
+  --color-on-error: #ffffff;
+  --color-tertiary-fixed: #ffdbd1;
+  --color-tertiary: #9b2900;
+  --color-surface-container-lowest: #ffffff;
+  --color-inverse-surface: #27313f;
+  --color-error-container: #ffdad6;
+  --color-on-tertiary-container: #ffe8e2;
+  --color-surface-tint: #0050e2;
+  --color-primary-fixed: #dce1ff;
+  --color-tertiary-fixed-dim: #ffb59f;
+  --color-surface-container-high: #dee9fc;
+  --color-outline: #737688;
+  --color-inverse-on-surface: #eaf1ff;
+  --color-primary: #0046c9;
+  --color-on-surface-variant: #424656;
+  --color-on-secondary: #ffffff;
+  --color-primary-container: #005bff;
+  --color-on-primary-fixed-variant: #003cae;
+  --color-on-secondary-fixed-variant: #005321;
+  --color-secondary-container: #6bff8f;
+  --color-surface-variant: #d9e3f6;
+  --color-surface-container-low: #eff4ff;
+  --color-primary-fixed-dim: #b5c4ff;
+  --color-surface-container: #e6eeff;
+  --color-on-secondary-fixed: #002109;
+  --color-on-secondary-container: #007432;
+  --color-tertiary-container: #c53802;
+  --color-surface-container-highest: #d9e3f6;
+  --color-inverse-primary: #b5c4ff;
+  --color-on-error-container: #93000a;
+  --color-secondary: #006e2f;
+  --color-secondary-fixed: #6bff8f;
+  --color-on-primary-container: #eaecff;
+  --color-on-background: #121c2a;
+  --color-background: #f8f9ff;
+  --color-on-tertiary: #ffffff;
+  --color-error: #ba1a1a;
+  --color-on-tertiary-fixed-variant: #862300;
+  --color-surface: #f8f9ff;
+  --color-on-surface: #121c2a;
+  --color-on-primary-fixed: #00164e;
+  --color-surface-dim: #d0dbed;
+  --color-surface-bright: #f8f9ff;
+  --color-secondary-fixed-dim: #4ae176;
+  --color-on-tertiary-fixed: #3a0a00;
+  --color-outline-variant: #c3c5d9;
+  --color-on-primary: #ffffff;
+
+  /* ── Font family ─────────────────────────────────────────────────────── */
+  --font-sans: 'Inter', sans-serif;
+  --font-display-lg: 'Inter', sans-serif;
+  --font-headline-lg: 'Inter', sans-serif;
+  --font-headline-md: 'Inter', sans-serif;
+  --font-body-lg: 'Inter', sans-serif;
+  --font-body-md: 'Inter', sans-serif;
+  --font-label-md: 'Inter', sans-serif;
+  --font-label-sm: 'Inter', sans-serif;
+
+  /* ── Font sizes (with line-height / weight / tracking) ───────────────── */
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 28px;
+  --text-body-lg--font-weight: 400;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 24px;
+  --text-body-md--font-weight: 400;
+
+  --text-label-sm: 12px;
+  --text-label-sm--line-height: 16px;
+  --text-label-sm--font-weight: 600;
+
+  --text-label-md: 14px;
+  --text-label-md--line-height: 20px;
+  --text-label-md--font-weight: 500;
+
+  --text-headline-md: 24px;
+  --text-headline-md--line-height: 32px;
+  --text-headline-md--font-weight: 600;
+
+  --text-headline-lg: 32px;
+  --text-headline-lg--line-height: 40px;
+  --text-headline-lg--letter-spacing: -0.01em;
+  --text-headline-lg--font-weight: 700;
+
+  --text-display-lg: 48px;
+  --text-display-lg--line-height: 56px;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-display-lg--font-weight: 700;
+
+  /* ── Spacing scale (named tokens from the design) ────────────────────── */
+  --spacing-base: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-gutter: 24px;
+  --spacing-lg: 32px;
+  --spacing-xl: 48px;
+
+  /* ── Border radius ───────────────────────────────────────────────────── */
+  --radius-DEFAULT: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+
+  /* ── Container max width ─────────────────────────────────────────────── */
+  --container-container-max: 1280px;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-size: 20px;
+  line-height: 1;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.material-symbols-outlined.fill {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.date-no-indicator::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}

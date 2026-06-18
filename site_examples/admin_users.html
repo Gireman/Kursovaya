@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ru" style="">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Управление Клиентами и Сотрудниками - Административная Панель</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#b5c4ff",
+                        "secondary-fixed": "#6bff8f",
+                        "primary-container": "#005bff",
+                        "secondary-container": "#6bff8f",
+                        "on-tertiary-container": "#ffe8e2",
+                        "inverse-surface": "#27313f",
+                        "on-tertiary-fixed-variant": "#862300",
+                        "on-primary-fixed-variant": "#003cae",
+                        "on-primary-container": "#eaecff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-tint": "#0050e2",
+                        "on-primary-fixed": "#00164e",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#ffdbd1",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#c53802",
+                        "secondary": "#006e2f",
+                        "surface-container": "#e6eeff",
+                        "primary-fixed": "#dce1ff",
+                        "on-tertiary-fixed": "#3a0a00",
+                        "on-secondary-container": "#007432",
+                        "on-secondary-fixed": "#002109",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#d9e3f6",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#121c2a",
+                        "surface-bright": "#f8f9ff",
+                        "on-secondary-fixed-variant": "#005321",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#4ae176",
+                        "outline": "#737688",
+                        "primary": "#0046c9",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#424656",
+                        "background": "#f8f9ff",
+                        "tertiary": "#9b2900",
+                        "on-background": "#121c2a",
+                        "outline-variant": "#c3c5d9",
+                        "surface-dim": "#d0dbed",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-highest": "#d9e3f6",
+                        "surface": "#f8f9ff",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "tertiary-fixed-dim": "#ffb59f",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#dee9fc",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "32px",
+                        "md": "24px",
+                        "gutter": "24px",
+                        "sm": "16px",
+                        "base": "4px",
+                        "xl": "48px",
+                        "container-max": "1280px",
+                        "xs": "8px"
+                    },
+                    "fontFamily": {
+                        "label-sm": [
+                            "Inter"
+                        ],
+                        "label-md": [
+                            "Inter"
+                        ],
+                        "body-md": [
+                            "Inter"
+                        ],
+                        "body-lg": [
+                            "Inter"
+                        ],
+                        "display-lg": [
+                            "Inter"
+                        ],
+                        "headline-md": [
+                            "Inter"
+                        ],
+                        "headline-lg": [
+                            "Inter"
+                        ]
+                    },
+                    "fontSize": {
+                        "label-sm": [
+                            "12px",
+                            {
+                                "lineHeight": "16px",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "label-md": [
+                            "14px",
+                            {
+                                "lineHeight": "20px",
+                                "fontWeight": "500"
+                            }
+                        ],
+                        "body-md": [
+                            "16px",
+                            {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                            }
+                        ],
+                        "body-lg": [
+                            "18px",
+                            {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                            }
+                        ],
+                        "display-lg": [
+                            "48px",
+                            {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                            }
+                        ],
+                        "headline-md": [
+                            "24px",
+                            {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "headline-lg": [
+                            "32px",
+                            {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "700"
+                            }
+                        ]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .material-symbols-outlined.fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        /* Custom scrollbar for tables */
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: theme('colors.surface-container');
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background-color: theme('colors.outline-variant');
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col relative">
+    <!-- TopNavBar (From JSON) -->
+    <header class="bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline">
+        <div class="max-w-container-max mx-auto px-lg flex items-center justify-between h-16">
+            <div class="flex items-center gap-2">
+                <div
+                    class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-on-primary shadow-lg shadow-primary/20">
+                    <span class="material-symbols-outlined font-bold">laptop</span>
+                </div>
+                <span class="font-display-lg text-2xl tracking-tight font-bold text-on-background">VERTEX</span>
+            </div>
+            <div class="flex items-center gap-sm">
+                <div class="relative hidden sm:block">
+                    <input
+                        class="pl-10 pr-4 py-2 bg-surface-container rounded-lg border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-body-md text-body-md text-on-surface placeholder-on-surface-variant"
+                        placeholder="Поиск..." type="text">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant"
+                        data-icon="search">search</span>
+                </div>
+                <button
+                    class="text-on-surface-variant hover:text-primary transition-colors p-2 active:opacity-80 transition-all">
+                    <span class="material-symbols-outlined" data-icon="person">person</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <div class="flex-1 max-w-container-max mx-auto w-full px-lg py-xl flex gap-xl flex-col lg:flex-row">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full lg:w-64 flex-shrink-0 flex flex-col h-[calc(100vh-160px)] sticky top-24">
+            <div
+                class="bg-surface rounded-xl border border-outline-variant p-sm flex flex-col gap-xs flex-1 shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                <!-- Navigation Block 1 -->
+                <div class="flex flex-col gap-xs">
+                    <p class="px-4 py-2 text-label-sm font-bold text-on-surface-variant/50 uppercase tracking-widest">
+                        Управление</p>
+                    <a class="flex items-center gap-sm px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors font-label-md text-label-md"
+                        href="#">
+                        <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                        Дашборд
+                    </a>
+                    <a class="flex items-center gap-sm px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors font-label-md text-label-md"
+                        href="#">
+                        <span class="material-symbols-outlined" data-icon="home_repair_service">build</span>
+                        Ремонты
+                    </a>
+                    <a class="flex items-center gap-sm px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors font-label-md text-label-md"
+                        href="#">
+                        <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+                        Заказы
+                    </a>
+                    <a class="flex items-center gap-sm px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors font-label-md text-label-md"
+                        href="#">
+                        <span class="material-symbols-outlined fill" data-icon="inventory_2">inventory_2</span>
+                        Склад
+                    </a>
+                </div>
+                <!-- Navigation Block 2 -->
+                <div class="mt-4 flex flex-col gap-xs">
+                    <p class="px-4 py-2 text-label-sm font-bold text-on-surface-variant/50 uppercase tracking-widest">
+                        Пользователи</p>
+                    <a class="flex items-center gap-sm px-4 py-3 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md shadow-sm"
+                        href="#">
+                        <span class="material-symbols-outlined" data-icon="group">group</span>
+                        Клиенты и Сотрудники
+                    </a>
+                </div>
+                <!-- Profile Section -->
+                <div class="mt-auto pt-4 border-t border-outline-variant flex flex-col gap-4">
+                    <div class="flex items-center gap-3 px-2">
+                        <div
+                            class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold">
+                            ИИ
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-label-md font-bold text-on-surface">Иван Иванов</span>
+                            <span class="text-label-sm text-on-surface-variant">Администратор</span>
+                        </div>
+                    </div>
+                    <a class="flex items-center gap-sm px-4 py-3 rounded-lg text-error hover:bg-error-container hover:text-on-error-container transition-colors font-label-md text-label-md"
+                        href="#">
+                        <span class="material-symbols-outlined" data-icon="logout">logout</span>
+                        Выйти
+                    </a>
+                </div>
+            </div>
+        </aside>
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col gap-lg">
+            <!-- Page Header -->
+            <div class="flex flex-col gap-sm">
+                <h1 class="font-headline-lg text-headline-lg text-on-background mb-xs">Управление пользователями</h1>
+                <p class="font-body-md text-body-md text-on-surface-variant">Управление базой клиентов и штатным
+                    расписанием сотрудников.</p>
+            </div>
+            <!-- Client Management Section -->
+            <div class="flex flex-col gap-md">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-headline-md text-headline-md text-on-surface">Клиенты</h2>
+                    <button
+                        class="px-4 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors font-label-md text-label-md flex items-center gap-xs shadow-sm"
+                        onclick="document.getElementById('add-client-modal').classList.remove('hidden')">
+                        <span class="material-symbols-outlined text-[20px]">add</span>
+                        Добавить клиента
+                    </button>
+                </div>
+                <!-- Filters Bar -->
+                <div
+                    class="flex flex-wrap gap-sm items-center bg-surface p-4 rounded-xl border border-outline-variant shadow-sm">
+                    <div class="flex items-center gap-2 flex-1 min-w-[250px]">
+                        <span class="material-symbols-outlined text-on-surface-variant">search</span>
+                        <input
+                            class="w-full bg-transparent border-none focus:ring-0 text-body-md placeholder-on-surface-variant text-on-surface p-0"
+                            placeholder="Поиск клиента..." type="text">
+                    </div>
+                </div>
+                <div
+                    class="bg-surface rounded-xl border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.05)] overflow-hidden">
+                    <div class="table-container overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[800px]">
+                            <thead>
+                                <tr class="bg-surface-container-low border-b border-outline-variant">
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        ID</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        ФИО</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Логин</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Телефон</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Почта</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Адрес</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">
+                                        Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-outline-variant">
+                                <tr class="hover:bg-surface-container-lowest transition-colors group">
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">101</td>
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">Иван Иванов</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">ivan_i</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">+7 (999) 123-45-67
+                                    </td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">ivan.i@example.com
+                                    </td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">г. Москва, ул.
+                                        Ленина, д. 10</td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex justify-end gap-xs transition-opacity"><button
+                                                class="p-xs text-outline hover:text-primary hover:bg-surface-container rounded transition-colors"
+                                                onclick="document.getElementById('edit-user-modal').classList.remove('hidden'); document.getElementById('edit-address-field').classList.remove('hidden'); document.getElementById('edit-role-field').classList.add('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">edit</span></button><button
+                                                class="p-xs text-outline hover:text-error hover:bg-error-container rounded transition-colors"
+                                                onclick="document.getElementById('delete-confirm-modal').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">delete</span></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors group">
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">102</td>
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">Анна Смирнова</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">a_smirnova</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">+7 (911) 222-33-44
+                                    </td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">anna.s@example.com
+                                    </td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">г.
+                                        Санкт-Петербург, пр. Мира, д. 5</td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex justify-end gap-xs transition-opacity"><button
+                                                class="p-xs text-outline hover:text-primary hover:bg-surface-container rounded transition-colors"
+                                                onclick="document.getElementById('edit-user-modal').classList.remove('hidden'); document.getElementById('edit-address-field').classList.remove('hidden'); document.getElementById('edit-role-field').classList.add('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">edit</span></button><button
+                                                class="p-xs text-outline hover:text-error hover:bg-error-container rounded transition-colors"
+                                                onclick="document.getElementById('delete-confirm-modal').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">delete</span></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors group">
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">103</td>
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">Петр Сидоров</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">p_sidorov</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">+7 (922) 333-44-55
+                                    </td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">petr.s@example.com
+                                    </td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">г. Казань, ул.
+                                        Пушкина, д. 12</td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex justify-end gap-xs transition-opacity"><button
+                                                class="p-xs text-outline hover:text-primary hover:bg-surface-container rounded transition-colors"
+                                                onclick="document.getElementById('edit-user-modal').classList.remove('hidden'); document.getElementById('edit-address-field').classList.remove('hidden'); document.getElementById('edit-role-field').classList.add('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">edit</span></button><button
+                                                class="p-xs text-outline hover:text-error hover:bg-error-container rounded transition-colors"
+                                                onclick="document.getElementById('delete-confirm-modal').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">delete</span></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors group">
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">104</td>
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">Елена Крылова</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">e_krylova</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">+7 (933) 444-55-66
+                                    </td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">
+                                        elena.k@example.com</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">г. Екатеринбург,
+                                        ул. Малышева, д. 8</td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex justify-end gap-xs transition-opacity"><button
+                                                class="p-xs text-outline hover:text-primary hover:bg-surface-container rounded transition-colors"
+                                                onclick="document.getElementById('edit-user-modal').classList.remove('hidden'); document.getElementById('edit-address-field').classList.remove('hidden'); document.getElementById('edit-role-field').classList.add('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">edit</span></button><button
+                                                class="p-xs text-outline hover:text-error hover:bg-error-container rounded transition-colors"
+                                                onclick="document.getElementById('delete-confirm-modal').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">delete</span></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors group">
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">105</td>
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">Дмитрий Волков</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">d_volkov</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">+7 (944) 555-66-77
+                                    </td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">
+                                        dmitry.v@example.com</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">г. Новосибирск,
+                                        ул. Ленина, д. 45</td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex justify-end gap-xs transition-opacity"><button
+                                                class="p-xs text-outline hover:text-primary hover:bg-surface-container rounded transition-colors"
+                                                onclick="document.getElementById('edit-user-modal').classList.remove('hidden'); document.getElementById('edit-address-field').classList.remove('hidden'); document.getElementById('edit-role-field').classList.add('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">edit</span></button><button
+                                                class="p-xs text-outline hover:text-error hover:bg-error-container rounded transition-colors"
+                                                onclick="document.getElementById('delete-confirm-modal').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">delete</span></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div
+                        class="p-4 border-t border-outline-variant bg-surface-container-lowest flex justify-between items-center text-on-surface-variant font-label-md">
+                        <span class="">Показано 1-5 из 156</span>
+                        <div class="flex gap-2">
+                            <button
+                                class="p-1 hover:bg-surface-container rounded transition-colors text-on-surface-variant disabled:opacity-30"
+                                disabled=""><span class="material-symbols-outlined">chevron_left</span></button>
+                            <button
+                                class="p-1 hover:bg-surface-container rounded transition-colors text-on-surface-variant"><span
+                                    class="material-symbols-outlined">chevron_right</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Staff Management Section -->
+            <div class="flex flex-col gap-md mt-xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-headline-md text-headline-md text-on-surface">Сотрудники</h2>
+                    <button
+                        class="px-4 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors font-label-md text-label-md flex items-center gap-xs shadow-sm"
+                        onclick="document.getElementById('add-employee-modal').classList.remove('hidden')">
+                        <span class="material-symbols-outlined text-[20px]">add</span>
+                        Добавить сотрудника
+                    </button>
+                </div>
+                <!-- Filters Bar -->
+                <div
+                    class="flex flex-wrap gap-sm items-center bg-surface p-4 rounded-xl border border-outline-variant shadow-sm">
+                    <div class="flex items-center gap-2 flex-1 min-w-[250px]">
+                        <span class="material-symbols-outlined text-on-surface-variant">search</span>
+                        <input
+                            class="w-full bg-transparent border-none focus:ring-0 text-body-md placeholder-on-surface-variant text-on-surface p-0"
+                            placeholder="Поиск сотрудника..." type="text">
+                    </div>
+                </div>
+                <div
+                    class="bg-surface rounded-xl border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.05)] overflow-hidden">
+                    <div class="table-container overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[700px]">
+                            <thead>
+                                <tr class="bg-surface-container-low border-b border-outline-variant">
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        ID</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        ФИО</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Логин</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Телефон</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Почта</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Должность</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">
+                                        Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-outline-variant">
+                                <tr class="hover:bg-surface-container-lowest transition-colors group">
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">001</td>
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">Михаил Алексеев</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">m_alekseev</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">+7 (900) 111-22-33
+                                    </td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">
+                                        m.alekseev@service.ru</td>
+                                    <td class="p-4"><span
+                                            class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-tertiary-container/20 text-tertiary font-label-sm text-label-sm"><span
+                                                class="material-symbols-outlined text-[14px]">admin_panel_settings</span>Директор</span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex justify-end gap-xs transition-opacity"><button
+                                                class="p-xs text-outline hover:text-primary hover:bg-surface-container rounded transition-colors"
+                                                onclick="document.getElementById('edit-user-modal').classList.remove('hidden'); document.getElementById('edit-address-field').classList.add('hidden'); document.getElementById('edit-role-field').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">edit</span></button><button
+                                                class="p-xs text-outline hover:text-error hover:bg-error-container rounded transition-colors"
+                                                onclick="document.getElementById('delete-confirm-modal').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">delete</span></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors group">
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">002</td>
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">Алексей Петров</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">a_petrov</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">+7 (900) 222-33-44
+                                    </td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">
+                                        a.petrov@service.ru</td>
+                                    <td class="p-4"><span
+                                            class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-primary-container/20 text-primary font-label-sm text-label-sm"><span
+                                                class="material-symbols-outlined text-[14px]">build</span>Техник</span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex justify-end gap-xs transition-opacity"><button
+                                                class="p-xs text-outline hover:text-primary hover:bg-surface-container rounded transition-colors"
+                                                onclick="document.getElementById('edit-user-modal').classList.remove('hidden'); document.getElementById('edit-address-field').classList.add('hidden'); document.getElementById('edit-role-field').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">edit</span></button><button
+                                                class="p-xs text-outline hover:text-error hover:bg-error-container rounded transition-colors"
+                                                onclick="document.getElementById('delete-confirm-modal').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">delete</span></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors group">
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">003</td>
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">Мария Соколова</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">m_sokolova</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">+7 (900) 333-44-55
+                                    </td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">
+                                        m.sokolova@service.ru</td>
+                                    <td class="p-4"><span
+                                            class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-secondary-container/20 text-secondary font-label-sm text-label-sm"><span
+                                                class="material-symbols-outlined text-[14px]">support_agent</span>Менеджер</span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex justify-end gap-xs transition-opacity"><button
+                                                class="p-xs text-outline hover:text-primary hover:bg-surface-container rounded transition-colors"
+                                                onclick="document.getElementById('edit-user-modal').classList.remove('hidden'); document.getElementById('edit-address-field').classList.add('hidden'); document.getElementById('edit-role-field').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">edit</span></button><button
+                                                class="p-xs text-outline hover:text-error hover:bg-error-container rounded transition-colors"
+                                                onclick="document.getElementById('delete-confirm-modal').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">delete</span></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors group">
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">004</td>
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">Сергей Иванов</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">s_ivanov</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">+7 (900) 444-55-66
+                                    </td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">
+                                        s.ivanov@service.ru</td>
+                                    <td class="p-4"><span
+                                            class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-tertiary-container/20 text-tertiary font-label-sm text-label-sm"><span
+                                                class="material-symbols-outlined text-[14px]">inventory</span>Кладовщик</span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex justify-end gap-xs transition-opacity"><button
+                                                class="p-xs text-outline hover:text-primary hover:bg-surface-container rounded transition-colors"
+                                                onclick="document.getElementById('edit-user-modal').classList.remove('hidden'); document.getElementById('edit-address-field').classList.add('hidden'); document.getElementById('edit-role-field').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">edit</span></button><button
+                                                class="p-xs text-outline hover:text-error hover:bg-error-container rounded transition-colors"
+                                                onclick="document.getElementById('delete-confirm-modal').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">delete</span></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors group">
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">005</td>
+                                    <td class="p-4 font-label-md text-label-md text-on-surface">Ольга Кузнецова</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">o_kuznetsova</td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">+7 (900) 555-66-77
+                                    </td>
+                                    <td class="p-4 font-body-md text-body-md text-on-surface-variant">
+                                        o.kuznetsova@service.ru</td>
+                                    <td class="p-4"><span
+                                            class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-primary-container/20 text-primary font-label-sm text-label-sm"><span
+                                                class="material-symbols-outlined text-[14px]">build</span>Техник</span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex justify-end gap-xs transition-opacity"><button
+                                                class="p-xs text-outline hover:text-primary hover:bg-surface-container rounded transition-colors"
+                                                onclick="document.getElementById('edit-user-modal').classList.remove('hidden'); document.getElementById('edit-address-field').classList.add('hidden'); document.getElementById('edit-role-field').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">edit</span></button><button
+                                                class="p-xs text-outline hover:text-error hover:bg-error-container rounded transition-colors"
+                                                onclick="document.getElementById('delete-confirm-modal').classList.remove('hidden')"><span
+                                                    class="material-symbols-outlined text-[20px]">delete</span></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div
+                        class="p-4 border-t border-outline-variant bg-surface-container-lowest flex justify-between items-center text-on-surface-variant font-label-md">
+                        <span class="">Показано 1-5 из 12</span>
+                        <div class="flex gap-2">
+                            <button
+                                class="p-1 hover:bg-surface-container rounded transition-colors text-on-surface-variant disabled:opacity-30"
+                                disabled=""><span class="material-symbols-outlined">chevron_left</span></button>
+                            <button
+                                class="p-1 hover:bg-surface-container rounded transition-colors text-on-surface-variant"><span
+                                    class="material-symbols-outlined">chevron_right</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- Footer -->
+    <footer
+        class="bg-surface-container-low dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline mt-auto">
+        <div class="max-w-container-max mx-auto px-lg py-xl grid grid-cols-1 md:grid-cols-3 gap-md">
+            <div class="flex flex-col gap-sm">
+                <span class="font-headline-sm text-headline-sm font-bold text-primary">VERTEX</span>
+                <span class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant">© 2026
+                    VERTEX. Все права защищены.</span>
+            </div>
+            <div class="col-span-1 md:col-span-2 flex flex-wrap gap-md justify-start md:justify-end">
+                <a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim underline transition-all"
+                    href="#">Дашборд</a>
+                <a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim underline transition-all"
+                    href="#">Ремонты</a>
+                <a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim underline transition-all"
+                    href="#">Заказы</a>
+                <a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim underline transition-all"
+                    href="#">Склад</a>
+                <a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim underline transition-all"
+                    href="#">Клиенты и сотрудники</a>
+            </div>
+        </div>
+    </footer>
+    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-on-background/40 backdrop-blur-sm hidden"
+        id="add-client-modal">
+        <div class="bg-surface rounded-xl shadow-xl w-full max-w-md overflow-hidden border border-outline-variant">
+            <div
+                class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+                <h3 class="font-headline-md text-headline-md text-on-surface">Добавить клиента</h3><button
+                    class="text-outline hover:text-on-surface"
+                    onclick="document.getElementById('add-client-modal').classList.add('hidden')"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <form class="p-md flex flex-col gap-md">
+                <div class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">ФИО</label><input
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 outline-none"
+                        placeholder="Иванов Иван Иванович" type="text" required="true" pattern="^[А-Яа-яA-Za-z\s]+$">
+                </div>
+                <div class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">Логин</label><input
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 outline-none"
+                        type="text" placeholder="ivan_i" required="true" minlength="3"></div>
+                <div class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">Телефон</label><input
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 outline-none"
+                        type="tel" required="" pattern="[+]?[0-9]{10,15}" placeholder="+7 (___) ___-__-__"></div>
+                <div class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">Почта</label><input
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 outline-none"
+                        type="email" required="" placeholder="example@mail.com"></div>
+                <div class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">Адрес</label><textarea
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 outline-none"
+                        placeholder="г. Москва, ул. Ленина, д. 10" required="true"></textarea></div>
+                <div class="flex justify-end gap-sm mt-sm"><button class="px-md py-xs text-primary font-label-md"
+                        onclick="document.getElementById('add-client-modal').classList.add('hidden')"
+                        type="button">Отмена</button><button
+                        class="bg-primary text-on-primary px-md py-xs rounded-lg font-label-md shadow-sm"
+                        type="submit">Сохранить</button></div>
+            </form>
+        </div>
+    </div>
+    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-on-background/40 backdrop-blur-sm hidden"
+        id="add-employee-modal">
+        <div class="bg-surface rounded-xl shadow-xl w-full max-w-md overflow-hidden border border-outline-variant">
+            <div
+                class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+                <h3 class="font-headline-md text-headline-md text-on-surface">Добавить сотрудника</h3><button
+                    class="text-outline hover:text-on-surface"
+                    onclick="document.getElementById('add-employee-modal').classList.add('hidden')"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <form class="p-md flex flex-col gap-md">
+                <div class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">ФИО</label><input
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-tertiary/20 outline-none"
+                        type="text" placeholder="Иванов Иван Иванович" required="true" pattern="^[А-Яа-яA-Za-z\s]+$">
+                </div>
+                <div class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">Логин</label><input
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-tertiary/20 outline-none"
+                        type="text" placeholder="ivan_i" required="true" minlength="3"></div>
+                <div class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">Телефон</label><input
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-tertiary/20 outline-none"
+                        type="tel" required="" pattern="[+]?[0-9]{10,15}" placeholder="+7 (___) ___-__-__"></div>
+                <div class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">Почта</label><input
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-tertiary/20 outline-none"
+                        type="email" required="" placeholder="example@mail.com"></div>
+                <div class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">Должность</label><select
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-tertiary/20 outline-none">
+                        <option>Директор</option>
+                        <option>Менеджер</option>
+                        <option>Техник</option>
+                        <option>Кладовщик</option>
+                    </select></div>
+                <div class="flex justify-end gap-sm mt-sm"><button class="px-md py-xs text-primary font-label-md"
+                        onclick="document.getElementById('add-employee-modal').classList.add('hidden')"
+                        type="button">Отмена</button><button
+                        class="bg-primary text-on-primary px-md py-xs rounded-lg font-label-md shadow-sm"
+                        type="submit">Сохранить</button></div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-on-background/40 backdrop-blur-sm hidden"
+        id="delete-confirm-modal" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="bg-surface rounded-xl shadow-xl w-full max-w-md overflow-hidden border border-outline-variant">
+            <div
+                class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+                <h3 class="font-headline-md text-headline-md text-on-surface">Подтверждение удаления</h3><button
+                    class="text-outline hover:text-on-surface"
+                    onclick="document.getElementById('delete-confirm-modal').classList.add('hidden')"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="p-md flex flex-col gap-md">
+                <p class="text-body-md text-on-surface-variant">Вы уверены, что хотите удалить этого пользователя? Это
+                    действие нельзя будет отменить.</p>
+                <div class="flex justify-end gap-sm mt-sm"><button
+                        class="px-md py-xs text-on-surface-variant font-label-md hover:bg-surface-container rounded-lg transition-colors"
+                        onclick="document.getElementById('delete-confirm-modal').classList.add('hidden')"
+                        type="button">Отмена</button><button
+                        class="bg-error text-on-error px-md py-xs rounded-lg font-label-md shadow-sm hover:opacity-90 transition-opacity"
+                        type="button"
+                        onclick="document.getElementById('delete-confirm-modal').classList.add('hidden')">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-on-background/40 backdrop-blur-sm"
+        id="edit-user-modal" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="bg-surface rounded-xl shadow-xl w-full max-w-md overflow-hidden border border-outline-variant">
+            <div
+                class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+                <h3 class="font-headline-md text-headline-md text-on-surface">Редактирование данных</h3><button
+                    class="text-outline hover:text-on-surface"
+                    onclick="document.getElementById('edit-user-modal').classList.add('hidden')"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <form class="p-md flex flex-col gap-md">
+                <div class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">ФИО</label><input
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 outline-none"
+                        type="text" value="" placeholder="Иванов Иван Иванович"></div>
+                <div class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">Логин</label><input
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 outline-none"
+                        type="text" value="" placeholder="ivan_i"></div>
+                <div class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">Телефон</label><input
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 outline-none"
+                        type="tel" value="" placeholder="+7 (___) ___-__-__"></div>
+                <div class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">Почта</label><input
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 outline-none"
+                        type="email" value="" placeholder="example@mail.com"></div>
+                <div id="edit-address-field" class="flex flex-col gap-xs hidden"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">Адрес</label><textarea
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 outline-none"
+                        placeholder="г. Москва, ул. Ленина, д. 10"></textarea></div>
+                <div id="edit-role-field" class="flex flex-col gap-xs"><label
+                        class="font-label-sm text-label-sm text-on-surface-variant">Должность</label><select
+                        class="w-full px-sm py-xs bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 outline-none">
+                        <option>Директор</option>
+                        <option>Менеджер</option>
+                        <option>Техник</option>
+                        <option>Кладовщик</option>
+                    </select></div>
+                <div class="flex justify-end gap-sm mt-sm"><button class="px-md py-xs text-primary font-label-md"
+                        onclick="document.getElementById('edit-user-modal').classList.add('hidden')"
+                        type="button">Отмена</button><button
+                        class="bg-primary text-on-primary px-md py-xs rounded-lg font-label-md shadow-sm"
+                        type="submit">Сохранить изменения</button></div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+
+
+</body>
+
+</html>

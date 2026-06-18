@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ru" style="">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Инвентарь и склад - Компьютерный Сервис &amp; Магазин</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#ffdbd1",
+                        "tertiary": "#9b2900",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#27313f",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#ffe8e2",
+                        "surface-tint": "#0050e2",
+                        "primary-fixed": "#dce1ff",
+                        "tertiary-fixed-dim": "#ffb59f",
+                        "surface-container-high": "#dee9fc",
+                        "outline": "#737688",
+                        "inverse-on-surface": "#eaf1ff",
+                        "primary": "#0046c9",
+                        "on-surface-variant": "#424656",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#005bff",
+                        "on-primary-fixed-variant": "#003cae",
+                        "on-secondary-fixed-variant": "#005321",
+                        "secondary-container": "#6bff8f",
+                        "surface-variant": "#d9e3f6",
+                        "surface-container-low": "#eff4ff",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "surface-container": "#e6eeff",
+                        "on-secondary-fixed": "#002109",
+                        "on-secondary-container": "#007432",
+                        "tertiary-container": "#c53802",
+                        "surface-container-highest": "#d9e3f6",
+                        "inverse-primary": "#b5c4ff",
+                        "on-error-container": "#93000a",
+                        "secondary": "#006e2f",
+                        "secondary-fixed": "#6bff8f",
+                        "on-primary-container": "#eaecff",
+                        "on-background": "#121c2a",
+                        "background": "#f8f9ff",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#862300",
+                        "surface": "#f8f9ff",
+                        "on-surface": "#121c2a",
+                        "on-primary-fixed": "#00164e",
+                        "surface-dim": "#d0dbed",
+                        "surface-bright": "#f8f9ff",
+                        "secondary-fixed-dim": "#4ae176",
+                        "on-tertiary-fixed": "#3a0a00",
+                        "outline-variant": "#c3c5d9",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "16px",
+                        "container-max": "1280px",
+                        "xs": "8px",
+                        "md": "24px",
+                        "lg": "32px",
+                        "xl": "48px",
+                        "gutter": "24px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col relative">
+    <!-- TopNavBar -->
+    <header class="bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline">
+        <div class="max-w-container-max mx-auto px-lg flex items-center justify-between h-16">
+            <div class="flex items-center gap-2">
+                <div
+                    class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-on-primary shadow-lg shadow-primary/20">
+                    <span class="material-symbols-outlined font-bold">laptop</span>
+                </div>
+                <span class="font-display-lg text-2xl tracking-tight font-bold text-on-background">VERTEX</span>
+            </div>
+            <div class="flex items-center gap-sm">
+                <div class="relative hidden sm:block">
+                    <input
+                        class="pl-10 pr-4 py-2 bg-surface-container rounded-lg border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-body-md text-body-md text-on-surface placeholder-on-surface-variant"
+                        placeholder="Поиск..." type="text">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant"
+                        data-icon="search">search</span>
+                </div>
+                <button
+                    class="text-on-surface-variant hover:text-primary transition-colors p-2 active:opacity-80 transition-all">
+                    <span class="material-symbols-outlined" data-icon="person">person</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <div class="flex-1 max-w-container-max mx-auto w-full px-lg py-xl flex gap-xl flex-col lg:flex-row">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full lg:w-64 flex-shrink-0 flex flex-col h-[calc(100vh-160px)] sticky top-24">
+            <div
+                class="bg-surface rounded-xl border border-outline-variant p-sm flex flex-col gap-xs flex-1 shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                <!-- Navigation Block 1 -->
+                <div class="flex flex-col gap-xs">
+                    <p class="px-4 py-2 text-label-sm font-bold text-on-surface-variant/50 uppercase tracking-widest">
+                        Управление</p>
+                    <a class="flex items-center gap-sm px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors font-label-md text-label-md"
+                        href="#">
+                        <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                        Дашборд
+                    </a>
+                    <a class="flex items-center gap-sm px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors font-label-md text-label-md"
+                        href="#">
+                        <span class="material-symbols-outlined" data-icon="home_repair_service">build</span>
+                        Ремонты
+                    </a>
+                    <a class="flex items-center gap-sm px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors font-label-md text-label-md"
+                        href="#">
+                        <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+                        Заказы
+                    </a>
+                    <a class="flex items-center gap-sm px-4 py-3 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md shadow-sm"
+                        href="#">
+                        <span class="material-symbols-outlined fill" data-icon="inventory_2">inventory_2</span>
+                        Склад
+                    </a>
+                </div>
+                <!-- Navigation Block 2 -->
+                <div class="mt-4 flex flex-col gap-xs">
+                    <p class="px-4 py-2 text-label-sm font-bold text-on-surface-variant/50 uppercase tracking-widest">
+                        Пользователи</p>
+                    <a class="flex items-center gap-sm px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors font-label-md text-label-md"
+                        href="#">
+                        <span class="material-symbols-outlined" data-icon="group">group</span>
+                        Клиенты и Сотрудники
+                    </a>
+                </div>
+                <!-- Profile Section -->
+                <div class="mt-auto pt-4 border-t border-outline-variant flex flex-col gap-4">
+                    <div class="flex items-center gap-3 px-2">
+                        <div
+                            class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold">
+                            ИИ
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-label-md font-bold text-on-surface">Иван Иванов</span>
+                            <span class="text-label-sm text-on-surface-variant">Администратор</span>
+                        </div>
+                    </div>
+                    <a class="flex items-center gap-sm px-4 py-3 rounded-lg text-error hover:bg-error-container hover:text-on-error-container transition-colors font-label-md text-label-md"
+                        href="#">
+                        <span class="material-symbols-outlined" data-icon="logout">logout</span>
+                        Выйти
+                    </a>
+                </div>
+            </div>
+        </aside>
+        <!-- Main Content Canvas -->
+        <main class="flex-1 flex flex-col gap-lg">
+            <div class="flex flex-col gap-lg">
+                <div class="flex flex-col gap-sm">
+                    <h1 class="font-headline-lg text-headline-lg text-on-background">Управление складом</h1>
+                    <p class="font-body-md text-body-md text-on-surface-variant">Мониторинг остатков, управление складом
+                        и контроль входящих поставок от дилеров.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+                    <!-- Card 1: Всего позиций -->
+                    <div
+                        class="bg-surface p-6 rounded-xl border border-outline-variant shadow-sm flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined">inventory_2</span>
+                        </div>
+                        <div>
+                            <p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Всего позиций</p>
+                            <p class="text-headline-md font-bold text-on-surface">1,248</p>
+                        </div>
+                    </div>
+                    <!-- Card 2: Критический остаток -->
+                    <div
+                        class="bg-surface p-6 rounded-xl border border-outline-variant shadow-sm flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center text-error">
+                            <span class="material-symbols-outlined">warning</span>
+                        </div>
+                        <div>
+                            <p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Критический
+                                остаток (&lt;3)</p>
+                            <p class="text-headline-md font-bold text-on-surface">12</p>
+                        </div>
+                    </div>
+                    <!-- Card 3: Ожидается от дилеров -->
+                    <div
+                        class="bg-surface p-6 rounded-xl border border-outline-variant shadow-sm flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+                            <span class="material-symbols-outlined">local_shipping</span>
+                        </div>
+                        <div>
+                            <p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Ожидается от
+                                дилеров</p>
+                            <p class="text-headline-md font-bold text-on-surface">45</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Tabs Navigation -->
+            <!-- Tab Content 1: Товары на складе -->
+            <div class="flex flex-col gap-md">
+                <!-- Filters Bar -->
+                <h2 class="font-headline-md text-headline-md text-on-surface">Товары на складе</h2>
+                <div
+                    class="flex flex-wrap gap-sm items-center bg-surface p-4 rounded-xl border border-outline-variant shadow-sm">
+                    <div class="flex items-center gap-2 flex-1 min-w-[250px]">
+                        <span class="material-symbols-outlined text-on-surface-variant">search</span>
+                        <input
+                            class="w-full bg-transparent border-none focus:ring-0 text-body-md placeholder-on-surface-variant text-on-surface p-0"
+                            placeholder="Название товара..." type="text">
+                    </div>
+                    <div class="h-6 w-px bg-outline-variant mx-2 hidden sm:block"></div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-on-surface-variant text-sm">warehouse</span>
+                        <select
+                            class="bg-transparent border-none focus:ring-0 text-body-md text-on-surface py-0 pl-0 pr-8 font-label-md outline-none cursor-pointer">
+                            <option value="">Все склады</option>
+                            <option value="A">Склад А (Основной)</option>
+                            <option value="B">Склад B (Резерв)</option>
+                        </select>
+                    </div>
+                    <button
+                        class="ml-auto px-4 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors font-label-md text-label-md flex items-center gap-xs shadow-sm">
+                        <span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                        Добавить товар
+                    </button>
+                </div>
+                <!-- Warehouse Table -->
+                <div
+                    class="bg-surface rounded-xl border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.05)] overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-surface-container-low border-b border-outline-variant">
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        ID Товара</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Название</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Склад (ID/Название)</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">
+                                        Количество</th>
+                                </tr>
+                            </thead>
+                            <tbody class="font-body-md text-body-md text-on-surface divide-y divide-outline-variant">
+                                <tr class="hover:bg-surface-container-lowest transition-colors">
+                                    <td class="p-4 font-mono text-sm text-on-surface-variant">PRD-8901</td>
+                                    <td class="p-4 font-medium text-on-background">Материнская плата ASUS ROG Strix
+                                        B650E-F</td>
+                                    <td class="p-4 text-on-surface-variant">WH-01 / Склад А</td>
+                                    <td class="p-4 text-right"><span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary/10 text-secondary border border-secondary/20">15
+                                            шт.</span></td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors">
+                                    <td class="p-4 font-mono text-sm text-on-surface-variant">PRD-8902</td>
+                                    <td class="p-4 font-medium text-on-background">Видеокарта NVIDIA RTX 4070 Ti</td>
+                                    <td class="p-4 text-on-surface-variant">WH-02 / Склад B</td>
+                                    <td class="p-4 text-right"><span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary/10 text-secondary border border-secondary/20">8
+                                            шт.</span></td>
+                                </tr>
+                                <tr class="bg-error-container/30 hover:bg-error-container/50 transition-colors">
+                                    <td class="p-4 font-mono text-sm text-on-error-container">PRD-8903</td>
+                                    <td class="p-4 font-medium text-on-error-container">Процессор Intel Core i9-14900K
+                                    </td>
+                                    <td class="p-4 text-on-error-container/80">WH-01 / Склад А</td>
+                                    <td class="p-4 text-right"><span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-error/10 text-error border border-error/20 gap-1"><span
+                                                class="material-symbols-outlined text-[14px]">error</span>2 шт.</span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors">
+                                    <td class="p-4 font-mono text-sm text-on-surface-variant">PRD-8904</td>
+                                    <td class="p-4 font-medium text-on-background">Оперативная память Kingston FURY
+                                        Beast 32GB</td>
+                                    <td class="p-4 text-on-surface-variant">WH-01 / Склад А</td>
+                                    <td class="p-4 text-right"><span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary/10 text-secondary border border-secondary/20">24
+                                            шт.</span></td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors">
+                                    <td class="p-4 font-mono text-sm text-on-surface-variant">PRD-8905</td>
+                                    <td class="p-4 font-medium text-on-background">Блок питания Corsair RM850x</td>
+                                    <td class="p-4 text-on-surface-variant">WH-02 / Склад B</td>
+                                    <td class="p-4 text-right"><span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary/10 text-secondary border border-secondary/20">10
+                                            шт.</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div
+                        class="p-4 border-t border-outline-variant bg-surface-container-lowest flex justify-between items-center text-on-surface-variant font-label-md">
+                        <span class="">Показано 1-5 из 5</span>
+                        <div class="flex gap-2"><button
+                                class="p-1 hover:bg-surface-container rounded transition-colors text-on-surface-variant disabled:opacity-30"
+                                disabled=""><span class="material-symbols-outlined">chevron_left</span></button><button
+                                class="p-1 hover:bg-surface-container rounded transition-colors text-on-surface-variant"><span
+                                    class="material-symbols-outlined">chevron_right</span></button></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Tab Content 2: Закупки у дилеров (Shown structurally below, normally handled via JS toggling) -->
+            <div class="flex flex-col gap-md mt-xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-headline-md text-headline-md text-on-surface">Закупки у дилеров</h2><button
+                        class="px-4 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors font-label-md text-label-md flex items-center gap-xs shadow-sm"
+                        id="new-purchase-btn"><span class="material-symbols-outlined text-sm">add</span>Новая
+                        закупка</button>
+                </div>
+                <!-- Filters Bar -->
+                <div
+                    class="flex flex-wrap gap-sm items-center bg-surface p-4 rounded-xl border border-outline-variant shadow-sm">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-on-surface-variant text-sm">store</span>
+                        <select
+                            class="bg-transparent border-none focus:ring-0 text-body-md text-on-surface py-0 pl-0 pr-8 font-label-md outline-none cursor-pointer">
+                            <option value="">Все дилеры</option>
+                            <option value="Merlion">Merlion</option>
+                            <option value="Marvel">Marvel</option>
+                            <option value="OCS">OCS Distribution</option>
+                        </select>
+                    </div>
+                    <div class="h-6 w-px bg-outline-variant mx-2 hidden sm:block"></div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-on-surface-variant text-sm">pending_actions</span>
+                        <select
+                            class="bg-transparent border-none focus:ring-0 text-body-md text-on-surface py-0 pl-0 pr-8 font-label-md outline-none cursor-pointer">
+                            <option value="">Любой статус</option>
+                            <option value="1">В пути</option>
+                            <option value="2">Комплектуется</option>
+                            <option value="3">Прибыло</option>
+                        </select>
+                    </div>
+                    <div class="h-6 w-px bg-outline-variant mx-2 hidden sm:block"></div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-on-surface-variant text-sm">calendar_month</span>
+                        <input
+                            class="bg-transparent border-none focus:ring-0 text-body-md text-on-surface py-0 font-label-md outline-none cursor-pointer"
+                            type="date">
+                    </div>
+                    <button
+                        class="ml-auto px-4 py-2 border border-outline-variant text-on-surface hover:bg-surface-container rounded-lg transition-colors font-label-md text-label-md flex items-center gap-xs">
+                        <span class="material-symbols-outlined text-sm">refresh</span>
+                        Обновить
+                    </button>
+                </div>
+                <!-- Dealer Orders Table -->
+                <div
+                    class="bg-surface rounded-xl border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.05)] overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-surface-container-low border-b border-outline-variant">
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        ID закупки</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Дилер</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Склад</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Сотрудник</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Общая сумма</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Даты (Запрос / Получ.)</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Статус</th>
+                                    <th
+                                        class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                        Товар</th>
+                                </tr>
+                            </thead>
+                            <tbody class="font-body-md text-body-md text-on-surface divide-y divide-outline-variant">
+                                <tr class="hover:bg-surface-container-lowest transition-colors">
+                                    <td class="p-4 font-mono text-sm text-on-surface-variant">PO-44021</td>
+                                    <td class="p-4 font-medium text-on-background">Merlion</td>
+                                    <td class="p-4 text-on-surface-variant">Склад А</td>
+                                    <td class="p-4 text-on-surface-variant">Иванов И.</td>
+                                    <td class="p-4 font-medium">350 000 ₽</td>
+                                    <td class="p-4 text-on-surface-variant text-sm">10 Окт 2023<br><span
+                                            class="text-primary">Завтра</span></td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-container text-on-primary-container border border-primary/20">
+                                            В пути
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        <button
+                                            class="modal-open-btn text-primary hover:text-primary/80 font-label-md text-label-md underline flex items-center gap-1 active:opacity-80 transition-all">
+
+                                            См. детали
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors">
+                                    <td class="p-4 font-mono text-sm text-on-surface-variant">PO-44019</td>
+                                    <td class="p-4 font-medium text-on-background">OCS Distribution</td>
+                                    <td class="p-4 text-on-surface-variant">Склад B</td>
+                                    <td class="p-4 text-on-surface-variant">Петров А.</td>
+                                    <td class="p-4 font-medium">1 200 500 ₽</td>
+                                    <td class="p-4 text-on-surface-variant text-sm">05 Окт 2023<br><span
+                                            class="text-secondary">Сегодня</span></td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary/10 text-secondary border border-secondary/20 gap-1">
+                                            <span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                            Прибыло на склад
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        <button
+                                            class="modal-open-btn text-primary hover:text-primary/80 font-label-md text-label-md underline flex items-center gap-1">
+                                            См. детали
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors">
+                                    <td class="p-4 font-mono text-sm text-on-surface-variant">PO-44018</td>
+                                    <td class="p-4 font-medium text-on-background">Marvel</td>
+                                    <td class="p-4 text-on-surface-variant">Склад А</td>
+                                    <td class="p-4 text-on-surface-variant">Сидоров С.</td>
+                                    <td class="p-4 font-medium">215 000 ₽</td>
+                                    <td class="p-4 text-on-surface-variant text-sm">01 Окт 2023<br><span
+                                            class="text-on-surface-variant">03 Окт 2023</span></td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary/10 text-secondary border border-secondary/20 gap-1">
+                                            <span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                            Прибыло на склад
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        <button
+                                            class="modal-open-btn text-primary hover:text-primary/80 font-label-md text-label-md underline flex items-center gap-1">
+                                            См. детали
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors">
+                                    <td class="p-4 font-mono text-sm text-on-surface-variant">PO-44017</td>
+                                    <td class="p-4 font-medium text-on-background">Netlab</td>
+                                    <td class="p-4 text-on-surface-variant">Склад B</td>
+                                    <td class="p-4 text-on-surface-variant">Кузнецов Д.</td>
+                                    <td class="p-4 font-medium">89 000 ₽</td>
+                                    <td class="p-4 text-on-surface-variant text-sm">28 Сент 2023<br><span
+                                            class="text-on-surface-variant">-</span></td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-error/10 text-error border border-error/20 gap-1">
+                                            <span class="material-symbols-outlined text-[14px]">cancel</span>
+                                            Отменено
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        <button
+                                            class="modal-open-btn text-primary hover:text-primary/80 font-label-md text-label-md underline flex items-center gap-1">
+                                            См. детали
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-container-lowest transition-colors">
+                                    <td class="p-4 font-mono text-sm text-on-surface-variant">PO-44016</td>
+                                    <td class="p-4 font-medium text-on-background">ELKO</td>
+                                    <td class="p-4 text-on-surface-variant">Склад А</td>
+                                    <td class="p-4 text-on-surface-variant">Васильев А.</td>
+                                    <td class="p-4 font-medium">540 000 ₽</td>
+                                    <td class="p-4 text-on-surface-variant text-sm">25 Сент 2023<br><span
+                                            class="text-on-surface-variant">27 Сент 2023</span></td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary/10 text-secondary border border-secondary/20 gap-1">
+                                            <span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                            Прибыло на склад
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        <button
+                                            class="modal-open-btn text-primary hover:text-primary/80 font-label-md text-label-md underline flex items-center gap-1">
+                                            См. детали
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div
+                        class="p-4 border-t border-outline-variant bg-surface-container-lowest flex justify-between items-center text-on-surface-variant font-label-md">
+                        <span class="">Показано 1-5 из 5</span>
+                        <div class="flex gap-2"><button
+                                class="p-1 hover:bg-surface-container rounded transition-colors text-on-surface-variant disabled:opacity-30"
+                                disabled=""><span class="material-symbols-outlined">chevron_left</span></button><button
+                                class="p-1 hover:bg-surface-container rounded transition-colors text-on-surface-variant"><span
+                                    class="material-symbols-outlined">chevron_right</span></button></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- Footer -->
+    <footer
+        class="bg-surface-container-low dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline mt-auto">
+        <div class="max-w-container-max mx-auto px-lg py-xl grid grid-cols-1 md:grid-cols-3 gap-md">
+            <div class="flex flex-col gap-sm">
+                <span class="font-headline-sm text-headline-sm font-bold text-primary">VERTEX</span>
+                <span class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant">© 2026
+                    VERTEX. Все права защищены.</span>
+            </div>
+            <div class="col-span-1 md:col-span-2 flex flex-wrap gap-md justify-start md:justify-end">
+                <a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim underline transition-all"
+                    href="#">Дашборд</a>
+                <a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim underline transition-all"
+                    href="#">Ремонты</a>
+                <a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim underline transition-all"
+                    href="#">Заказы</a>
+                <a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim underline transition-all"
+                    href="#">Склад</a>
+                <a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim underline transition-all"
+                    href="#">Клиенты и сотрудники</a>
+            </div>
+        </div>
+    </footer>
+    <!-- Modal Overlay (Hidden by default, shown for demonstration purposes as requested) -->
+    <div class="fixed inset-0 bg-on-background/50 z-50 items-center justify-center p-4 backdrop-blur-sm hidden"
+        id="modal-overlay">
+        <div class="bg-surface rounded-xl shadow-lg w-full max-w-3xl flex flex-col overflow-hidden max-h-[90vh] border border-outline-variant"
+            id="modal-content">
+            <div
+                class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+                <div>
+                    <h3 class="font-headline-md text-headline-md text-on-surface">Состав закупки PO-44021</h3>
+                    <p class="font-body-sm text-sm text-on-surface-variant mt-1">Дилер: Merlion | Всего позиций: 2</p>
+                </div>
+                <button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors"
+                    id="modal-close-icon">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="overflow-y-auto flex-1 p-6">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-surface-container-low border-b border-outline-variant">
+                            <th
+                                class="p-3 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                ID Товара</th>
+                            <th
+                                class="p-3 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                Название</th>
+                            <th
+                                class="p-3 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">
+                                Количество</th>
+                            <th
+                                class="p-3 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">
+                                Сумма</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-body-md text-body-md text-on-surface divide-y divide-outline-variant">
+                        <tr class="hover:bg-surface-container-lowest transition-colors">
+                            <td class="p-3 font-mono text-sm text-on-surface-variant">PRD-8901</td>
+                            <td class="p-3 font-medium">Материнская плата ASUS ROG Strix B650E-F</td>
+                            <td class="p-3 text-right">5 шт.</td>
+                            <td class="p-3 text-right">175 000 ₽</td>
+                        </tr>
+                        <tr class="hover:bg-surface-container-lowest transition-colors">
+                            <td class="p-3 font-mono text-sm text-on-surface-variant">PRD-8904</td>
+                            <td class="p-3 font-medium">SSD Samsung 990 PRO 2TB</td>
+                            <td class="p-3 text-right">5 шт.</td>
+                            <td class="p-3 text-right">175 000 ₽</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-6 border-t border-outline-variant bg-surface-container-lowest flex justify-end">
+                <button
+                    class="px-6 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors font-label-md text-label-md shadow-sm"
+                    id="modal-close-btn">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    <script>
+            (function () {
+                const overlay = document.getElementById('modal-overlay');
+                const closeIcon = document.getElementById('modal-close-icon');
+                const closeBtn = document.getElementById('modal-close-btn');
+                const openBtns = document.querySelectorAll('.modal-open-btn');
+
+                const openModal = () => {
+                    overlay.classList.remove('hidden');
+                    overlay.classList.add('flex');
+                };
+
+                const closeModal = () => {
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('flex');
+                };
+
+                openBtns.forEach(btn => btn.addEventListener('click', openModal));
+
+                if (closeIcon) closeIcon.addEventListener('click', closeModal);
+                if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+                // Also close on backdrop click
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) closeModal();
+                });
+            })();
+    </script>
+    <div class="fixed inset-0 bg-on-background/50 z-50 items-center justify-center p-4 backdrop-blur-sm flex"
+        id="purchase-modal-overlay">
+        <div
+            class="bg-surface rounded-xl shadow-lg w-full max-w-3xl flex flex-col overflow-hidden max-h-[90vh] border border-outline-variant">
+            <div
+                class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+                <div>
+                    <h3 class="font-headline-md text-headline-md text-on-surface">Подача заявки на закупку</h3>
+                    <p class="font-body-sm text-sm text-on-surface-variant mt-1">Заполните данные для формирования
+                        нового заказа дилеру</p>
+                </div><button
+                    class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors"
+                    id="purchase-modal-close-icon"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="overflow-y-auto flex-1 p-6 flex flex-col gap-md">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+                    <div><label
+                            class="block text-label-sm font-bold text-on-surface-variant uppercase mb-2">Дилер</label><select
+                            class="w-full bg-surface-container rounded-lg border border-outline-variant p-2 text-body-md">
+                            <option>Выберите дилера...</option>
+                            <option>Merlion</option>
+                            <option>Marvel</option>
+                            <option>OCS Distribution</option>
+                        </select></div>
+                    <div><label class="block text-label-sm font-bold text-on-surface-variant uppercase mb-2">Склад
+                            назначения</label><select
+                            class="w-full bg-surface-container rounded-lg border border-outline-variant p-2 text-body-md">
+                            <option>Выберите склад...</option>
+                            <option>Склад А</option>
+                            <option>Склад B</option>
+                        </select></div>
+                </div>
+                <div><label class="block text-label-sm font-bold text-on-surface-variant uppercase mb-2">Список
+                        товаров</label>
+                    <div class="border border-outline-variant rounded-lg overflow-hidden">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-surface-container-low">
+                                <tr class="border-b border-outline-variant">
+                                    <th class="p-3 text-label-sm">Товар</th>
+                                    <th class="p-3 text-label-sm w-24">Кол-во</th>
+                                    <th class="p-3 text-label-sm w-32">Цена (₽)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-outline-variant">
+                                    <td class="p-2"><select
+                                            class="w-full bg-transparent border-none p-1 text-body-md focus:ring-0 cursor-pointer appearance-none pr-8">
+                                            <option value="" disabled="" selected="">Выберите товар...</option>
+                                            <option>Материнская плата ASUS ROG Strix B650E-F</option>
+                                            <option>Видеокарта NVIDIA RTX 4070 Ti</option>
+                                            <option>Процессор Intel Core i9-14900K</option>
+                                            <option>Оперативная память Kingston FURY Beast 32GB</option>
+                                            <option>Блок питания Corsair RM850x</option>
+                                        </select></td>
+                                    <td class="p-2"><input class="w-full bg-transparent border-none p-1 text-body-md"
+                                            type="number" value="1" placeholder="4"></td>
+                                    <td class="p-2"><input
+                                            class="w-full bg-transparent border-none p-1 text-body-md cursor-not-allowed"
+                                            placeholder="4" type="number" readonly="true"></td>
+                                </tr>
+                            </tbody>
+                        </table><button
+                            class="w-full py-2 text-primary hover:bg-primary/5 text-label-md border-t border-outline-variant">+
+                            Добавить позицию</button>
+                    </div>
+                </div>
+                <div class="flex justify-end items-center gap-2"><span
+                        class="text-label-md font-bold text-on-surface-variant">ИТОГО:</span><span
+                        class="text-headline-sm font-bold text-primary">0 ₽</span></div>
+            </div>
+            <div class="p-6 border-t border-outline-variant bg-surface-container-lowest flex justify-end gap-sm"><button
+                    class="px-6 py-2 border border-outline-variant text-on-surface hover:bg-surface-container rounded-lg transition-colors font-label-md text-label-md"
+                    id="purchase-modal-cancel-btn">Отмена</button><button
+                    class="px-6 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors font-label-md text-label-md shadow-sm">Отправить
+                    заявку</button></div>
+        </div>
+    </div>
+    <script>(function () { const overlay = document.getElementById('purchase-modal-overlay'); const openBtn = document.getElementById('new-purchase-btn'); const closeIcon = document.getElementById('purchase-modal-close-icon'); const cancelBtn = document.getElementById('purchase-modal-cancel-btn'); const openModal = () => { overlay.classList.remove('hidden'); overlay.classList.add('flex'); }; const closeModal = () => { overlay.classList.add('hidden'); overlay.classList.remove('flex'); }; if (openBtn) openBtn.addEventListener('click', openModal); if (closeIcon) closeIcon.addEventListener('click', closeModal); if (cancelBtn) cancelBtn.addEventListener('click', closeModal); overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); }); })();</script>
+
+
+
+
+
+</body>
+
+</html>
