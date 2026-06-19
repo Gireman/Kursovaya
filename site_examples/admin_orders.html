@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html class="light" lang="ru" style="">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Управление заказами - Компьютерный Сервис &amp; Магазин</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#b5c4ff",
+                        "outline-variant": "#c3c5d9",
+                        "surface": "#f8f9ff",
+                        "surface-dim": "#d0dbed",
+                        "tertiary": "#9b2900",
+                        "primary-fixed": "#dce1ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#d9e3f6",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#4ae176",
+                        "on-primary-container": "#eaecff",
+                        "surface-variant": "#d9e3f6",
+                        "surface-bright": "#f8f9ff",
+                        "secondary": "#006e2f",
+                        "on-tertiary-fixed-variant": "#862300",
+                        "surface-tint": "#0050e2",
+                        "on-tertiary-fixed": "#3a0a00",
+                        "inverse-surface": "#27313f",
+                        "primary-container": "#005bff",
+                        "on-background": "#121c2a",
+                        "on-tertiary-container": "#ffe8e2",
+                        "on-surface": "#121c2a",
+                        "surface-container": "#e6eeff",
+                        "secondary-fixed": "#6bff8f",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#eff4ff",
+                        "tertiary-fixed": "#ffdbd1",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#c53802",
+                        "on-secondary-fixed-variant": "#005321",
+                        "on-secondary-container": "#007432",
+                        "outline": "#737688",
+                        "inverse-on-surface": "#eaf1ff",
+                        "primary": "#0046c9",
+                        "on-secondary-fixed": "#002109",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#ffb59f",
+                        "secondary-container": "#6bff8f",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#00164e",
+                        "surface-container-high": "#dee9fc",
+                        "inverse-primary": "#b5c4ff",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#424656",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#003cae",
+                        "background": "#f8f9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "ROUND_EIGHT": "8px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "xs": "8px",
+                        "xl": "48px",
+                        "lg": "32px",
+                        "gutter": "24px",
+                        "sm": "16px",
+                        "md": "24px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+    <!-- Top Navigation Bar (Shared Component) -->
+    <header class="bg-surface border-b border-outline-variant w-full fixed top-0 z-50">
+        <div class="max-w-container-max mx-auto px-lg flex items-center justify-between h-16">
+            <div class="flex items-center gap-sm">
+                <button class="md:hidden text-on-surface-variant hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <div class="font-headline-md text-headline-md font-bold text-primary md:hidden">Компьютерный Сервис
+                    &amp; Магазин</div>
+            </div>
+            <!-- Global Search & Actions -->
+            <div class="flex items-center gap-md ml-auto">
+                <div class="relative hidden sm:block">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+                    <input
+                        class="pl-10 pr-4 py-2 bg-surface-container rounded-[8px] border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 text-body-md font-body-md w-64"
+                        placeholder="Поиск..." type="text">
+                </div>
+                <button class="text-on-surface-variant hover:text-primary transition-colors relative">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+                </button>
+                <button class="text-on-surface-variant hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                </button>
+                <button class="text-on-surface-variant hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">person</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <div class="flex flex-1 pt-16 h-screen overflow-hidden">
+        <!-- Sidebar Navigation (From SCREEN_15) -->
+        <aside
+            class="w-64 bg-surface-container-low border-r border-outline-variant flex-shrink-0 hidden lg:flex flex-col h-full overflow-y-auto">
+            <div class="p-lg flex items-center gap-sm border-b border-outline-variant/50">
+                <span class="material-symbols-outlined text-primary text-3xl">computer</span>
+                <div class="font-headline-md text-[18px] font-bold text-primary leading-tight">Компьютерный Сервис</div>
+            </div>
+            <nav class="flex-1 px-md py-md space-y-xs">
+                <a class="flex items-center gap-md px-sm py-xs text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors rounded-[8px] font-label-md text-label-md"
+                    href="#">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Дашборд
+                </a>
+                <a class="flex items-center gap-md px-sm py-xs text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors rounded-[8px] font-label-md text-label-md"
+                    href="#">
+                    <span class="material-symbols-outlined">build</span>
+                    Ремонты
+                </a>
+                <a class="flex items-center gap-md px-sm py-xs bg-primary-container text-on-primary-container rounded-[8px] font-label-md text-label-md font-bold"
+                    href="#">
+                    <span class="material-symbols-outlined fill">shopping_cart</span>
+                    Заказы
+                </a>
+                <a class="flex items-center gap-md px-sm py-xs text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors rounded-[8px] font-label-md text-label-md"
+                    href="#">
+                    <span class="material-symbols-outlined">inventory_2</span>
+                    Склад
+                </a>
+                <a class="flex items-center gap-md px-sm py-xs text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors rounded-[8px] font-label-md text-label-md"
+                    href="#">
+                    <span class="material-symbols-outlined">group</span>
+                    Пользователи
+                </a>
+            </nav>
+            <div class="p-md border-t border-outline-variant mt-auto space-y-md">
+                <div class="flex items-center gap-sm">
+                    <img alt="User Avatar" class="w-10 h-10 rounded-full"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxlEownKzWjXQPCzrp2xNyPY5yDaZ8ExC6CeU1G_DrSoNEBmEO9Og292_TvPJWm_7iw2u9apJJWaLVk12qNRtMqM1ug3hYH1i2f4CVIm4Sv4kGd8VsxXEJ6C7cXDLsinU3uzmXz0RI7fRBZHJexI0oVC-lj41wEb6evkNig87TgoJK3vm4shdUKZNzyQ6dCMa8kkkdFEceAOsvd22Nu6zIlLCB93nh-MqGiJNVJJynfk_JmAfGwpnuiqVEYC4XMLAUJ4f8L1C5pck">
+                    <div>
+                        <div class="font-label-md text-label-md text-on-surface">Иван Иванов</div>
+                        <div class="font-label-sm text-label-sm text-on-surface-variant">Администратор</div>
+                    </div>
+                </div>
+                <a class="flex items-center gap-md px-sm py-xs text-on-surface-variant hover:text-error hover:bg-error-container/20 transition-colors rounded-[8px] font-label-md text-label-md"
+                    href="#">
+                    <span class="material-symbols-outlined">logout</span>
+                    Выйти
+                </a>
+            </div>
+        </aside>
+        <!-- Main Content Area -->
+        <main class="flex-1 bg-background overflow-y-auto p-md lg:p-lg">
+            <!-- Page Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-lg gap-md">
+                <div>
+                    <h1 class="font-headline-lg text-headline-lg text-on-background mb-base">Управление заказами</h1>
+                    <p class="font-body-md text-body-md text-on-surface-variant">Просмотр и управление покупками
+                        клиентов.</p>
+                </div>
+                <button
+                    class="px-4 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors font-label-md text-label-md flex items-center gap-xs shadow-sm"
+                    onclick="document.getElementById('newOrderModal').classList.remove('hidden'); document.getElementById('newOrderModal').classList.add('flex')"><span
+                        class="material-symbols-outlined text-sm">add</span>Новый заказ</button>
+            </div>
+            <!-- Controls (Search & Filter) -->
+            <div
+                class="flex flex-wrap gap-sm items-center bg-surface p-4 rounded-xl border border-outline-variant shadow-sm mb-md">
+                <div class="flex items-center gap-2 flex-1 min-w-[250px]"><span
+                        class="material-symbols-outlined text-on-surface-variant">search</span><input
+                        class="w-full bg-transparent border-none focus:ring-0 text-body-md placeholder-on-surface-variant text-on-surface p-0"
+                        placeholder="ID заказа, клиент, сотрудник..." type="text"></div>
+                <div class="h-6 w-px bg-outline-variant/50 mx-2"></div>
+                <div class="flex items-center gap-2"><span
+                        class="material-symbols-outlined text-on-surface-variant text-sm">pending_actions</span><select
+                        class="bg-transparent border-none focus:ring-0 text-body-md text-on-surface py-0 pl-0 pr-8 font-label-md outline-none cursor-pointer">
+                        <option value="all">Все статусы</option>
+                        <option value="paid">Оплачено</option>
+                        <option value="assembling">В сборке</option>
+                        <option value="ready">Готов к выдаче</option>
+                        <option value="delivered">Выдан</option>
+                    </select></div><button
+                    class="ml-auto px-4 py-2 border border-outline-variant text-on-surface hover:bg-surface-container rounded-lg transition-colors font-label-md text-label-md flex items-center gap-xs"><span
+                        class="material-symbols-outlined text-sm">filter_list</span>Больше фильтров</button>
+            </div>
+            <!-- Data Table -->
+            <div
+                class="bg-surface rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[1000px]">
+                        <thead>
+                            <tr
+                                class="bg-surface-container-low border-b border-outline-variant text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                <th class="p-sm font-medium">ID заказа</th>
+                                <th class="p-sm font-medium">Клиент (Login / ФИО)</th>
+                                <th class="p-sm font-medium">Сотрудник (ID / ФИО)</th>
+                                <th class="p-sm font-medium text-right">Сумма всего</th>
+                                <th class="p-sm font-medium text-center">Налоговый вычет</th>
+                                <th class="p-sm font-medium">Дата поступления</th>
+                                <th class="p-sm font-medium">Дата выдачи</th>
+                                <th class="p-sm font-medium">Статус</th>
+                                <th class="p-sm font-medium text-right">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-body-md text-on-surface divide-y divide-outline-variant/50">
+                            <!-- Row 1 -->
+                            <tr class="hover:bg-surface-container-low transition-colors group">
+                                <td class="p-sm font-label-md">#ORD-9021</td>
+                                <td class="p-sm">
+                                    <div class="font-medium">ivan_i</div>
+                                    <div class="text-on-surface-variant text-sm">Иванов Иван Иванович</div>
+                                </td>
+                                <td class="p-sm">
+                                    <div class="font-medium">EMP-001</div>
+                                    <div class="text-on-surface-variant text-sm">Петров П.П.</div>
+                                </td>
+                                <td class="p-sm text-right font-medium">125 000 ₽</td>
+                                <td class="p-sm text-center">12 500 ₽</td>
+                                <td class="p-sm text-on-surface-variant text-sm">24.10.2024</td>
+                                <td class="p-sm text-on-surface-variant text-sm">-</td>
+                                <td class="p-sm">
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-label-sm bg-[#4ae176]/20 text-[#005321] font-bold border border-[#4ae176]/30">
+                                        Оплачено
+                                    </span>
+                                </td>
+                                <td class="p-sm text-right">
+                                    <button class="text-primary hover:underline font-label-sm mr-2"
+                                        onclick="document.getElementById('productListModal').classList.remove('hidden')">Товары</button>
+                                    <button class="text-primary hover:underline font-label-sm"
+                                        onclick="document.getElementById('servicesModal').classList.remove('hidden')">Услуги</button>
+                                </td>
+                            </tr>
+                            <!-- Row 2 -->
+                            <tr class="hover:bg-surface-container-low transition-colors group">
+                                <td class="p-sm font-label-md">#ORD-9020</td>
+                                <td class="p-sm">
+                                    <div class="font-medium">anna_s</div>
+                                    <div class="text-on-surface-variant text-sm">Смирнова Анна Сергеевна</div>
+                                </td>
+                                <td class="p-sm">
+                                    <div class="font-medium">EMP-002</div>
+                                    <div class="text-on-surface-variant text-sm">Сидоров С.С.</div>
+                                </td>
+                                <td class="p-sm text-right font-medium">45 500 ₽</td>
+                                <td class="p-sm text-center">4 550 ₽</td>
+                                <td class="p-sm text-on-surface-variant text-sm">23.10.2024</td>
+                                <td class="p-sm text-on-surface-variant text-sm">-</td>
+                                <td class="p-sm">
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-label-sm bg-[#ffb59f]/30 text-[#862300] font-bold border border-[#ffb59f]/50">
+                                        В сборке
+                                    </span>
+                                </td>
+                                <td class="p-sm text-right">
+                                    <button class="text-primary hover:underline font-label-sm mr-2"
+                                        onclick="document.getElementById('productListModal').classList.remove('hidden')">Товары</button>
+                                    <button class="text-primary hover:underline font-label-sm"
+                                        onclick="document.getElementById('servicesModal').classList.remove('hidden')">Услуги</button>
+                                </td>
+                            </tr>
+                            <!-- Row 3 -->
+                            <tr class="hover:bg-surface-container-low transition-colors group">
+                                <td class="p-sm font-label-md">#ORD-9019</td>
+                                <td class="p-sm">
+                                    <div class="font-medium">kuz_dim</div>
+                                    <div class="text-on-surface-variant text-sm">Кузнецов Дмитрий Олегович</div>
+                                </td>
+                                <td class="p-sm">
+                                    <div class="font-medium">EMP-001</div>
+                                    <div class="text-on-surface-variant text-sm">Петров П.П.</div>
+                                </td>
+                                <td class="p-sm text-right font-medium">8 900 ₽</td>
+                                <td class="p-sm text-center">890 ₽</td>
+                                <td class="p-sm text-on-surface-variant text-sm">22.10.2024</td>
+                                <td class="p-sm text-on-surface-variant text-sm">-</td>
+                                <td class="p-sm">
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-label-sm bg-[#b5c4ff]/30 text-[#00164e] font-bold border border-[#b5c4ff]/50">
+                                        Готов к выдаче
+                                    </span>
+                                </td>
+                                <td class="p-sm text-right">
+                                    <button class="text-primary hover:underline font-label-sm mr-2"
+                                        onclick="document.getElementById('productListModal').classList.remove('hidden')">Товары</button>
+                                    <button class="text-primary hover:underline font-label-sm"
+                                        onclick="document.getElementById('servicesModal').classList.remove('hidden')">Услуги</button>
+                                </td>
+                            </tr>
+                            <!-- Row 4 -->
+                            <tr class="hover:bg-surface-container-low transition-colors group">
+                                <td class="p-sm font-label-md">#ORD-9018</td>
+                                <td class="p-sm">
+                                    <div class="font-medium">tech_stroy</div>
+                                    <div class="text-on-surface-variant text-sm">ООО "ТехноСтрой"</div>
+                                </td>
+                                <td class="p-sm">
+                                    <div class="font-medium">EMP-003</div>
+                                    <div class="text-on-surface-variant text-sm">Иванова М.И.</div>
+                                </td>
+                                <td class="p-sm text-right font-medium">350 000 ₽</td>
+                                <td class="p-sm text-center">35 000 ₽</td>
+                                <td class="p-sm text-on-surface-variant text-sm">20.10.2024</td>
+                                <td class="p-sm text-on-surface-variant text-sm">24.10.2024</td>
+                                <td class="p-sm">
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-label-sm bg-surface-container-high text-on-surface-variant font-bold border border-outline-variant">
+                                        Выдан
+                                    </span>
+                                </td>
+                                <td class="p-sm text-right">
+                                    <button class="text-primary hover:underline font-label-sm mr-2"
+                                        onclick="document.getElementById('productListModal').classList.remove('hidden')">Товары</button>
+                                    <button class="text-primary hover:underline font-label-sm"
+                                        onclick="document.getElementById('servicesModal').classList.remove('hidden')">Услуги</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination -->
+                <div
+                    class="p-4 border-t border-outline-variant bg-surface-container-lowest flex justify-between items-center text-on-surface-variant font-label-md">
+                    <span class="">Показано 1-4 из 124 заказов</span>
+                    <div class="flex gap-2"><button
+                            class="p-1 hover:bg-surface-container rounded transition-colors disabled:opacity-50"
+                            disabled=""><span class="material-symbols-outlined">chevron_left</span></button><button
+                            class="p-1 hover:bg-surface-container rounded transition-colors"><span
+                                class="material-symbols-outlined">chevron_right</span></button></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- Product List Overlay -->
+    <div class="fixed inset-0 z-[100] flex items-center justify-center hidden" id="productListModal">
+        <div class="absolute inset-0 bg-on-background/50 backdrop-blur-sm"
+            onclick="document.getElementById('productListModal').classList.add('hidden')"></div>
+        <div
+            class="relative bg-surface rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col border border-outline-variant m-sm">
+            <div class="bg-surface border-b border-outline-variant px-lg py-md flex items-center justify-between">
+                <h2 class="font-headline-md text-headline-md text-on-background">Заказ #ORD-9021 - Товары</h2>
+                <button
+                    class="text-on-surface-variant hover:text-error transition-colors p-xs rounded-full hover:bg-surface-variant"
+                    onclick="document.getElementById('productListModal').classList.add('hidden')">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-md bg-surface-container-lowest border-b border-outline-variant">
+                <div class="relative w-full max-w-md">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+                    <input
+                        class="w-full pl-10 pr-sm py-2 bg-surface-container rounded-[8px] border border-outline-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-body-md text-sm text-on-surface"
+                        placeholder="Поиск товаров..." type="text">
+                </div>
+            </div>
+            <div class="overflow-y-auto flex-1 p-lg bg-surface">
+                <div class="border border-outline-variant rounded-lg overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead
+                            class="bg-surface-container-low border-b border-outline-variant text-label-sm text-on-surface-variant">
+                            <tr
+                                class="bg-surface-container-low border-b border-outline-variant text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                <th class="p-3 font-medium">ID товара</th>
+                                <th class="p-3 font-medium">Название</th>
+                                <th class="p-3 font-medium text-center">Количество</th>
+                                <th class="p-3 font-medium text-right">Сумма</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-body-md text-on-surface divide-y divide-outline-variant/50">
+                            <tr class="hover:bg-surface-container-lowest transition-colors">
+                                <td class="p-3 text-sm font-medium">CPU-INT-004</td>
+                                <td class="p-3 text-sm">Процессор Intel Core i7-13700K</td>
+                                <td class="p-3 text-sm text-center">1</td>
+                                <td class="p-3 text-sm text-right font-medium">42 500 ₽</td>
+                            </tr>
+                            <tr class="hover:bg-surface-container-lowest transition-colors">
+                                <td class="p-3 text-sm font-medium">MB-ASUS-012</td>
+                                <td class="p-3 text-sm">Материнская плата ASUS ROG STRIX Z790-E</td>
+                                <td class="p-3 text-sm text-center">1</td>
+                                <td class="p-3 text-sm text-right font-medium">35 000 ₽</td>
+                            </tr>
+                            <tr class="hover:bg-surface-container-lowest transition-colors">
+                                <td class="p-3 text-sm font-medium">RAM-KNG-008</td>
+                                <td class="p-3 text-sm">Оперативная память Kingston FURY Beast 32GB (2x16GB)</td>
+                                <td class="p-3 text-sm text-center">2</td>
+                                <td class="p-3 text-sm text-right font-medium">24 000 ₽</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bg-surface border-t border-outline-variant px-lg py-md flex justify-end">
+                <button
+                    class="px-md py-2 bg-primary text-on-primary font-label-md rounded-[8px] hover:opacity-90 transition-opacity"
+                    onclick="document.getElementById('productListModal').classList.add('hidden')">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    <!-- Additional Services Overlay -->
+    <div class="fixed inset-0 z-[100] flex items-center justify-center hidden" id="servicesModal">
+        <div class="absolute inset-0 bg-on-background/50 backdrop-blur-sm"
+            onclick="document.getElementById('servicesModal').classList.add('hidden')"></div>
+        <div
+            class="relative bg-surface rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col border border-outline-variant m-sm">
+            <div class="bg-surface border-b border-outline-variant px-lg py-md flex items-center justify-between">
+                <h2 class="font-headline-md text-headline-md text-on-background">Дополнительные услуги</h2>
+                <button
+                    class="text-on-surface-variant hover:text-error transition-colors p-xs rounded-full hover:bg-surface-variant"
+                    onclick="document.getElementById('servicesModal').classList.add('hidden')">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-md bg-surface-container-lowest border-b border-outline-variant">
+                <div class="relative w-full max-w-md">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+                    <input
+                        class="w-full pl-10 pr-sm py-2 bg-surface-container rounded-[8px] border border-outline-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-body-md text-sm text-on-surface"
+                        placeholder="Поиск услуг..." type="text">
+                </div>
+            </div>
+            <div class="overflow-y-auto flex-1 p-lg bg-surface">
+                <div class="border border-outline-variant rounded-lg overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead
+                            class="bg-surface-container-low border-b border-outline-variant text-label-sm text-on-surface-variant">
+                            <tr
+                                class="bg-surface-container-low border-b border-outline-variant text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                <th class="p-3 font-medium">Название услуги</th>
+                                <th class="p-3 font-medium text-right">Цена услуги</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-body-md text-on-surface divide-y divide-outline-variant/50">
+                            <tr class="hover:bg-surface-container-lowest transition-colors">
+                                <td class="p-3 text-sm">Сборка ПК</td>
+                                <td class="p-3 text-sm text-right font-medium">3 500 ₽</td>
+                            </tr>
+                            <tr class="hover:bg-surface-container-lowest transition-colors">
+                                <td class="p-3 text-sm">Установка и настройка ОС Windows</td>
+                                <td class="p-3 text-sm text-right font-medium">2 000 ₽</td>
+                            </tr>
+                            <tr class="hover:bg-surface-container-lowest transition-colors">
+                                <td class="p-3 text-sm">Стресс-тестирование системы</td>
+                                <td class="p-3 text-sm text-right font-medium">1 500 ₽</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bg-surface border-t border-outline-variant px-lg py-md flex justify-end">
+                <button
+                    class="px-md py-2 bg-primary text-on-primary font-label-md rounded-[8px] hover:opacity-90 transition-opacity"
+                    onclick="document.getElementById('servicesModal').classList.add('hidden')">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    <div class="fixed inset-0 z-[100] flex items-center justify-center" id="newOrderModal">
+        <div class="absolute inset-0 bg-on-background/50 backdrop-blur-sm"
+            onclick="document.getElementById('newOrderModal').classList.add('hidden')"></div>
+        <div
+            class="relative bg-surface rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col border border-outline-variant m-sm">
+            <!-- Header -->
+            <div class="bg-surface border-b border-outline-variant px-lg py-md flex items-center justify-between">
+                <h2 class="font-headline-md text-headline-md text-on-background">Создать новый заказ</h2>
+                <button
+                    class="text-on-surface-variant hover:text-error transition-colors p-xs rounded-full hover:bg-surface-variant"
+                    onclick="document.getElementById('newOrderModal').classList.add('hidden')">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <!-- Form Content -->
+            <div class="overflow-y-auto flex-1 p-lg space-y-md bg-surface">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+                    <div class="space-y-xs">
+                        <label
+                            class="font-label-md text-on-surface-variant font-bold uppercase text-xs tracking-wider">Клиент</label>
+                        <select
+                            class="w-full p-2 bg-surface-container-lowest rounded-lg border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 text-body-md">
+                            <option value="">Выберите клиента...</option>
+                            <option>ivan_i (Иванов Иван)</option>
+                            <option>anna_s (Смирнова Анна)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="space-y-sm">
+                    <div class="flex items-center justify-between">
+                        <label
+                            class="font-label-md text-on-surface-variant uppercase tracking-wider text-xs font-bold">Список
+                            товаров</label>
+                    </div>
+                    <div
+                        class="border border-outline-variant/50 rounded-lg overflow-hidden bg-surface-container-lowest">
+                        <table class="w-full text-left border-collapse">
+                            <thead
+                                class="bg-surface-container-low/50 border-b border-outline-variant/50 text-label-sm text-on-surface-variant uppercase tracking-wider">
+                                <tr class="bg-surface-container">
+                                    <th class="p-3 font-bold text-xs text-on-surface-variant uppercase tracking-wider">
+                                        ТОВАР</th>
+                                    <th
+                                        class="p-3 font-bold text-xs text-center w-24 text-on-surface-variant uppercase tracking-wider">
+                                        КОЛ-ВО</th>
+                                    <th
+                                        class="p-3 font-bold text-xs text-right w-32 text-on-surface-variant uppercase tracking-wider">
+                                        ЦЕНА (₽)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-body-md text-on-surface divide-y divide-outline-variant/50">
+                                <tr class="h-12">
+                                    <td class="p-3">
+                                        <div class="relative">
+                                            <select
+                                                class="w-full bg-transparent border-none focus:ring-0 text-sm p-0 cursor-pointer appearance-none pr-8 font-normal">
+                                                <option>Выберите товар...</option>
+                                                <option>Процессор Intel Core i7-13700K</option>
+                                                <option>Материнская плата ASUS ROG STRIX</option>
+                                                <option>Kingston FURY Beast 32GB</option>
+                                            </select>
+
+                                        </div>
+                                    </td>
+                                    <td class="p-3 text-center"><input type="number" value="1" min="1"
+                                            class="w-16 p-1 bg-surface-container rounded border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary/20 text-sm text-center outline-none">
+                                    </td>
+                                    <td class="p-3 text-right">
+                                        <div class="flex items-center justify-end gap-1"><input type="text" value="4"
+                                                readonly=""
+                                                class="w-12 p-1 bg-transparent border-none text-right text-sm text-on-surface focus:ring-0 cursor-default outline-none"><span
+                                                class="text-sm text-on-surface">₽</span></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div
+                            class="py-1.5 px-3 border-t border-outline-variant/50 flex justify-center bg-surface-container-lowest hover:bg-primary/5 transition-colors">
+                            <button
+                                class="flex items-center gap-xs text-primary hover:text-primary/80 hover:bg-primary/5 font-label-md transition-colors px-2 py-1 rounded">
+                                <span class="material-symbols-outlined text-sm">add</span>
+                                <span class="text-sm">Добавить позицию</span>
+                            </button></div>
+                    </div>
+                </div>
+                <div class="space-y-xs">
+                    <label
+                        class="font-label-md text-on-surface-variant uppercase tracking-wider text-xs font-bold">Дополнительные
+                        услуги</label>
+                    <select
+                        class="w-full p-2 bg-surface-container-lowest rounded-lg border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 text-body-md">
+                        <option value="">Выберите услугу...</option>
+                        <option>Сборка ПК (3 500 ₽)</option>
+                        <option>Установка ОС (2 000 ₽)</option>
+                        <option>Тестирование (1 500 ₽)</option>
+                    </select>
+                </div>
+                <div class="flex justify-end pt-md border-t border-outline-variant/50">
+                    <div class="text-right">
+                        <span
+                            class="font-label-sm text-on-surface-variant uppercase tracking-wider mr-2 font-bold">ИТОГО:</span>
+                        <span class="font-headline-md text-primary font-bold">0 ₽</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <div class="bg-surface border-t border-outline-variant px-lg py-md flex justify-end gap-md">
+                <button
+                    class="px-md py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors font-label-md border border-outline-variant"
+                    onclick="document.getElementById('newOrderModal').classList.add('hidden')">Отмена</button>
+                <button
+                    class="px-md py-2 bg-primary text-on-primary font-label-md rounded-lg hover:opacity-90 transition-opacity shadow-sm">Создать
+                    заказ</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,4 +1,4 @@
-type BadgeVariant = 'success' | 'error' | 'info' | 'warning';
+type BadgeVariant = 'success' | 'error' | 'info' | 'warning' | 'neutral';
 
 interface BadgeProps {
   variant: BadgeVariant;
@@ -11,6 +11,7 @@ const variantClasses: Record<BadgeVariant, string> = {
   error: 'bg-error/10 text-error border-error/20',
   info: 'bg-primary-container text-on-primary-container border-primary/20',
   warning: 'bg-tertiary/10 text-tertiary border-tertiary/20',
+  neutral: 'bg-surface-container-high text-on-surface-variant border-outline-variant',
 };
 
 export function Badge({ variant, icon, children }: BadgeProps) {

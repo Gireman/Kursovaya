@@ -1,17 +1,21 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AdminLayout } from './components/layout/AdminLayout';
 import Inventory from './pages/admin/Inventory';
+import Users from './pages/admin/Users';
+import Orders from './pages/admin/Orders';
+import Repairs from './pages/admin/Repairs';
+import Dashboard from './pages/admin/Dashboard';
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<div className="text-on-surface-variant p-8 text-center">Дашборд — в разработке</div>} />
+          <Route index element={<Dashboard />} />
           <Route path="inventory" element={<Inventory />} />
-          <Route path="repairs" element={<div className="text-on-surface-variant p-8 text-center">Ремонты — в разработке</div>} />
-          <Route path="orders" element={<div className="text-on-surface-variant p-8 text-center">Заказы — в разработке</div>} />
-          <Route path="users" element={<div className="text-on-surface-variant p-8 text-center">Клиенты и сотрудники — в разработке</div>} />
+          <Route path="repairs" element={<Repairs />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="users" element={<Users />} />
         </Route>
         <Route path="*" element={<Navigate to="/admin/inventory" replace />} />
       </Routes>
