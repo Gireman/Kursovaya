@@ -1,17 +1,29 @@
 import { useEffect, useState } from 'react';
-import { fetchClients, fetchEmployees } from '../../api/users';
-import type { Client, Employee, EmployeeRole } from '../../types';
+import {
+  fetchClients, fetchEmployees, createClient, updateClient, deleteClient,
+  createEmployee, updateEmployee, deleteEmployee, fetchPosts,
+} from '../../api/users';
+import type { Client, ClientInput, Employee, EmployeeInput, PostRef } from '../../types';
 import { Modal } from '../../components/ui/Modal';
 import { Select } from '../../components/ui/Select';
 
-const ROLES: EmployeeRole[] = ['Директор', 'Менеджер', 'Техник', 'Кладовщик'];
+const PAGE_SIZE = 5;
 
-const ROLE_CONFIG: Record<EmployeeRole, { icon: string; className: string }> = {
+const ROLE_CONFIG: Record<string, { icon: string; className: string }> = {
   'Директор': { icon: 'admin_panel_settings', className: 'bg-tertiary-container/20 text-tertiary' },
   'Менеджер': { icon: 'support_agent', className: 'bg-secondary-container/20 text-secondary' },
   'Техник': { icon: 'build', className: 'bg-primary-container/20 text-primary' },
+  'Ремонтник': { icon: 'build', className: 'bg-primary-container/20 text-primary' },
   'Кладовщик': { icon: 'inventory', className: 'bg-tertiary-container/20 text-tertiary' },
+  'Бухгалтер': { icon: 'calculate', className: 'bg-secondary-container/20 text-secondary' },
 };
+
+// Должность приходит из БД свободным текстом — на неизвестную ставим нейтральный стиль.
+const DEFAULT_ROLE_STYLE = { icon: 'badge', className: 'bg-surface-container text-on-surface-variant' };
+const roleStyle = (role: string) => ROLE_CONFIG[role] ?? DEFAULT_ROLE_STYLE;
+
+// Пустые/необязательные поля (Email, Адрес, Отчество) показываем прочерком.
+const dash = (v?: string | null) => (v && String(v).trim() ? v : '—');
 
 // ── Shared field styles ───────────────────────────────────────────────────────
 
@@ -40,15 +52,16 @@ function ActionButtons({ onEdit, onDelete }: { onEdit: () => void; onDelete: () 
   );
 }
 
-function SectionTablePagination({ shown, total }: { shown: number; total: number }) {
+function SectionTablePagination({ page, total, count, onPrev, onNext }: { page: number; total: number; count: number; onPrev: () => void; onNext: () => void }) {
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   return (
     <div className="p-4 border-t border-outline-variant bg-surface-container-lowest flex justify-between items-center text-on-surface-variant text-label-md">
-      <span>Показано {shown} из {total}</span>
+      <span>Показано {count} из {total}</span>
       <div className="flex gap-2">
-        <button className="p-1 hover:bg-surface-container rounded transition-colors disabled:opacity-30" disabled>
+        <button onClick={onPrev} disabled={page <= 1} className="p-1 hover:bg-surface-container rounded transition-colors disabled:opacity-30">
           <span className="material-symbols-outlined">chevron_left</span>
         </button>
-        <button className="p-1 hover:bg-surface-container rounded transition-colors">
+        <button onClick={onNext} disabled={page >= totalPages} className="p-1 hover:bg-surface-container rounded transition-colors disabled:opacity-30">
           <span className="material-symbols-outlined">chevron_right</span>
         </button>
       </div>
@@ -107,15 +120,26 @@ function DeleteConfirmModal({ name, onCancel, onConfirm }: { name: string; onCan
 
 // ── Client form modal (add / edit) ──────────────────────────────────────────────
 
-function ClientFormModal({ client, onClose, onSave }: { client: Client | null; onClose: () => void; onSave: (c: Client) => void }) {
+function ClientFormModal({ client, onClose, onSave }: { client: Client | null; onClose: () => void; onSave: (c: ClientInput) => Promise<void> }) {
   const [fullName, setFullName] = useState(client?.fullName ?? '');
   const [login, setLogin] = useState(client?.login ?? '');
   const [phone, setPhone] = useState(client?.phone ?? '');
   const [email, setEmail] = useState(client?.email ?? '');
   const [address, setAddress] = useState(client?.address ?? '');
+  const [birthday, setBirthday] = useState(client?.birthday ?? '');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
 
-  const submit = () => {
-    onSave({ id: client?.id ?? 0, fullName, login, phone, email, address });
+  const submit = async () => {
+    setError('');
+    setSaving(true);
+    try {
+      await onSave({ fullName, login, phone, email, address, birthday, password: password || undefined });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Ошибка сохранения');
+      setSaving(false);
+    }
   };
 
   return (
@@ -135,14 +159,18 @@ function ClientFormModal({ client, onClose, onSave }: { client: Client | null; o
           </button>
           <button
             onClick={submit}
-            className="px-6 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors text-label-md shadow-sm"
+            disabled={saving}
+            className="px-6 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors text-label-md shadow-sm disabled:opacity-50"
           >
-            {client ? 'Сохранить изменения' : 'Сохранить'}
+            {saving ? 'Сохранение...' : client ? 'Сохранить изменения' : 'Сохранить'}
           </button>
         </>
       }
     >
       <div className="flex flex-col gap-md">
+        {error && (
+          <div className="p-3 rounded-lg bg-error-container text-on-error-container text-label-md">{error}</div>
+        )}
         <div>
           <label className={labelClass}>ФИО</label>
           <input value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Иванов Иван Иванович" className={inputClass} />
@@ -152,8 +180,16 @@ function ClientFormModal({ client, onClose, onSave }: { client: Client | null; o
           <input value={login} onChange={(e) => setLogin(e.target.value)} placeholder="ivan_i" className={inputClass} />
         </div>
         <div>
+          <label className={labelClass}>Пароль{client && ' (оставьте пустым, чтобы не менять)'}</label>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••" className={inputClass} />
+        </div>
+        <div>
           <label className={labelClass}>Телефон</label>
           <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+7 (___) ___-__-__" className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Дата рождения</label>
+          <input type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} className={inputClass} />
         </div>
         <div>
           <label className={labelClass}>Почта</label>
@@ -170,15 +206,26 @@ function ClientFormModal({ client, onClose, onSave }: { client: Client | null; o
 
 // ── Employee form modal (add / edit) ────────────────────────────────────────────
 
-function EmployeeFormModal({ employee, onClose, onSave }: { employee: Employee | null; onClose: () => void; onSave: (e: Employee) => void }) {
+function EmployeeFormModal({ employee, posts, onClose, onSave }: { employee: Employee | null; posts: PostRef[]; onClose: () => void; onSave: (e: EmployeeInput) => Promise<void> }) {
   const [fullName, setFullName] = useState(employee?.fullName ?? '');
   const [login, setLogin] = useState(employee?.login ?? '');
   const [phone, setPhone] = useState(employee?.phone ?? '');
   const [email, setEmail] = useState(employee?.email ?? '');
-  const [role, setRole] = useState<EmployeeRole>(employee?.role ?? 'Техник');
+  const [birthday, setBirthday] = useState(employee?.birthday ?? '');
+  const [postId, setPostId] = useState(employee?.postId ?? posts[0]?.id ?? '');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
 
-  const submit = () => {
-    onSave({ id: employee?.id ?? '', fullName, login, phone, email, role });
+  const submit = async () => {
+    setError('');
+    setSaving(true);
+    try {
+      await onSave({ fullName, login, phone, email, birthday, postId, password: password || undefined });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Ошибка сохранения');
+      setSaving(false);
+    }
   };
 
   return (
@@ -198,14 +245,18 @@ function EmployeeFormModal({ employee, onClose, onSave }: { employee: Employee |
           </button>
           <button
             onClick={submit}
-            className="px-6 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors text-label-md shadow-sm"
+            disabled={saving}
+            className="px-6 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors text-label-md shadow-sm disabled:opacity-50"
           >
-            {employee ? 'Сохранить изменения' : 'Сохранить'}
+            {saving ? 'Сохранение...' : employee ? 'Сохранить изменения' : 'Сохранить'}
           </button>
         </>
       }
     >
       <div className="flex flex-col gap-md">
+        {error && (
+          <div className="p-3 rounded-lg bg-error-container text-on-error-container text-label-md">{error}</div>
+        )}
         <div>
           <label className={labelClass}>ФИО</label>
           <input value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Иванов Иван Иванович" className={inputClass} />
@@ -215,8 +266,16 @@ function EmployeeFormModal({ employee, onClose, onSave }: { employee: Employee |
           <input value={login} onChange={(e) => setLogin(e.target.value)} placeholder="ivan_i" className={inputClass} />
         </div>
         <div>
+          <label className={labelClass}>Пароль{employee && ' (оставьте пустым, чтобы не менять)'}</label>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••" className={inputClass} />
+        </div>
+        <div>
           <label className={labelClass}>Телефон</label>
           <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+7 (___) ___-__-__" className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Дата рождения</label>
+          <input type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} className={inputClass} />
         </div>
         <div>
           <label className={labelClass}>Почта</label>
@@ -226,9 +285,9 @@ function EmployeeFormModal({ employee, onClose, onSave }: { employee: Employee |
           <label className={labelClass}>Должность</label>
           <Select
             variant="outlined"
-            value={role}
-            onChange={(v) => setRole(v as EmployeeRole)}
-            options={ROLES.map((r) => ({ value: r, label: r }))}
+            value={postId}
+            onChange={(v) => setPostId(v)}
+            options={posts.map((p) => ({ value: p.id, label: p.name }))}
           />
         </div>
       </div>
@@ -240,9 +299,11 @@ function EmployeeFormModal({ employee, onClose, onSave }: { employee: Employee |
 
 function ClientsSection({ clients, setClients }: { clients: Client[]; setClients: React.Dispatch<React.SetStateAction<Client[]>> }) {
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Client | null>(null);
   const [deleting, setDeleting] = useState<Client | null>(null);
+  const [deleteError, setDeleteError] = useState('');
 
   const filtered = clients.filter((c) => {
     const q = search.toLowerCase();
@@ -250,26 +311,38 @@ function ClientsSection({ clients, setClients }: { clients: Client[]; setClients
       c.fullName.toLowerCase().includes(q) ||
       c.login.toLowerCase().includes(q) ||
       c.phone.toLowerCase().includes(q) ||
-      c.email.toLowerCase().includes(q) ||
-      c.address.toLowerCase().includes(q)
+      (c.email ?? '').toLowerCase().includes(q) ||
+      (c.address ?? '').toLowerCase().includes(q)
     );
   });
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const paged = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   const openAdd = () => { setEditing(null); setShowForm(true); };
   const openEdit = (c: Client) => { setEditing(c); setShowForm(true); };
 
-  const save = (c: Client) => {
-    if (c.id) {
-      setClients((list) => list.map((x) => (x.id === c.id ? c : x)));
+  const save = async (input: ClientInput) => {
+    if (editing) {
+      const updated = await updateClient(editing.id, input);
+      setClients((list) => list.map((x) => (x.id === updated.id ? updated : x)));
     } else {
-      const nextId = clients.reduce((m, x) => Math.max(m, x.id), 100) + 1;
-      setClients((list) => [...list, { ...c, id: nextId }]);
+      const created = await createClient(input);
+      setClients((list) => [...list, created]);
     }
     setShowForm(false);
   };
 
-  const confirmDelete = () => {
-    if (deleting) setClients((list) => list.filter((x) => x.id !== deleting.id));
+  const confirmDelete = async () => {
+    if (!deleting) return;
+    try {
+      await deleteClient(deleting.id);
+      setClients((list) => list.filter((x) => x.id !== deleting.id));
+      setDeleteError('');
+    } catch (e) {
+      setDeleteError(e instanceof Error ? e.message : 'Ошибка удаления');
+    }
     setDeleting(null);
   };
 
@@ -285,27 +358,31 @@ function ClientsSection({ clients, setClients }: { clients: Client[]; setClients
           Добавить клиента
         </button>
       </div>
-      <SearchBar value={search} onChange={setSearch} placeholder="Поиск клиента..." />
+      <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Поиск клиента..." />
+      {deleteError && (
+        <div className="p-3 rounded-lg bg-error-container text-on-error-container text-label-md">{deleteError}</div>
+      )}
       <div className="bg-surface rounded-xl border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.05)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[800px]">
             <thead>
               <tr className="bg-surface-container-low border-b border-outline-variant">
-                {['ID', 'ФИО', 'Логин', 'Телефон', 'Почта', 'Адрес'].map((h) => (
+                {['ID', 'ФИО', 'Логин', 'Телефон', 'Дата рождения', 'Почта', 'Адрес'].map((h) => (
                   <th key={h} className="p-4 text-label-sm text-on-surface-variant uppercase tracking-wider">{h}</th>
                 ))}
                 <th className="p-4 text-label-sm text-on-surface-variant uppercase tracking-wider text-right">Действия</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant">
-              {filtered.map((c) => (
+              {paged.map((c) => (
                 <tr key={c.id} className="hover:bg-surface-container-lowest transition-colors">
                   <td className="p-4 font-mono text-sm text-on-surface">{c.id}</td>
                   <td className="p-4 text-body-md font-medium text-on-surface">{c.fullName}</td>
                   <td className="p-4 text-body-md text-on-surface-variant">{c.login}</td>
-                  <td className="p-4 text-body-md text-on-surface-variant">{c.phone}</td>
-                  <td className="p-4 text-body-md text-on-surface-variant">{c.email}</td>
-                  <td className="p-4 text-body-md text-on-surface-variant">{c.address}</td>
+                  <td className="p-4 text-body-md text-on-surface-variant">{dash(c.phone)}</td>
+                  <td className="p-4 text-body-md text-on-surface-variant">{dash(c.birthday)}</td>
+                  <td className="p-4 text-body-md text-on-surface-variant">{dash(c.email)}</td>
+                  <td className="p-4 text-body-md text-on-surface-variant">{dash(c.address)}</td>
                   <td className="p-4 text-right">
                     <ActionButtons onEdit={() => openEdit(c)} onDelete={() => setDeleting(c)} />
                   </td>
@@ -314,7 +391,13 @@ function ClientsSection({ clients, setClients }: { clients: Client[]; setClients
             </tbody>
           </table>
         </div>
-        <SectionTablePagination shown={filtered.length} total={clients.length} />
+        <SectionTablePagination
+          page={currentPage}
+          total={filtered.length}
+          count={paged.length}
+          onPrev={() => setPage(currentPage - 1)}
+          onNext={() => setPage(currentPage + 1)}
+        />
       </div>
 
       {showForm && <ClientFormModal client={editing} onClose={() => setShowForm(false)} onSave={save} />}
@@ -325,11 +408,13 @@ function ClientsSection({ clients, setClients }: { clients: Client[]; setClients
 
 // ── Staff section ─────────────────────────────────────────────────────────────
 
-function EmployeesSection({ employees, setEmployees }: { employees: Employee[]; setEmployees: React.Dispatch<React.SetStateAction<Employee[]>> }) {
+function EmployeesSection({ employees, setEmployees, posts }: { employees: Employee[]; setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>; posts: PostRef[] }) {
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Employee | null>(null);
   const [deleting, setDeleting] = useState<Employee | null>(null);
+  const [deleteError, setDeleteError] = useState('');
 
   const filtered = employees.filter((e) => {
     const q = search.toLowerCase();
@@ -337,27 +422,38 @@ function EmployeesSection({ employees, setEmployees }: { employees: Employee[]; 
       e.fullName.toLowerCase().includes(q) ||
       e.login.toLowerCase().includes(q) ||
       e.phone.toLowerCase().includes(q) ||
-      e.email.toLowerCase().includes(q) ||
+      (e.email ?? '').toLowerCase().includes(q) ||
       e.role.toLowerCase().includes(q)
     );
   });
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const paged = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
   const openAdd = () => { setEditing(null); setShowForm(true); };
   const openEdit = (e: Employee) => { setEditing(e); setShowForm(true); };
 
-  const save = (e: Employee) => {
-    if (e.id) {
-      setEmployees((list) => list.map((x) => (x.id === e.id ? e : x)));
+  const save = async (input: EmployeeInput) => {
+    if (editing) {
+      const updated = await updateEmployee(editing.id, input);
+      setEmployees((list) => list.map((x) => (x.id === updated.id ? updated : x)));
     } else {
-      const maxId = employees.reduce((m, x) => Math.max(m, Number(x.id) || 0), 0) + 1;
-      const nextId = String(maxId).padStart(3, '0');
-      setEmployees((list) => [...list, { ...e, id: nextId }]);
+      const created = await createEmployee(input);
+      setEmployees((list) => [...list, created]);
     }
     setShowForm(false);
   };
 
-  const confirmDelete = () => {
-    if (deleting) setEmployees((list) => list.filter((x) => x.id !== deleting.id));
+  const confirmDelete = async () => {
+    if (!deleting) return;
+    try {
+      await deleteEmployee(deleting.id);
+      setEmployees((list) => list.filter((x) => x.id !== deleting.id));
+      setDeleteError('');
+    } catch (e) {
+      setDeleteError(e instanceof Error ? e.message : 'Ошибка удаления');
+    }
     setDeleting(null);
   };
 
@@ -373,7 +469,10 @@ function EmployeesSection({ employees, setEmployees }: { employees: Employee[]; 
           Добавить сотрудника
         </button>
       </div>
-      <SearchBar value={search} onChange={setSearch} placeholder="Поиск сотрудника..." />
+      <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Поиск сотрудника..." />
+      {deleteError && (
+        <div className="p-3 rounded-lg bg-error-container text-on-error-container text-label-md">{deleteError}</div>
+      )}
       <div className="bg-surface rounded-xl border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.05)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[700px]">
@@ -386,15 +485,15 @@ function EmployeesSection({ employees, setEmployees }: { employees: Employee[]; 
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant">
-              {filtered.map((e) => {
-                const role = ROLE_CONFIG[e.role];
+              {paged.map((e) => {
+                const role = roleStyle(e.role);
                 return (
                   <tr key={e.id} className="hover:bg-surface-container-lowest transition-colors">
                     <td className="p-4 font-mono text-sm text-on-surface">{e.id}</td>
                     <td className="p-4 text-body-md font-medium text-on-surface">{e.fullName}</td>
                     <td className="p-4 text-body-md text-on-surface-variant">{e.login}</td>
-                    <td className="p-4 text-body-md text-on-surface-variant">{e.phone}</td>
-                    <td className="p-4 text-body-md text-on-surface-variant">{e.email}</td>
+                    <td className="p-4 text-body-md text-on-surface-variant">{dash(e.phone)}</td>
+                    <td className="p-4 text-body-md text-on-surface-variant">{dash(e.email)}</td>
                     <td className="p-4">
                       <span className={`inline-flex items-center gap-xs px-2 py-1 rounded-full text-label-sm ${role.className}`}>
                         <span className="material-symbols-outlined" style={{ fontSize: 14 }}>{role.icon}</span>
@@ -410,10 +509,16 @@ function EmployeesSection({ employees, setEmployees }: { employees: Employee[]; 
             </tbody>
           </table>
         </div>
-        <SectionTablePagination shown={filtered.length} total={employees.length} />
+        <SectionTablePagination
+          page={currentPage}
+          total={filtered.length}
+          count={paged.length}
+          onPrev={() => setPage(currentPage - 1)}
+          onNext={() => setPage(currentPage + 1)}
+        />
       </div>
 
-      {showForm && <EmployeeFormModal employee={editing} onClose={() => setShowForm(false)} onSave={save} />}
+      {showForm && <EmployeeFormModal employee={editing} posts={posts} onClose={() => setShowForm(false)} onSave={save} />}
       {deleting && <DeleteConfirmModal name={deleting.fullName} onCancel={() => setDeleting(null)} onConfirm={confirmDelete} />}
     </div>
   );
@@ -424,12 +529,14 @@ function EmployeesSection({ employees, setEmployees }: { employees: Employee[]; 
 export default function Users() {
   const [clients, setClients] = useState<Client[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const [posts, setPosts] = useState<PostRef[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([fetchClients(), fetchEmployees()]).then(([cl, emp]) => {
+    Promise.all([fetchClients(), fetchEmployees(), fetchPosts()]).then(([cl, emp, ps]) => {
       setClients(cl);
       setEmployees(emp);
+      setPosts(ps);
       setLoading(false);
     });
   }, []);
@@ -452,7 +559,7 @@ export default function Users() {
         </p>
       </div>
       <ClientsSection clients={clients} setClients={setClients} />
-      <EmployeesSection employees={employees} setEmployees={setEmployees} />
+      <EmployeesSection employees={employees} setEmployees={setEmployees} posts={posts} />
     </>
   );
 }

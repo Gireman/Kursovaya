@@ -4,13 +4,13 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const serverPort = env.PORT || 3001;
+  const serverPort = env.API_PORT || 8080;
 
   return {
     plugins: [react(), tailwindcss()],
     server: {
       proxy: {
-        '/api': `http://localhost:${serverPort}`,
+        '/api': `http://127.0.0.1:${serverPort}`,
       },
     },
   };

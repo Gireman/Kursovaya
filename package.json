@@ -5,17 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "server": "node server.js",
-    "start": "vite build && node server.js",
+    "server": "node server/index.js",
+    "start": "vite build && node server/index.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "@types/react-router-dom": "^5.3.3",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "mysql2": "^3.22.5",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",

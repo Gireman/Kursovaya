@@ -1,49 +1,83 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { fetchOrders } from '../../api/orders';
 import { fetchRepairs } from '../../api/repairs';
 import { fetchInventory } from '../../api/inventory';
-import type { Order, Repair, InventoryItem, OrderStatus, RepairStatus } from '../../types';
+import type { Order, Repair, InventoryItem } from '../../types';
 import { Badge } from '../../components/ui/Badge';
 
 const LOW_STOCK_THRESHOLD = 3;
 
 type BadgeVariant = 'success' | 'error' | 'info' | 'warning' | 'neutral';
 
-const ORDER_STATUS: Record<OrderStatus, { label: string; variant: BadgeVariant }> = {
-  paid: { label: 'Оплачено', variant: 'success' },
-  assembling: { label: 'В сборке', variant: 'warning' },
-  ready: { label: 'Готов к выдаче', variant: 'info' },
-  delivered: { label: 'Выдан', variant: 'neutral' },
+// Статусы — свободные русские подписи из БД (orders/purchases/repairs.Status).
+const ORDER_STATUS: Record<string, BadgeVariant> = {
+  'Оплачено': 'success',
+  'В сборке': 'warning',
+  'Готов к выдаче': 'info',
+  'Выдан': 'neutral',
 };
 
-const REPAIR_STATUS: Record<RepairStatus, { label: string; variant: BadgeVariant }> = {
-  accepted: { label: 'Принято', variant: 'neutral' },
-  diagnostics: { label: 'Диагностика', variant: 'info' },
-  in_progress: { label: 'В работе', variant: 'info' },
-  waiting_parts: { label: 'Ожидает запчасти', variant: 'warning' },
-  ready: { label: 'Готов к выдаче', variant: 'success' },
-  issued: { label: 'Выдан', variant: 'neutral' },
+const REPAIR_STATUS: Record<string, BadgeVariant> = {
+  'Принято': 'neutral',
+  'Диагностика': 'info',
+  'В работе': 'info',
+  'Ожидает запчасти': 'warning',
+  'Готов к выдаче': 'success',
+  'Выдан': 'neutral',
 };
 
-// Mock monthly series — drives the bar charts (variant B: heights computed from data).
-const REVENUE_BY_MONTH = [
-  { label: 'Май', value: 320000 },
-  { label: 'Июн', value: 480000 },
-  { label: 'Июл', value: 390000 },
-  { label: 'Авг', value: 610000 },
-  { label: 'Сен', value: 540000 },
-  { label: 'Окт', value: 720000 },
-];
+const ISSUED_STATUS = 'Выдан';
 
-const REPAIRS_BY_MONTH = [
-  { label: 'Май', value: 120 },
-  { label: 'Июн', value: 180 },
-  { label: 'Июл', value: 105 },
-  { label: 'Авг', value: 240 },
-  { label: 'Сен', value: 150 },
-  { label: 'Окт', value: 210 },
-];
+// Подпись берём как есть из БД, цвет — из конфигурации (с нейтральным фолбэком).
+function orderStatus(status: string) {
+  return { label: status, variant: ORDER_STATUS[status] ?? 'neutral' };
+}
+function repairStatus(status: string) {
+  return { label: status, variant: REPAIR_STATUS[status] ?? 'neutral' };
+}
+
+// Месячные ряды для графиков считаются из реальных данных (заказы/ремонты).
+const MONTH_SHORT = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+const CHART_MONTHS = 6; // окно: последние N месяцев, включая текущий
+
+interface MonthBucket {
+  label: string;
+  year: number;
+  month: number; // 0-11
+}
+
+// Последние N месяцев (включая текущий) как стабильная ось графика.
+function lastMonths(n: number): MonthBucket[] {
+  const now = new Date();
+  const buckets: MonthBucket[] = [];
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    buckets.push({ label: MONTH_SHORT[d.getMonth()], year: d.getFullYear(), month: d.getMonth() });
+  }
+  return buckets;
+}
+
+function inMonth(dateStr: string | null | undefined, b: MonthBucket): boolean {
+  if (!dateStr) return false;
+  const d = new Date(dateStr);
+  return d.getFullYear() === b.year && d.getMonth() === b.month;
+}
+
+// Выручка по месяцам — сумма заказов по дате оформления (receiptDate).
+function revenueByMonth(orders: Order[]): { label: string; value: number }[] {
+  return lastMonths(CHART_MONTHS).map((b) => ({
+    label: b.label,
+    value: orders.reduce((sum, o) => (inMonth(o.receiptDate, b) ? sum + o.totalAmount : sum), 0),
+  }));
+}
+
+// Ремонты по месяцам — количество ремонтов по дате приёма (submitDate).
+function repairsByMonth(repairs: Repair[]): { label: string; value: number }[] {
+  return lastMonths(CHART_MONTHS).map((b) => ({
+    label: b.label,
+    value: repairs.reduce((count, r) => (inMonth(r.submitDate, b) ? count + 1 : count), 0),
+  }));
+}
 
 function formatAmount(amount: number) {
   return new Intl.NumberFormat('ru-RU').format(amount) + ' ₽';
@@ -66,7 +100,7 @@ interface StatCard {
 
 function StatCards({ orders, repairs, inventory }: { orders: Order[]; repairs: Repair[]; inventory: InventoryItem[] }) {
   const revenue = orders.reduce((sum, o) => sum + o.totalAmount, 0);
-  const activeRepairs = repairs.filter((r) => r.status !== 'issued').length;
+  const activeRepairs = repairs.filter((r) => r.status !== ISSUED_STATUS).length;
   const totalOrders = orders.length;
   const lowStock = inventory.filter((i) => i.quantity < LOW_STOCK_THRESHOLD).length;
 
@@ -107,37 +141,26 @@ function StatCards({ orders, repairs, inventory }: { orders: Order[]; repairs: R
 
 function BarChart({ data, valueFormatter }: { data: { label: string; value: number }[]; valueFormatter?: (v: number) => string }) {
   const max = Math.max(...data.map((d) => d.value), 1);
-  const peak = Math.max(...data.map((d) => d.value));
 
   return (
     <div>
       <div className="h-56 flex items-end justify-between gap-3 pt-xl border-l border-outline-variant/50">
-        {data.map((d) => {
-          const isPeak = d.value === peak;
-          return (
-            <div key={d.label} className="flex-1 h-full flex items-end justify-center">
-              <div
-                className={`group relative w-8 rounded-t-sm transition-colors ${isPeak ? 'bg-primary shadow-md' : 'bg-surface-container-high hover:bg-primary'}`}
-                style={{ height: `${(d.value / max) * 100}%` }}
-              >
-                <span
-                  className={`absolute -top-6 left-1/2 -translate-x-1/2 text-xs whitespace-nowrap transition-opacity ${
-                    isPeak ? 'font-bold text-on-surface' : 'text-on-surface-variant opacity-0 group-hover:opacity-100'
-                  }`}
-                >
-                  {valueFormatter ? valueFormatter(d.value) : d.value}
-                </span>
-              </div>
+        {data.map((d, i) => (
+          <div key={`${d.label}-${i}`} className="flex-1 h-full flex items-end justify-center">
+            <div
+              className="group relative w-8 rounded-t-sm transition-colors bg-surface-container-high hover:bg-primary"
+              style={{ height: `${(d.value / max) * 100}%` }}
+            >
+              <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs whitespace-nowrap transition-opacity text-on-surface-variant opacity-0 group-hover:opacity-100">
+                {valueFormatter ? valueFormatter(d.value) : d.value}
+              </span>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
       <div className="flex justify-between gap-3 border-t border-outline-variant/50 pt-2">
-        {data.map((d) => (
-          <span
-            key={d.label}
-            className={`flex-1 text-center text-label-sm ${d.value === peak ? 'text-primary font-bold' : 'text-on-surface-variant'}`}
-          >
+        {data.map((d, i) => (
+          <span key={`${d.label}-${i}`} className="flex-1 text-center text-label-sm text-on-surface-variant">
             {d.label}
           </span>
         ))}
@@ -174,9 +197,9 @@ function buildActivity(orders: Order[], repairs: Repair[]): Activity[] {
   const fromOrders: Activity[] = orders.map((o) => ({
     key: `O-${o.id}`,
     id: o.id,
-    client: o.clientName,
+    client: o.clientLogin,
     device: o.products[0]?.name ?? `Заказ (${o.products.length} поз.)`,
-    status: ORDER_STATUS[o.status],
+    status: orderStatus(o.status),
     amount: o.totalAmount,
     date: o.issueDate ?? o.receiptDate,
   }));
@@ -184,9 +207,9 @@ function buildActivity(orders: Order[], repairs: Repair[]): Activity[] {
   const fromRepairs: Activity[] = repairs.map((r) => ({
     key: `R-${r.id}`,
     id: r.id,
-    client: r.clientName,
+    client: r.clientLogin,
     device: r.deviceName,
-    status: REPAIR_STATUS[r.status],
+    status: repairStatus(r.status),
     amount: r.cost,
     date: r.returnDate ?? r.submitDate,
   }));
@@ -203,9 +226,6 @@ function RecentActivity({ orders, repairs }: { orders: Order[]; repairs: Repair[
     <div>
       <div className="flex justify-between items-center mb-md">
         <h2 className="text-headline-md font-bold text-on-surface">Последняя активность</h2>
-        <Link to="/admin/orders" className="text-primary text-label-md hover:text-secondary transition-colors">
-          Все заказы
-        </Link>
       </div>
       <div className="overflow-x-auto bg-surface border border-outline-variant rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
         <table className="w-full text-left border-collapse">
@@ -222,7 +242,7 @@ function RecentActivity({ orders, repairs }: { orders: Order[]; repairs: Repair[
           <tbody className="text-body-md text-on-surface divide-y divide-outline-variant">
             {items.map((a) => (
               <tr key={a.key} className="hover:bg-surface-container-lowest transition-colors">
-                <td className="p-4 font-mono text-sm text-on-surface">#{a.id}</td>
+                <td className="p-4 font-mono text-sm text-on-surface">{a.id}</td>
                 <td className="p-4">{a.client}</td>
                 <td className="p-4 text-on-surface-variant">{a.device}</td>
                 <td className="p-4 text-on-surface-variant text-sm whitespace-nowrap">{formatDate(a.date)}</td>
@@ -267,28 +287,19 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-sm">
-        <div className="flex flex-col gap-sm">
-          <h1 className="text-headline-lg font-bold text-on-background">Обзор</h1>
-          <p className="text-body-md text-on-surface-variant">Сводка по заказам, ремонтам и складу.</p>
-        </div>
-        <Link
-          to="/admin/orders"
-          className="px-4 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors text-label-md flex items-center gap-xs shadow-sm self-start sm:self-auto"
-        >
-          <span className="material-symbols-outlined" style={{ fontSize: 18 }}>add</span>
-          Новый заказ
-        </Link>
+      <div className="flex flex-col gap-sm">
+        <h1 className="text-headline-lg font-bold text-on-background">Обзор</h1>
+        <p className="text-body-md text-on-surface-variant">Сводка по заказам, ремонтам и складу.</p>
       </div>
 
       <StatCards orders={orders} repairs={repairs} inventory={inventory} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-md">
-        <ChartCard title="Выручка по месяцам" year="2026">
-          <BarChart data={REVENUE_BY_MONTH} valueFormatter={formatAmount} />
+        <ChartCard title="Выручка по месяцам" year={String(new Date().getFullYear())}>
+          <BarChart data={revenueByMonth(orders)} valueFormatter={formatAmount} />
         </ChartCard>
-        <ChartCard title="Ремонты по месяцам" year="2026">
-          <BarChart data={REPAIRS_BY_MONTH} />
+        <ChartCard title="Ремонты по месяцам" year={String(new Date().getFullYear())}>
+          <BarChart data={repairsByMonth(repairs)} />
         </ChartCard>
       </div>
 

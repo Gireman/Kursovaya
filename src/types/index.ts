@@ -3,7 +3,31 @@ export interface InventoryItem {
   name: string;
   warehouseId: string;
   warehouseName: string;
+  cost: number;
   quantity: number;
+}
+
+export interface ProductInput {
+  name: string;
+  warehouseId: string;
+  cost: number;
+  quantity: number;
+}
+
+export interface WarehouseRef {
+  id: string;
+  name: string;
+}
+
+export interface DealerRef {
+  id: string;
+  name: string;
+}
+
+export interface PurchaseInput {
+  dealerId: string;
+  warehouseId: string;
+  items: { productId: string; quantity: number }[];
 }
 
 export interface PurchaseOrder {
@@ -14,7 +38,7 @@ export interface PurchaseOrder {
   totalAmount: number;
   requestDate: string;
   receivedDate: string | null;
-  status: 'in_transit' | 'assembling' | 'arrived' | 'cancelled';
+  status: string;
   items: PurchaseOrderItem[];
 }
 
@@ -32,9 +56,21 @@ export interface Client {
   phone: string;
   email: string;
   address: string;
+  birthday: string;
 }
 
-export type EmployeeRole = 'Директор' | 'Менеджер' | 'Техник' | 'Кладовщик';
+export interface ClientInput {
+  fullName: string;
+  login: string;
+  phone: string;
+  email: string;
+  address: string;
+  birthday: string;
+  password?: string;
+}
+
+// Должность сотрудника берётся из справочника posts (свободный текст в БД).
+export type EmployeeRole = string;
 
 export interface Employee {
   id: string;
@@ -42,10 +78,29 @@ export interface Employee {
   login: string;
   phone: string;
   email: string;
-  role: EmployeeRole;
+  birthday: string;
+  postId: string;
+  role: EmployeeRole; // имя должности для отображения
 }
 
-export type OrderStatus = 'paid' | 'assembling' | 'ready' | 'delivered';
+export interface EmployeeInput {
+  fullName: string;
+  login: string;
+  phone: string;
+  email: string;
+  birthday: string;
+  postId: string;
+  password?: string;
+}
+
+// Справочник должностей (таблица posts).
+export interface PostRef {
+  id: string;
+  name: string;
+}
+
+// Статус заказа — свободный varchar в БД (purchases.Status), хранится как русская подпись.
+export type OrderStatus = string;
 
 export interface OrderProduct {
   id: string;
@@ -55,12 +110,14 @@ export interface OrderProduct {
 }
 
 export interface OrderService {
+  id?: string;
   name: string;
-  price: number;
+  price: number; // в БД у услуг цены нет → 0
 }
 
 export interface Order {
   id: string;
+  clientId: string;
   clientLogin: string;
   clientName: string;
   employeeId: string;
@@ -74,10 +131,26 @@ export interface Order {
   services: OrderService[];
 }
 
-export type RepairStatus = 'accepted' | 'diagnostics' | 'in_progress' | 'waiting_parts' | 'ready' | 'issued';
+export interface OrderInput {
+  clientId: string;
+  employeeId: string;
+  products: { productId: string; quantity: number }[];
+  services: { serviceId: string }[];
+}
+
+// Справочник услуг (таблица services).
+export interface ServiceRef {
+  id: string;
+  name: string;
+  price: number;
+}
+
+// Статус ремонта — свободный varchar в БД (repairs.Status), хранится как русская подпись.
+export type RepairStatus = string;
 
 export interface Repair {
   id: string;
+  clientId: string;
   clientLogin: string;
   clientName: string;
   employeeId: string;
@@ -90,4 +163,14 @@ export interface Repair {
   cost: number;
   taxDeduction: number;
   status: RepairStatus;
+}
+
+export interface RepairInput {
+  clientId: string;
+  employeeId: string;
+  deviceName: string;
+  cost: number;
+  homeVisit: boolean;
+  repairable: boolean;
+  status: string;
 }

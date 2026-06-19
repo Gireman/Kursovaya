@@ -1,83 +1,18 @@
-import type { Repair } from '../types';
+import type { Repair, RepairInput } from '../types';
+import { apiRequest } from './client';
 
-const MOCK_REPAIRS: Repair[] = [
-  {
-    id: 'REP-2023-084',
-    clientLogin: 'ivan_i',
-    clientName: 'Иван Иванов',
-    employeeId: 'EMP-001',
-    employeeName: 'Петр Смирнов',
-    deviceName: 'Ноутбук ASUS ROG Strix',
-    repairable: true,
-    homeVisit: false,
-    submitDate: '2023-10-24',
-    returnDate: '2023-10-28',
-    cost: 15000,
-    taxDeduction: 0,
-    status: 'in_progress',
-  },
-  {
-    id: 'REP-2023-085',
-    clientLogin: 'anna_s',
-    clientName: 'Анна Смирнова',
-    employeeId: 'EMP-002',
-    employeeName: 'Алексей Попов',
-    deviceName: 'Apple MacBook Pro M1',
-    repairable: false,
-    homeVisit: true,
-    submitDate: '2023-10-25',
-    returnDate: '2023-11-01',
-    cost: 500,
-    taxDeduction: 0,
-    status: 'waiting_parts',
-  },
-  {
-    id: 'REP-2023-086',
-    clientLogin: 'vector_corp',
-    clientName: 'ООО "Вектор"',
-    employeeId: 'EMP-003',
-    employeeName: 'Дмитрий Волков',
-    deviceName: 'Сервер HP ProLiant',
-    repairable: true,
-    homeVisit: true,
-    submitDate: '2023-10-26',
-    returnDate: '2023-10-30',
-    cost: 45000,
-    taxDeduction: 9000,
-    status: 'ready',
-  },
-  {
-    id: 'REP-2023-087',
-    clientLogin: 'elena_p',
-    clientName: 'Елена Попова',
-    employeeId: 'EMP-002',
-    employeeName: 'Алексей Попов',
-    deviceName: 'iPhone 13 (Замена АКБ)',
-    repairable: true,
-    homeVisit: true,
-    submitDate: '2023-10-27',
-    returnDate: '2023-10-29',
-    cost: 4500,
-    taxDeduction: 0,
-    status: 'diagnostics',
-  },
-  {
-    id: 'REP-2023-088',
-    clientLogin: 'dmitry_v',
-    clientName: 'Дмитрий Васильев',
-    employeeId: 'EMP-001',
-    employeeName: 'Петр Смирнов',
-    deviceName: 'Ноутбук ASUS (Чистка СО)',
-    repairable: true,
-    homeVisit: false,
-    submitDate: '2023-10-28',
-    returnDate: '2023-10-30',
-    cost: 2500,
-    taxDeduction: 0,
-    status: 'ready',
-  },
-];
+export function fetchRepairs(): Promise<Repair[]> {
+  return apiRequest<Repair[]>('/api/repairs');
+}
 
-export async function fetchRepairs(): Promise<Repair[]> {
-  return new Promise((resolve) => setTimeout(() => resolve(MOCK_REPAIRS), 300));
+export function createRepair(input: RepairInput): Promise<Repair> {
+  return apiRequest<Repair>('/api/repairs', { method: 'POST', body: JSON.stringify(input) });
+}
+
+export function updateRepair(id: string, input: RepairInput): Promise<Repair> {
+  return apiRequest<Repair>(`/api/repairs/${id}`, { method: 'PUT', body: JSON.stringify(input) });
+}
+
+export function deleteRepair(id: string): Promise<void> {
+  return apiRequest<void>(`/api/repairs/${id}`, { method: 'DELETE' });
 }

@@ -1,51 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
-import { fetchOrders } from '../../api/orders';
-import type { Order, OrderStatus } from '../../types';
+import { createOrder, deleteOrder, fetchOrders, fetchServices, updateOrder, updateOrderStatus } from '../../api/orders';
+import { fetchClients, fetchEmployees } from '../../api/users';
+import { fetchInventory } from '../../api/inventory';
+import type { Client, Employee, InventoryItem, Order, OrderInput, OrderStatus, ServiceRef } from '../../types';
 import { Badge } from '../../components/ui/Badge';
 import { Modal } from '../../components/ui/Modal';
 import { Select } from '../../components/ui/Select';
 
-// Catalog with prices — used by the order form for live total calculation and prefill.
-const ORDER_PRODUCT_OPTIONS = [
-  { value: 'CPU-INT-004', label: 'Процессор Intel Core i7-13700K', price: 42500 },
-  { value: 'MB-ASUS-012', label: 'Материнская плата ASUS ROG STRIX Z790-E', price: 35000 },
-  { value: 'RAM-KNG-008', label: 'Оперативная память Kingston FURY Beast 32GB (2x16GB)', price: 12000 },
-  { value: 'GPU-NV-021', label: 'Видеокарта NVIDIA RTX 4070 Ti', price: 42000 },
-  { value: 'SSD-SAM-005', label: 'SSD Samsung 990 PRO 1TB', price: 8900 },
-  { value: 'PC-WS-001', label: 'Рабочая станция VERTEX Pro', price: 170000 },
-];
+const PAGE_SIZE = 5;
 
-const SERVICE_OPTIONS = [
-  { value: 'assembly', label: 'Сборка ПК', price: 3500 },
-  { value: 'os_install', label: 'Установка и настройка ОС Windows', price: 2000 },
-  { value: 'stress_test', label: 'Стресс-тестирование системы', price: 1500 },
-  { value: 'parts_install', label: 'Установка комплектующих', price: 3500 },
-  { value: 'corp_setup', label: 'Корпоративная настройка ПО', price: 10000 },
-];
+// Статусы заказа (русские подписи, как хранятся в purchases.Status). «Отмены» нет.
+const STATUS_OPTIONS: OrderStatus[] = ['Оплачено', 'В сборке', 'Готов к выдаче', 'Выдан'];
+const ISSUED_STATUS = 'Выдан';
 
-const CLIENT_OPTIONS = [
-  { login: 'ivan_i', name: 'Иванов Иван Иванович' },
-  { login: 'anna_s', name: 'Смирнова Анна Сергеевна' },
-  { login: 'kuz_dim', name: 'Кузнецов Дмитрий Олегович' },
-  { login: 'tech_stroy', name: 'ООО "ТехноСтрой"' },
-];
-
-const EMPLOYEE_OPTIONS = [
-  { id: 'EMP-001', name: 'Петров П.П.' },
-  { id: 'EMP-002', name: 'Сидоров С.С.' },
-  { id: 'EMP-003', name: 'Иванова М.И.' },
-];
-
-const PRODUCT_PRICE = Object.fromEntries(ORDER_PRODUCT_OPTIONS.map((o) => [o.value, o.price]));
-const SERVICE_PRICE = Object.fromEntries(SERVICE_OPTIONS.map((o) => [o.value, o.price]));
-const SERVICE_VALUE_BY_LABEL = Object.fromEntries(SERVICE_OPTIONS.map((o) => [o.label, o.value]));
-
-const STATUS_CONFIG: Record<OrderStatus, { label: string; variant: 'success' | 'warning' | 'info' | 'neutral' }> = {
-  paid: { label: 'Оплачено', variant: 'success' },
-  assembling: { label: 'В сборке', variant: 'warning' },
-  ready: { label: 'Готов к выдаче', variant: 'info' },
-  delivered: { label: 'Выдан', variant: 'neutral' },
+const STATUS_CONFIG: Record<string, { variant: 'success' | 'warning' | 'info' | 'neutral' }> = {
+  'Оплачено': { variant: 'success' },
+  'В сборке': { variant: 'warning' },
+  'Готов к выдаче': { variant: 'info' },
+  'Выдан': { variant: 'neutral' },
 };
+const DEFAULT_STATUS_STYLE = { variant: 'neutral' as const };
+const statusStyle = (status: string) => STATUS_CONFIG[status] ?? DEFAULT_STATUS_STYLE;
 
 function formatAmount(amount: number) {
   return new Intl.NumberFormat('ru-RU').format(amount) + ' ₽';
@@ -54,6 +29,23 @@ function formatAmount(amount: number) {
 function formatDate(dateStr: string | null) {
   if (!dateStr) return '—';
   return new Date(dateStr).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function Pagination({ page, total, count, onPrev, onNext }: { page: number; total: number; count: number; onPrev: () => void; onNext: () => void }) {
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  return (
+    <div className="p-4 border-t border-outline-variant bg-surface-container-lowest flex justify-between items-center text-on-surface-variant text-label-md">
+      <span>Показано {count} из {total} заказов</span>
+      <div className="flex gap-2">
+        <button onClick={onPrev} disabled={page <= 1} className="p-1 hover:bg-surface-container rounded transition-colors disabled:opacity-30">
+          <span className="material-symbols-outlined">chevron_left</span>
+        </button>
+        <button onClick={onNext} disabled={page >= totalPages} className="p-1 hover:bg-surface-container rounded transition-colors disabled:opacity-30">
+          <span className="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
+    </div>
+  );
 }
 
 // ── Action buttons (edit / delete) ──────────────────────────────────────────────
@@ -81,7 +73,28 @@ function ActionButtons({ onEdit, onDelete }: { onEdit: () => void; onDelete: () 
 
 // ── Delete confirmation modal ───────────────────────────────────────────────────
 
-function DeleteConfirmModal({ orderId, onCancel, onConfirm }: { orderId: string; onCancel: () => void; onConfirm: () => void }) {
+function DeleteConfirmModal({
+  orderId,
+  onCancel,
+  onConfirm,
+  onError,
+}: {
+  orderId: string;
+  onCancel: () => void;
+  onConfirm: () => Promise<void>;
+  onError: (msg: string) => void;
+}) {
+  const [deleting, setDeleting] = useState(false);
+
+  const handleConfirm = async () => {
+    setDeleting(true);
+    try {
+      await onConfirm();
+    } catch (e) {
+      onError(e instanceof Error ? e.message : 'Не удалось удалить заказ');
+    }
+  };
+
   return (
     <Modal
       isOpen
@@ -92,15 +105,17 @@ function DeleteConfirmModal({ orderId, onCancel, onConfirm }: { orderId: string;
         <>
           <button
             onClick={onCancel}
-            className="px-6 py-2 border border-outline-variant text-on-surface hover:bg-surface-container rounded-lg transition-colors text-label-md"
+            disabled={deleting}
+            className="px-6 py-2 border border-outline-variant text-on-surface hover:bg-surface-container rounded-lg transition-colors text-label-md disabled:opacity-50"
           >
             Отмена
           </button>
           <button
-            onClick={onConfirm}
-            className="px-6 py-2 bg-error text-on-error hover:opacity-90 rounded-lg transition-opacity text-label-md shadow-sm"
+            onClick={handleConfirm}
+            disabled={deleting}
+            className="px-6 py-2 bg-error text-on-error hover:opacity-90 rounded-lg transition-opacity text-label-md shadow-sm disabled:opacity-50"
           >
-            Удалить
+            {deleting ? 'Удаление...' : 'Удалить'}
           </button>
         </>
       }
@@ -108,6 +123,76 @@ function DeleteConfirmModal({ orderId, onCancel, onConfirm }: { orderId: string;
       <p className="text-body-md text-on-surface-variant">
         Вы уверены, что хотите удалить заказ <span className="font-medium text-on-surface">#{orderId}</span>? Это действие нельзя будет отменить.
       </p>
+    </Modal>
+  );
+}
+
+// ── Order status modal (change status, like purchases) ────────────────────────────
+
+function OrderStatusModal({ order, onUpdated, onClose }: { order: Order; onUpdated: (order: Order) => void; onClose: () => void }) {
+  const [status, setStatus] = useState<OrderStatus>(order.status);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+
+  const save = async () => {
+    if (status === order.status) return onClose();
+    setSaving(true);
+    setError('');
+    try {
+      const updated = await updateOrderStatus(order.id, status);
+      onUpdated(updated);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Не удалось изменить статус');
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Modal
+      isOpen
+      onClose={onClose}
+      title={`Статус заказа #${order.id}`}
+      subtitle={`Текущий статус: ${order.status}`}
+      maxWidth="max-w-[28rem]"
+      footer={
+        <>
+          <button
+            onClick={onClose}
+            disabled={saving}
+            className="px-6 py-2 border border-outline-variant text-on-surface hover:bg-surface-container rounded-lg transition-colors text-label-md disabled:opacity-50"
+          >
+            Отмена
+          </button>
+          <button
+            onClick={save}
+            disabled={saving}
+            className="px-6 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors text-label-md shadow-sm disabled:opacity-50"
+          >
+            {saving ? 'Сохранение...' : 'Сохранить'}
+          </button>
+        </>
+      }
+    >
+      <div className="flex flex-col gap-md">
+        {error && (
+          <div className="rounded-lg bg-error-container/40 text-on-error-container px-3 py-2 text-body-sm">{error}</div>
+        )}
+        <div>
+          <label className="block text-label-sm font-bold text-on-surface-variant uppercase mb-2">Новый статус</label>
+          <Select
+            variant="outlined"
+            value={status}
+            onChange={(v) => setStatus(v)}
+            options={STATUS_OPTIONS.map((s) => ({ value: s, label: s }))}
+          />
+        </div>
+        {status === ISSUED_STATUS && (
+          <p className="text-body-sm text-on-surface-variant">Дата выдачи будет проставлена автоматически (сегодня).</p>
+        )}
+        {status !== ISSUED_STATUS && order.issueDate && (
+          <p className="text-body-sm text-on-surface-variant">Дата выдачи будет очищена.</p>
+        )}
+      </div>
     </Modal>
   );
 }
@@ -169,7 +254,7 @@ function OrderItemsModal({ order, type, onClose }: { order: Order; type: 'produc
           <tbody className="text-body-md text-on-surface divide-y divide-outline-variant">
             {order.services.length > 0 ? (
               order.services.map((s) => (
-                <tr key={s.name} className="hover:bg-surface-container-lowest transition-colors">
+                <tr key={s.id ?? s.name} className="hover:bg-surface-container-lowest transition-colors">
                   <td className="p-3 font-medium">{s.name}</td>
                   <td className="p-3 text-right whitespace-nowrap">{formatAmount(s.price)}</td>
                 </tr>
@@ -186,7 +271,7 @@ function OrderItemsModal({ order, type, onClose }: { order: Order; type: 'produc
   );
 }
 
-// ── New order modal ───────────────────────────────────────────────────────────
+// ── Order form modal (create / edit) ──────────────────────────────────────────
 
 interface ProductLine {
   id: number;
@@ -199,10 +284,27 @@ interface ServiceLine {
   service: string;
 }
 
-function OrderFormModal({ order, onClose, onSave }: { order: Order | null; onClose: () => void; onSave: (o: Order) => void }) {
-  const [client, setClient] = useState(order?.clientLogin ?? '');
+function OrderFormModal({
+  order,
+  clients,
+  employees,
+  products,
+  services,
+  onClose,
+  onSave,
+}: {
+  order: Order | null;
+  clients: Client[];
+  employees: Employee[];
+  products: InventoryItem[];
+  services: ServiceRef[];
+  onClose: () => void;
+  onSave: (o: Order) => void;
+}) {
+  const [client, setClient] = useState(order?.clientId ?? '');
   const [employee, setEmployee] = useState(order?.employeeId ?? '');
-  const [status, setStatus] = useState<OrderStatus>(order?.status ?? 'assembling');
+  const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
 
   const initialProductLines: ProductLine[] =
     order && order.products.length
@@ -210,7 +312,7 @@ function OrderFormModal({ order, onClose, onSave }: { order: Order | null; onClo
       : [{ id: 1, product: '', quantity: 1 }];
   const initialServiceLines: ServiceLine[] =
     order && order.services.length
-      ? order.services.map((s, i) => ({ id: i + 1, service: SERVICE_VALUE_BY_LABEL[s.name] ?? '' }))
+      ? order.services.map((s, i) => ({ id: i + 1, service: s.id ?? '' }))
       : [{ id: 1, service: '' }];
 
   const [productLines, setProductLines] = useState<ProductLine[]>(initialProductLines);
@@ -228,41 +330,37 @@ function OrderFormModal({ order, onClose, onSave }: { order: Order | null; onClo
   const updateService = (id: number, patch: Partial<ServiceLine>) =>
     setServiceLines((l) => l.map((x) => (x.id === id ? { ...x, ...patch } : x)));
 
-  const linePrice = (line: ProductLine) => (PRODUCT_PRICE[line.product] ?? 0) * line.quantity;
+  // Цена товара — из справочника товаров, цена услуги — из справочника услуг.
+  const costOf = (id: string) => products.find((p) => p.id === id)?.cost ?? 0;
+  const servicePriceOf = (id: string) => services.find((s) => s.id === id)?.price ?? 0;
+  const linePrice = (line: ProductLine) => costOf(line.product) * line.quantity;
   const total =
     productLines.reduce((sum, l) => sum + linePrice(l), 0) +
-    serviceLines.reduce((sum, l) => sum + (SERVICE_PRICE[l.service] ?? 0), 0);
+    serviceLines.reduce((sum, l) => sum + (l.service ? servicePriceOf(l.service) : 0), 0);
 
-  const submit = () => {
-    const products = productLines
-      .filter((l) => l.product)
-      .map((l) => {
-        const opt = ORDER_PRODUCT_OPTIONS.find((o) => o.value === l.product)!;
-        return { id: opt.value, name: opt.label, quantity: l.quantity, amount: opt.price * l.quantity };
-      });
-    const services = serviceLines
-      .filter((l) => l.service)
-      .map((l) => {
-        const opt = SERVICE_OPTIONS.find((o) => o.value === l.service)!;
-        return { name: opt.label, price: opt.price };
-      });
-    const clientOpt = CLIENT_OPTIONS.find((c) => c.login === client);
-    const employeeOpt = EMPLOYEE_OPTIONS.find((e) => e.id === employee);
+  const submit = async () => {
+    setError('');
+    if (!client) return setError('Выберите клиента');
+    if (!employee) return setError('Выберите сотрудника');
 
-    onSave({
-      id: order?.id ?? '',
-      clientLogin: client,
-      clientName: clientOpt?.name ?? '',
+    const input: OrderInput = {
+      clientId: client,
       employeeId: employee,
-      employeeName: employeeOpt?.name ?? '',
-      totalAmount: total,
-      taxDeduction: order?.taxDeduction ?? Math.round(total * 0.1),
-      receiptDate: order?.receiptDate ?? new Date().toISOString().slice(0, 10),
-      issueDate: status === 'delivered' ? (order?.issueDate ?? new Date().toISOString().slice(0, 10)) : null,
-      status,
-      products,
-      services,
-    });
+      products: productLines.filter((l) => l.product).map((l) => ({ productId: l.product, quantity: l.quantity })),
+      services: serviceLines.filter((l) => l.service).map((l) => ({ serviceId: l.service })),
+    };
+    if (input.products.length === 0 && input.services.length === 0) {
+      return setError('Добавьте хотя бы один товар или услугу');
+    }
+
+    setSaving(true);
+    try {
+      const saved = order ? await updateOrder(order.id, input) : await createOrder(input);
+      onSave(saved);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Не удалось сохранить заказ');
+      setSaving(false);
+    }
   };
 
   return (
@@ -275,21 +373,26 @@ function OrderFormModal({ order, onClose, onSave }: { order: Order | null; onClo
         <>
           <button
             onClick={onClose}
-            className="px-6 py-2 border border-outline-variant text-on-surface hover:bg-surface-container rounded-lg transition-colors text-label-md"
+            disabled={saving}
+            className="px-6 py-2 border border-outline-variant text-on-surface hover:bg-surface-container rounded-lg transition-colors text-label-md disabled:opacity-50"
           >
             Отмена
           </button>
           <button
             onClick={submit}
-            className="px-6 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors text-label-md shadow-sm"
+            disabled={saving}
+            className="px-6 py-2 bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors text-label-md shadow-sm disabled:opacity-50"
           >
-            {order ? 'Сохранить изменения' : 'Создать заказ'}
+            {saving ? 'Сохранение...' : order ? 'Сохранить изменения' : 'Создать заказ'}
           </button>
         </>
       }
     >
       <div className="flex flex-col gap-md">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-md">
+        {error && (
+          <div className="rounded-lg bg-error-container/40 text-on-error-container px-3 py-2 text-body-sm">{error}</div>
+        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
           <div>
             <label className="block text-label-sm font-bold text-on-surface-variant uppercase mb-2">Клиент</label>
             <Select
@@ -297,7 +400,7 @@ function OrderFormModal({ order, onClose, onSave }: { order: Order | null; onClo
               value={client}
               onChange={setClient}
               placeholder="Выберите клиента..."
-              options={CLIENT_OPTIONS.map((c) => ({ value: c.login, label: `${c.login} (${c.name})` }))}
+              options={clients.map((c) => ({ value: String(c.id), label: c.login }))}
             />
           </div>
           <div>
@@ -307,21 +410,7 @@ function OrderFormModal({ order, onClose, onSave }: { order: Order | null; onClo
               value={employee}
               onChange={setEmployee}
               placeholder="Выберите сотрудника..."
-              options={EMPLOYEE_OPTIONS.map((e) => ({ value: e.id, label: `${e.id} — ${e.name}` }))}
-            />
-          </div>
-          <div>
-            <label className="block text-label-sm font-bold text-on-surface-variant uppercase mb-2">Статус</label>
-            <Select
-              variant="outlined"
-              value={status}
-              onChange={(v) => setStatus(v as OrderStatus)}
-              options={[
-                { value: 'paid', label: 'Оплачено' },
-                { value: 'assembling', label: 'В сборке' },
-                { value: 'ready', label: 'Готов к выдаче' },
-                { value: 'delivered', label: 'Выдан' },
-              ]}
+              options={employees.map((e) => ({ value: e.id, label: `${e.id} — ${e.fullName}` }))}
             />
           </div>
         </div>
@@ -348,7 +437,7 @@ function OrderFormModal({ order, onClose, onSave }: { order: Order | null; onClo
                         value={line.product}
                         onChange={(v) => updateProduct(line.id, { product: v })}
                         placeholder="Выберите товар..."
-                        options={ORDER_PRODUCT_OPTIONS.map((o) => ({ value: o.value, label: o.label }))}
+                        options={products.map((p) => ({ value: p.id, label: p.name }))}
                         className="px-1"
                       />
                     </td>
@@ -387,7 +476,7 @@ function OrderFormModal({ order, onClose, onSave }: { order: Order | null; onClo
           </div>
         </div>
 
-        {/* Services — multiple, like products */}
+        {/* Services — у услуг в БД нет цены, поэтому только выбор названия */}
         <div>
           <label className="block text-label-sm font-bold text-on-surface-variant uppercase mb-2">Дополнительные услуги</label>
           <div className="border border-outline-variant rounded-lg overflow-hidden">
@@ -407,12 +496,12 @@ function OrderFormModal({ order, onClose, onSave }: { order: Order | null; onClo
                         block
                         value={line.service}
                         onChange={(v) => updateService(line.id, { service: v })}
-                        placeholder="Выберите услугу..."
-                        options={SERVICE_OPTIONS.map((o) => ({ value: o.value, label: o.label }))}
+                        placeholder={services.length ? 'Выберите услугу...' : 'Услуг пока нет'}
+                        options={services.map((s) => ({ value: s.id, label: s.name }))}
                         className="px-1"
                       />
                     </td>
-                    <td className="p-2 text-right text-body-md">{line.service ? formatAmount(SERVICE_PRICE[line.service] ?? 0) : '—'}</td>
+                    <td className="p-2 text-right text-body-md">{line.service ? formatAmount(servicePriceOf(line.service)) : '—'}</td>
                     <td className="p-2 text-center">
                       <button
                         type="button"
@@ -449,13 +538,30 @@ function OrderFormModal({ order, onClose, onSave }: { order: Order | null; onClo
 
 // ── Orders table ────────────────────────────────────────────────────────────────
 
-function OrdersTable({ orders, setOrders }: { orders: Order[]; setOrders: React.Dispatch<React.SetStateAction<Order[]>> }) {
+function OrdersTable({
+  orders,
+  setOrders,
+  clients,
+  employees,
+  products,
+  services,
+}: {
+  orders: Order[];
+  setOrders: React.Dispatch<React.SetStateAction<Order[]>>;
+  clients: Client[];
+  employees: Employee[];
+  products: InventoryItem[];
+  services: ServiceRef[];
+}) {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [page, setPage] = useState(1);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Order | null>(null);
+  const [editingStatus, setEditingStatus] = useState<Order | null>(null);
   const [details, setDetails] = useState<{ order: Order; type: 'products' | 'services' } | null>(null);
   const [deleting, setDeleting] = useState<Order | null>(null);
+  const [deleteError, setDeleteError] = useState('');
 
   const filtered = orders.filter((o) => {
     const q = search.toLowerCase();
@@ -470,21 +576,24 @@ function OrdersTable({ orders, setOrders }: { orders: Order[]; setOrders: React.
     return matchSearch && matchStatus;
   });
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const paged = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
   const openAdd = () => { setEditing(null); setShowForm(true); };
   const openEdit = (order: Order) => { setEditing(order); setShowForm(true); };
 
-  const save = (o: Order) => {
-    if (o.id) {
-      setOrders((list) => list.map((x) => (x.id === o.id ? o : x)));
-    } else {
-      const maxNum = orders.reduce((m, x) => Math.max(m, Number(x.id.replace('ORD-', '')) || 0), 0);
-      setOrders((list) => [{ ...o, id: `ORD-${maxNum + 1}` }, ...list]);
-    }
+  // saved уже сохранён на сервере — просто отражаем его в стейте.
+  const save = (saved: Order) => {
+    setOrders((list) => (list.some((x) => x.id === saved.id) ? list.map((x) => (x.id === saved.id ? saved : x)) : [saved, ...list]));
     setShowForm(false);
   };
 
-  const confirmDelete = () => {
-    if (deleting) setOrders((list) => list.filter((x) => x.id !== deleting.id));
+  const confirmDelete = async () => {
+    if (!deleting) return;
+    setDeleteError('');
+    await deleteOrder(deleting.id);
+    setOrders((list) => list.filter((x) => x.id !== deleting.id));
     setDeleting(null);
   };
 
@@ -504,36 +613,28 @@ function OrdersTable({ orders, setOrders }: { orders: Order[]; setOrders: React.
         </button>
       </div>
 
+      {deleteError && (
+        <div className="p-3 rounded-lg bg-error-container text-on-error-container text-body-sm">{deleteError}</div>
+      )}
+
       {/* Filters */}
       <div className="flex flex-wrap gap-sm items-center bg-surface p-4 rounded-xl border border-outline-variant shadow-sm">
         <div className="flex items-center gap-2 flex-1 min-w-[250px]">
           <span className="material-symbols-outlined text-on-surface-variant">search</span>
           <input
             className="w-full bg-transparent border-none focus:ring-0 text-body-md placeholder-on-surface-variant text-on-surface p-0 outline-none"
-            placeholder="ID заказа, клиент, сотрудник..."
+            placeholder="ID, клиент, сотрудник..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
           />
         </div>
         <div className="h-6 w-px bg-outline-variant mx-2 hidden sm:block" />
         <Select
           icon="pending_actions"
           value={statusFilter}
-          onChange={setStatusFilter}
-          options={[
-            { value: '', label: 'Все статусы' },
-            { value: 'paid', label: 'Оплачено' },
-            { value: 'assembling', label: 'В сборке' },
-            { value: 'ready', label: 'Готов к выдаче' },
-            { value: 'delivered', label: 'Выдан' },
-          ]}
+          onChange={(v) => { setStatusFilter(v); setPage(1); }}
+          options={[{ value: '', label: 'Все статусы' }, ...STATUS_OPTIONS.map((s) => ({ value: s, label: s }))]}
         />
-        {/* Кнопка «Больше фильтров» — закомментирована, может понадобиться позже
-        <button className="ml-auto px-4 py-2 border border-outline-variant text-on-surface hover:bg-surface-container rounded-lg transition-colors text-label-md flex items-center gap-xs">
-          <span className="material-symbols-outlined" style={{ fontSize: 18 }}>filter_list</span>
-          Больше фильтров
-        </button>
-        */}
       </div>
 
       {/* Table */}
@@ -542,11 +643,10 @@ function OrdersTable({ orders, setOrders }: { orders: Order[]; setOrders: React.
           <table className="w-full text-left border-collapse min-w-[1000px]">
             <thead>
               <tr className="bg-surface-container-low border-b border-outline-variant text-label-sm text-on-surface-variant uppercase tracking-wider">
-                <th className="p-4">ID заказа</th>
-                <th className="p-4">Клиент (Login / ФИО)</th>
-                <th className="p-4">Сотрудник (ID / ФИО)</th>
-                <th className="p-4 text-right whitespace-nowrap">Сумма всего</th>
-                {/* <th className="p-4 text-center">Налоговый вычет</th> — закомментирован, может понадобиться позже */}
+                <th className="p-4">ID</th>
+                <th className="p-4">Клиент</th>
+                <th className="p-4">Сотрудник</th>
+                <th className="p-4 text-right whitespace-nowrap">Сумма</th>
                 <th className="p-4">Даты (запрос / выдача)</th>
                 <th className="p-4">Статус</th>
                 <th className="p-4">Подробности</th>
@@ -554,21 +654,18 @@ function OrdersTable({ orders, setOrders }: { orders: Order[]; setOrders: React.
               </tr>
             </thead>
             <tbody className="text-body-md text-on-surface divide-y divide-outline-variant">
-              {filtered.map((order) => {
-                const status = STATUS_CONFIG[order.status];
+              {paged.map((order) => {
+                const status = statusStyle(order.status);
                 return (
                   <tr key={order.id} className="hover:bg-surface-container-lowest transition-colors">
-                    <td className="p-4 font-mono text-sm text-on-surface">#{order.id}</td>
+                    <td className="p-4 font-mono text-sm text-on-surface">{order.id}</td>
                     <td className="p-4">
                       <div className="font-medium text-on-surface">{order.clientLogin}</div>
-                      <div className="text-on-surface-variant text-sm">{order.clientName}</div>
                     </td>
                     <td className="p-4">
-                      <div className="font-medium text-on-surface">{order.employeeId}</div>
-                      <div className="text-on-surface-variant text-sm">{order.employeeName}</div>
+                      <div className="font-medium text-on-surface">{order.employeeName}</div>
                     </td>
                     <td className="p-4 text-right font-medium whitespace-nowrap">{formatAmount(order.totalAmount)}</td>
-                    {/* <td className="p-4 text-center text-on-surface-variant">{formatAmount(order.taxDeduction)}</td> — закомментирован */}
                     <td className="p-4 text-on-surface-variant text-sm">
                       {formatDate(order.receiptDate)}
                       <br />
@@ -577,7 +674,16 @@ function OrdersTable({ orders, setOrders }: { orders: Order[]; setOrders: React.
                       </span>
                     </td>
                     <td className="p-4">
-                      <Badge variant={status.variant}>{status.label}</Badge>
+                      <div className="flex items-center gap-2">
+                        <Badge variant={status.variant}>{order.status}</Badge>
+                        <button
+                          onClick={() => setEditingStatus(order)}
+                          title="Изменить статус"
+                          className="p-xs text-outline hover:text-primary hover:bg-primary/10 rounded transition-colors"
+                        >
+                          <span className="material-symbols-outlined" style={{ fontSize: 18 }}>edit</span>
+                        </button>
+                      </div>
                     </td>
                     <td className="p-4">
                       <div className="flex items-center gap-3">
@@ -596,7 +702,7 @@ function OrdersTable({ orders, setOrders }: { orders: Order[]; setOrders: React.
                       </div>
                     </td>
                     <td className="p-4 text-right">
-                      <ActionButtons onEdit={() => openEdit(order)} onDelete={() => setDeleting(order)} />
+                      <ActionButtons onEdit={() => openEdit(order)} onDelete={() => { setDeleteError(''); setDeleting(order); }} />
                     </td>
                   </tr>
                 );
@@ -604,22 +710,42 @@ function OrdersTable({ orders, setOrders }: { orders: Order[]; setOrders: React.
             </tbody>
           </table>
         </div>
-        <div className="p-4 border-t border-outline-variant bg-surface-container-lowest flex justify-between items-center text-on-surface-variant text-label-md">
-          <span>Показано {filtered.length} из {orders.length} заказов</span>
-          <div className="flex gap-2">
-            <button className="p-1 hover:bg-surface-container rounded transition-colors disabled:opacity-30" disabled>
-              <span className="material-symbols-outlined">chevron_left</span>
-            </button>
-            <button className="p-1 hover:bg-surface-container rounded transition-colors">
-              <span className="material-symbols-outlined">chevron_right</span>
-            </button>
-          </div>
-        </div>
+        <Pagination
+          page={currentPage}
+          total={filtered.length}
+          count={paged.length}
+          onPrev={() => setPage(currentPage - 1)}
+          onNext={() => setPage(currentPage + 1)}
+        />
       </div>
 
-      {showForm && <OrderFormModal order={editing} onClose={() => setShowForm(false)} onSave={save} />}
+      {editingStatus && (
+        <OrderStatusModal
+          order={editingStatus}
+          onUpdated={(o) => { setOrders((list) => list.map((x) => (x.id === o.id ? o : x))); setEditingStatus(null); }}
+          onClose={() => setEditingStatus(null)}
+        />
+      )}
+      {showForm && (
+        <OrderFormModal
+          order={editing}
+          clients={clients}
+          employees={employees}
+          products={products}
+          services={services}
+          onClose={() => setShowForm(false)}
+          onSave={save}
+        />
+      )}
       {details && <OrderItemsModal order={details.order} type={details.type} onClose={() => setDetails(null)} />}
-      {deleting && <DeleteConfirmModal orderId={deleting.id} onCancel={() => setDeleting(null)} onConfirm={confirmDelete} />}
+      {deleting && (
+        <DeleteConfirmModal
+          orderId={deleting.id}
+          onCancel={() => setDeleting(null)}
+          onConfirm={confirmDelete}
+          onError={(msg) => { setDeleteError(msg); setDeleting(null); }}
+        />
+      )}
     </div>
   );
 }
@@ -628,13 +754,23 @@ function OrdersTable({ orders, setOrders }: { orders: Order[]; setOrders: React.
 
 export default function Orders() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [products, setProducts] = useState<InventoryItem[]>([]);
+  const [services, setServices] = useState<ServiceRef[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchOrders().then((data) => {
-      setOrders(data);
-      setLoading(false);
-    });
+    Promise.all([fetchOrders(), fetchClients(), fetchEmployees(), fetchInventory(), fetchServices()]).then(
+      ([ord, cl, emp, prod, srv]) => {
+        setOrders(ord);
+        setClients(cl);
+        setEmployees(emp);
+        setProducts(prod);
+        setServices(srv);
+        setLoading(false);
+      },
+    );
   }, []);
 
   if (loading) {
@@ -646,5 +782,14 @@ export default function Orders() {
     );
   }
 
-  return <OrdersTable orders={orders} setOrders={setOrders} />;
+  return (
+    <OrdersTable
+      orders={orders}
+      setOrders={setOrders}
+      clients={clients}
+      employees={employees}
+      products={products}
+      services={services}
+    />
+  );
 }
