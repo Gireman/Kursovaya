@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ru" style="">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Корзина - Компьютерный Сервис &amp; Магазин</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#4ae176",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-bright": "#f8f9ff",
+                        "tertiary-container": "#c53802",
+                        "inverse-primary": "#b5c4ff",
+                        "surface-container-high": "#dee9fc",
+                        "surface-container-highest": "#d9e3f6",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#ffe8e2",
+                        "background": "#f8f9ff",
+                        "surface-tint": "#0050e2",
+                        "primary-fixed": "#dce1ff",
+                        "secondary-container": "#6bff8f",
+                        "on-secondary-fixed": "#002109",
+                        "on-primary-container": "#eaecff",
+                        "on-primary-fixed-variant": "#003cae",
+                        "primary-container": "#005bff",
+                        "inverse-surface": "#27313f",
+                        "on-background": "#121c2a",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#9b2900",
+                        "on-secondary-fixed-variant": "#005321",
+                        "on-primary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-fixed": "#3a0a00",
+                        "surface-variant": "#d9e3f6",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#424656",
+                        "tertiary-fixed": "#ffdbd1",
+                        "tertiary-fixed-dim": "#ffb59f",
+                        "primary": "#0046c9",
+                        "on-primary-fixed": "#00164e",
+                        "on-tertiary-fixed-variant": "#862300",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d0dbed",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#c3c5d9",
+                        "secondary": "#006e2f",
+                        "on-surface": "#121c2a",
+                        "outline": "#737688",
+                        "secondary-fixed": "#6bff8f",
+                        "on-secondary-container": "#007432",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container": "#e6eeff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "24px",
+                        "xs": "8px",
+                        "base": "4px",
+                        "xl": "48px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "lg": "32px",
+                        "sm": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md js-initialized">
+    <!-- TopNavBar -->
+    <header class="bg-surface border-b border-outline-variant w-full sticky top-0 z-50">
+
+    </header>
+    <!-- Main Content -->
+    <main class="flex-grow max-w-container-max mx-auto px-lg py-xl w-full">
+        <h1 class="font-headline-lg text-headline-lg text-on-background mb-xl">Корзина</h1>
+        <div class="flex flex-col lg:flex-row gap-gutter">
+            <!-- Cart Items List (Left Column) -->
+            <div class="w-full lg:w-2/3 flex flex-col gap-sm">
+                <!-- Item 1 -->
+                <div
+                    class="bg-surface rounded-lg p-md shadow-[0px_4px_12px_rgba(0,0,0,0.05)] flex flex-col sm:flex-row items-center gap-md border border-outline-variant/30 relative">
+                    <div class="w-24 h-24 bg-surface-container rounded-md overflow-hidden flex-shrink-0">
+                        <img alt="Video Card" class="w-full h-full object-cover"
+                            data-alt="A high-end modern computer graphics card resting on a clean white surface. The component features a sleek industrial design with triple cooling fans and metallic silver and black casing. The lighting is studio quality, creating sharp reflections on the metal parts and soft shadows beneath, emphasizing the technological premium feel of the hardware in a minimalist setting."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCO5vCIX78sY63wz-Z1IArREi4Pa2ScotYf76wi2R1qQADJoMH8fcBEuO7u0M5J00R53DTO2iYUY4sWmrr5VmS69nEdp3lX_jmm-LXiqEp2pPTtH8R-ba3fV0uaLtqn_atpqEbGEZPCaZY4-9lpT8OsGWGgCnwumWPisTa440WWRDtBpPDgxIQAByGtFYlX8VgEPG2PISorP6j9G7rfJ7I-isYBVQzxk7Vxp9PMSexi-ctUy_Sh4glVGF2GE2vWn3dDLH6TkOAvX0">
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 class="font-headline-md text-body-lg text-on-background mb-base">Видеокарта NVIDIA GeForce
+                            RTX 4080</h3>
+                        <p class="font-body-md text-label-md text-on-surface-variant mb-xs">Артикул: NV-4080-8G</p>
+                        <div class="font-headline-md text-headline-md font-bold text-primary">125 000 ₽</div>
+                    </div>
+                    <div class="flex items-center gap-sm mt-sm sm:mt-0">
+                        <div class="flex items-center border border-outline-variant rounded-md overflow-hidden">
+                            <button
+                                class="w-8 h-8 flex items-center justify-center bg-surface hover:bg-surface-container transition-colors text-on-surface-variant">
+                                <span class="material-symbols-outlined text-sm">remove</span>
+                            </button>
+                            <input
+                                class="w-12 h-8 text-center border-none bg-surface text-on-background font-body-md focus:ring-0 p-0"
+                                readonly="" type="text" value="1">
+                            <button
+                                class="w-8 h-8 flex items-center justify-center bg-surface hover:bg-surface-container transition-colors text-on-surface-variant">
+                                <span class="material-symbols-outlined text-sm">add</span>
+                            </button>
+                        </div>
+                        <button aria-label="Удалить"
+                            class="text-error hover:text-on-error-container transition-colors p-xs rounded-full hover:bg-error-container">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div
+                    class="bg-surface rounded-lg p-md shadow-[0px_4px_12px_rgba(0,0,0,0.05)] flex flex-col sm:flex-row items-center gap-md border border-outline-variant/30 relative">
+                    <div class="w-24 h-24 bg-surface-container rounded-md overflow-hidden flex-shrink-0">
+                        <img alt="Processor" class="w-full h-full object-cover"
+                            data-alt="A macro shot of a modern multi-core computer processor chip. The intricate gold pins and metallic heat spreader are clearly visible against a bright, sterile background. The lighting highlights the precision engineering and high-tech nature of the component, fitting a premium corporate modern aesthetic."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAD-7kdoUwoOU0tUWvq1H9lMjgESh-hVSWPIkNX7WUJgR79_I1gCgSind5sLSBIUx_5UZnXNlPelEBEVDIkfgVv_gc_WoxMfW97A7RdNjKkf_MmpvpvfSMS86VTtC6kv1p_TKkaIIleR5WWTHz4tuApxRfdJc8D5-6iEgttpbUnXBiNU6KSsBEE2JfzggP_FmL7aGnX1XAL2zQk0qXrOEo8K4H9urapGeofVzU1_6IBwJqxrhO2Lps8uij_2KaWqpIrF3Pg5KXqlKc">
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 class="font-headline-md text-body-lg text-on-background mb-base">Процессор Intel Core
+                            i9-13900K</h3>
+                        <p class="font-body-md text-label-md text-on-surface-variant mb-xs">Артикул: INT-I9-139</p>
+                        <div class="font-headline-md text-headline-md font-bold text-primary">58 000 ₽</div>
+                    </div>
+                    <div class="flex items-center gap-sm mt-sm sm:mt-0">
+                        <div class="flex items-center border border-outline-variant rounded-md overflow-hidden">
+                            <button
+                                class="w-8 h-8 flex items-center justify-center bg-surface hover:bg-surface-container transition-colors text-on-surface-variant">
+                                <span class="material-symbols-outlined text-sm">remove</span>
+                            </button>
+                            <input
+                                class="w-12 h-8 text-center border-none bg-surface text-on-background font-body-md focus:ring-0 p-0"
+                                readonly="" type="text" value="1">
+                            <button
+                                class="w-8 h-8 flex items-center justify-center bg-surface hover:bg-surface-container transition-colors text-on-surface-variant">
+                                <span class="material-symbols-outlined text-sm">add</span>
+                            </button>
+                        </div>
+                        <button aria-label="Удалить"
+                            class="text-error hover:text-on-error-container transition-colors p-xs rounded-full hover:bg-error-container">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Right Column: Summary & Services -->
+            <div class="w-full lg:w-1/3">
+                <div
+                    class="bg-surface rounded-xl p-lg shadow-[0px_8px_24px_rgba(0,0,0,0.1)] border border-outline-variant/30 sticky top-24 hover:bg-surface-container-low transition-all duration-300 hover:shadow-md cursor-pointer">
+                    <h2
+                        class="font-headline-md text-headline-md text-on-background border-b border-outline-variant pb-sm mb-md">
+                        Оформление</h2>
+                    <!-- Additional Services -->
+                    <div class="mb-md">
+                        <h3 class="font-label-md text-label-md text-on-surface-variant mb-sm uppercase tracking-wide">
+                            Дополнительные услуги</h3>
+                        <div class="flex flex-col gap-xs">
+                            <label
+                                class="flex items-center justify-between cursor-pointer p-sm rounded-md transition-colors hover:bg-surface-container-high">
+                                <div class="flex items-center gap-xs">
+                                    <input
+                                        class="w-5 h-5 rounded border-outline text-primary focus:ring-primary focus:ring-offset-surface bg-surface cursor-pointer"
+                                        type="checkbox">
+                                    <span class="font-body-md text-body-md text-on-background">Сборка ПК</span>
+                                </div>
+                                <span class="font-label-md text-label-md text-on-surface-variant">+ 2 000 ₽</span>
+                            </label>
+                            <label
+                                class="flex items-center justify-between cursor-pointer p-sm rounded-md transition-colors hover:bg-surface-container-high">
+                                <div class="flex items-center gap-xs">
+                                    <input
+                                        class="w-5 h-5 rounded border-outline text-primary focus:ring-primary focus:ring-offset-surface bg-surface cursor-pointer"
+                                        type="checkbox">
+                                    <span class="font-body-md text-body-md text-on-background">Установка ОС</span>
+                                </div>
+                                <span class="font-label-md text-label-md text-on-surface-variant">+ 1 500 ₽</span>
+                            </label>
+                            <label
+                                class="flex items-center justify-between cursor-pointer p-sm rounded-md transition-colors hover:bg-surface-container-high">
+                                <div class="flex items-center gap-xs">
+                                    <input checked=""
+                                        class="w-5 h-5 rounded border-outline text-primary focus:ring-primary focus:ring-offset-surface bg-surface cursor-pointer"
+                                        type="checkbox">
+                                    <span class="font-body-md text-body-md text-on-background">Доставка курьером</span>
+                                </div>
+                                <span class="font-label-md text-label-md text-on-surface-variant">Бесплатно</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="border-t border-outline-variant pt-md mb-md">
+                        <div class="flex justify-between items-end mb-sm">
+                            <span class="font-body-md text-body-md text-on-surface-variant">Товары (2)</span>
+                            <span class="font-body-md text-body-md text-on-background">183 000 ₽</span>
+                        </div>
+                        <div class="flex justify-between items-end mb-sm">
+                            <span class="font-body-md text-body-md text-on-surface-variant">Услуги</span>
+                            <span class="font-body-md text-body-md text-on-background">0 ₽</span>
+                        </div>
+                        <div class="flex justify-between items-end mt-md">
+                            <span class="font-headline-md text-body-lg text-on-background">Итого:</span>
+                            <span class="font-display-lg text-headline-lg text-primary">183 000 ₽</span>
+                        </div>
+                    </div>
+                    <button
+                        class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md rounded-lg shadow-sm transition-all active:scale-[0.98] flex items-center justify-center gap-xs hover:bg-primary-container">
+                        Оформить заказ
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </button>
+                    <p class="font-label-sm text-label-sm text-on-surface-variant text-center mt-sm">
+                        Нажимая кнопку, вы соглашаетесь с условиями обработки данных.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <script>
+                (function () {
+                    const updateTotals = () => {
+                        let subtotal = 0;
+                        document.querySelectorAll('main .flex-col.lg\\:flex-row > div:first-child > div').forEach(item => {
+                            const priceText = item.querySelector('.text-primary').textContent.replace(/[^0-9]/g, '');
+                            const quantity = parseInt(item.querySelector('input').value);
+                            subtotal += parseInt(priceText) * quantity;
+                        });
+
+                        const servicesTotal = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+                            .reduce((acc, cb) => {
+                                const priceSpan = cb.closest('label').querySelector('span:last-child').textContent;
+                                const price = parseInt(priceSpan.replace(/[^0-9]/g, '')) || 0;
+                                return acc + price;
+                            }, 0);
+
+                        const total = subtotal + servicesTotal;
+
+                        const summaryItems = document.querySelectorAll('.lg\\:w-1\\/3 .flex.justify-between.items-end');
+                        summaryItems[0].querySelector('span:last-child').textContent = subtotal.toLocaleString('ru-RU') + ' ₽';
+                        summaryItems[1].querySelector('span:last-child').textContent = servicesTotal.toLocaleString('ru-RU') + ' ₽';
+                        summaryItems[2].querySelector('span:last-child').textContent = total.toLocaleString('ru-RU') + ' ₽';
+                    };
+
+                    document.querySelectorAll('main .flex-col.lg\\:flex-row > div:first-child > div').forEach(item => {
+                        const minusBtn = item.querySelector('button:has(span:contains("remove"))') || item.querySelectorAll('button')[0];
+                        const plusBtn = item.querySelector('button:has(span:contains("add"))') || item.querySelectorAll('button')[1];
+                        const input = item.querySelector('input');
+                        const deleteBtn = item.querySelector('button[aria-label="Удалить"]');
+
+                        minusBtn.onclick = () => {
+                            let val = parseInt(input.value);
+                            if (val > 1) {
+                                input.value = val - 1;
+                                updateTotals();
+                            }
+                        };
+
+                        plusBtn.onclick = () => {
+                            input.value = parseInt(input.value) + 1;
+                            updateTotals();
+                        };
+
+                        deleteBtn.onclick = () => {
+                            const modal = document.createElement('div');
+                            modal.className = 'fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-md';
+                            modal.innerHTML = `
+                <div class="bg-surface p-lg rounded-xl shadow-xl max-w-sm w-full border border-outline-variant">
+                    <h3 class="font-headline-md text-headline-md mb-md">Удаление товара</h3>
+                    <p class="font-body-md text-on-surface-variant mb-lg">Вы уверены, что хотите удалить этот товар из корзины?</p>
+                    <div class="flex gap-sm justify-end">
+                        <button class="px-md py-sm rounded-lg font-label-md border border-outline-variant hover:bg-surface-container transition-colors">Отмена</button>
+                        <button class="px-md py-sm rounded-lg font-label-md bg-error text-on-error hover:opacity-90 transition-colors">Удалить</button>
+                    </div>
+                </div>`;
+
+                            modal.querySelector('button:first-child').onclick = () => modal.remove();
+                            modal.querySelector('button:last-child').onclick = () => {
+                                item.remove();
+                                updateTotals();
+                                modal.remove();
+                            };
+                            document.body.appendChild(modal);
+                        };
+                    });
+
+                    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                        cb.onchange = updateTotals;
+                    });
+                })();
+        </script>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-surface-container-low border-t border-outline-variant w-full mt-auto">
+
+    </footer>
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

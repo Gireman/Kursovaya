@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru" style="width: 1352px; height: 1075px; overflow: hidden; position: relative;">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Ремонт - Компьютерный Сервис &amp; Магазин</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#4ae176",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-bright": "#f8f9ff",
+                        "tertiary-container": "#c53802",
+                        "inverse-primary": "#b5c4ff",
+                        "surface-container-high": "#dee9fc",
+                        "surface-container-highest": "#d9e3f6",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#ffe8e2",
+                        "background": "#f8f9ff",
+                        "surface-tint": "#0050e2",
+                        "primary-fixed": "#dce1ff",
+                        "secondary-container": "#6bff8f",
+                        "on-secondary-fixed": "#002109",
+                        "on-primary-container": "#eaecff",
+                        "on-primary-fixed-variant": "#003cae",
+                        "primary-container": "#005bff",
+                        "inverse-surface": "#27313f",
+                        "on-background": "#121c2a",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#9b2900",
+                        "on-secondary-fixed-variant": "#005321",
+                        "on-primary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-fixed": "#3a0a00",
+                        "surface-variant": "#d9e3f6",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#424656",
+                        "tertiary-fixed": "#ffdbd1",
+                        "tertiary-fixed-dim": "#ffb59f",
+                        "primary": "#0046c9",
+                        "on-primary-fixed": "#00164e",
+                        "on-tertiary-fixed-variant": "#862300",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d0dbed",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#c3c5d9",
+                        "secondary": "#006e2f",
+                        "on-surface": "#121c2a",
+                        "outline": "#737688",
+                        "secondary-fixed": "#6bff8f",
+                        "on-secondary-container": "#007432",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container": "#e6eeff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "24px",
+                        "xs": "8px",
+                        "base": "4px",
+                        "xl": "48px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "lg": "32px",
+                        "sm": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md text-body-md">
+    <!-- TopNavBar -->
+    <header
+        class="bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline w-full top-0 z-50">
+
+    </header>
+    <main class="flex-grow max-w-container-max mx-auto px-lg py-xl w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+            <!-- Info Block -->
+            <div class="lg:col-span-5 flex flex-col space-y-md">
+                <div>
+                    <h1 class="font-display-lg text-display-lg text-primary mb-sm">Диагностика&nbsp;<div class="">и
+                            ремонт</div>
+                    </h1>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant">Оставьте заявку, и наши специалисты
+                        оперативно решат вашу проблему.
+                    </p>
+                </div>
+                <div class="space-y-sm">
+                    <div class="space-y-md">
+                        <div
+                            class="bg-surface-container-low p-md rounded-xl border border-outline-variant transition-all hover:shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                            <div class="flex items-start space-x-sm">
+                                <div class="bg-primary-container p-xs rounded-lg flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-white">check_circle</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface mb-base">
+                                        Бесплатная диагностика</h3>
+                                    <p class="font-body-md text-body-md text-on-surface-variant">При последующем ремонте
+                                        в нашем сервисном центре.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-surface-container-low p-md rounded-xl border border-outline-variant transition-all hover:shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                            <div class="flex items-start space-x-sm">
+                                <div class="bg-primary-container p-xs rounded-lg flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-white">build</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface mb-base">
+                                        Квалифицированный ремонт</h3>
+                                    <p class="font-body-md text-body-md text-on-surface-variant">Используем только
+                                        оригинальные запчасти и проверенные аналоги.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-surface-container-low p-md rounded-xl border border-outline-variant transition-all hover:shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                            <div class="flex items-start space-x-sm">
+                                <div class="bg-primary-container p-xs rounded-lg flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-white">lan</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface mb-base">
+                                        Монтаж сетей</h3>
+                                    <p class="font-body-md text-body-md text-on-surface-variant">Проектирование и
+                                        прокладка локальных вычислительных сетей любой сложности.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Form Block -->
+            <div
+                class="lg:col-span-7 bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] p-lg border border-outline-variant">
+                <div class="flex flex-col h-full">
+                    <h2 class="font-headline-lg text-headline-lg text-on-surface mb-md">Как заказать ремонт</h2>
+                    <div class="space-y-md flex-grow">
+                        <p class="text-body-lg text-on-surface-variant">
+                            Для получения услуг по ремонту и обслуживанию техники, пожалуйста, посетите наш сервисный
+                            центр или любой из розничных магазинов нашей сети.
+                        </p>
+                        <div class="bg-surface-container-low p-md rounded-lg border border-outline-variant">
+                            <h3 class="font-headline-md text-body-md font-bold text-on-surface mb-xs">Наш центральный
+                                офис</h3>
+                            <p class="text-body-md text-on-surface-variant mb-xs">
+                                <span class="material-symbols-outlined text-primary mr-xs">location_on</span>
+                                ул. Техническая, д. 42, Москва
+                            </p>
+                            <p class="text-body-md text-on-surface-variant mb-xs">
+                                <span class="material-symbols-outlined text-primary mr-xs">call</span>
+                                +7 (495) 000-00-00
+                            </p>
+                            <p class="text-body-md text-on-surface-variant">
+                                <span class="material-symbols-outlined text-primary mr-xs">schedule</span>
+                                Ежедневно: 10:00 — 21:00
+                            </p>
+                        </div>
+                        <div class="space-y-sm">
+                            <h3 class="font-headline-md text-body-md font-bold text-on-surface">Наши магазины</h3>
+                            <ul class="space-y-xs">
+                                <li class="flex items-center text-body-md text-on-surface-variant">
+                                    <span class="material-symbols-outlined text-secondary mr-xs">store</span>
+                                    ТЦ "Электроника", 2 этаж
+                                </li>
+                                <li class="flex items-center text-body-md text-on-surface-variant">
+                                    <span class="material-symbols-outlined text-secondary mr-xs">store</span>
+                                    Пр-т Мира, д. 15 (вход со двора)
+                                </li>
+                            </ul>
+                        </div>
+                        <div
+                            class="mt-lg p-md border-2 border-dashed border-outline-variant rounded-xl flex items-center justify-center bg-surface-container">
+                            <div class="text-center">
+                                <span
+                                    class="material-symbols-outlined text-primary-fixed-variant text-display-lg mb-xs">map</span>
+                                <p class="text-label-md text-on-surface-variant">Интерактивная карта магазинов</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-lg">
+                        <p class="text-body-md font-bold text-primary">Ждем вас! Мы всегда готовы помочь с любой
+                            технической проблемой.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer
+        class="bg-surface-container-low dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline w-full">
+
+    </footer>
+
+
+
+
+    <div id="snapdom-sandbox" data-snapdom-sandbox="true" aria-hidden="true"
+        style="position: absolute; left: -9999px; top: -9999px; width: 0px; height: 0px; overflow: hidden;"></div>
+</body>
+
+</html>

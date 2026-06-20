@@ -1,3 +1,11 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useCart } from '../cart/CartContext';
+
+function formatRub(value: number): string {
+  return value.toLocaleString('ru-RU') + ' ₽';
+}
+
 const HERO_IMAGE =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuBys0ck2IZef9POzBkHjo3aWeuiP2r_2pIrEKFxIxJ1fev5AafC8kc2a9D_DqgrRGgLik3UUgQIJS6iVd5x6faUvl00HA2uw2F-hauiKJp_Pz3daBGGRj4wNuS7_wYsHCFR5XPlVrxQ8KHNsrKvuyuks2rHDMVxdpUmP_jePYL0Cp-cOvDdgql2CG1IkdIX_ioqHj8mTFDEnu06LxD1lpOQvUihFXlIVhL_RgnFj-cIhNGrSPe0wqBwQ7vioj0EJ0fLVmcGD7X2Ud4';
 
@@ -14,8 +22,9 @@ const CATEGORIES: Category[] = [
 ];
 
 interface Product {
+  id: number; // products.Id в БД
   name: string;
-  price: string;
+  price: number;
   rating: string;
   reviews: string;
   badge: string;
@@ -24,8 +33,9 @@ interface Product {
 
 const PRODUCTS: Product[] = [
   {
+    id: 11,
     name: 'Intel Core i9-14900K',
-    price: '65 990 ₽',
+    price: 65990,
     rating: '4.9',
     reviews: '128 отзывов',
     badge: 'В наличии',
@@ -33,8 +43,9 @@ const PRODUCTS: Product[] = [
       'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQO1DqRVX94ToAhCE54A-3GlBIRbdYBSfzrVyceJg950MrA6uzpvYZjuLcoOp1e-oKwmYNDgC5bFESFdRw48BqeDWpOGVcIlBT-7X5ZbzjeqgJFqYZP2rZTMCodeuQZ088iF-7UsA&usqp=CAc',
   },
   {
+    id: 12,
     name: 'NVIDIA GeForce RTX 4080 Super',
-    price: '124 500 ₽',
+    price: 124500,
     rating: '5.0',
     reviews: '84 отзыва',
     badge: 'В наличии',
@@ -42,8 +53,9 @@ const PRODUCTS: Product[] = [
       'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTeTDR2PIa7n-BZHWnzNvpjUn_ZysJW6npBr7kG1HCXaM3NoSbfdgeVF8UXG75ziuSWS8lT8mQXEqg7Ykbp_taQT_c5BZwaNI5EJMat9VZW&usqp=CAc',
   },
   {
+    id: 13,
     name: "Сборка 'Cyber PRO' (i7/RTX4070)",
-    price: '189 000 ₽',
+    price: 189000,
     rating: '4.8',
     reviews: '45 отзывов',
     badge: 'Сборка',
@@ -51,8 +63,9 @@ const PRODUCTS: Product[] = [
       'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRzFFUpJGD5M59brPe-CwFXvXCCw09jaJF2b_UACM9RoIFNF8_Je7wG9rSA_poqC7uU9ptnamXBOOhabsa2pM2I4LfjCZBi9ydRgqWg-zu4xXnPAAe6lUQly9OYVqhWSJDg8K-4J38Fug&usqp=CAc',
   },
   {
+    id: 14,
     name: 'ASUS ROG Zephyrus G16',
-    price: '215 900 ₽',
+    price: 215900,
     rating: '4.9',
     reviews: '32 отзыва',
     badge: 'Новинка',
@@ -81,12 +94,12 @@ function Hero() {
             >
               Перейти в каталог
             </a>
-            <a
-              href="#"
+            <Link
+              to="/repair"
               className="border border-primary text-primary px-lg h-12 rounded-lg font-label-md hover:bg-primary/5 transition-all active:opacity-80 flex items-center justify-center"
             >
               Подробнее о ремонте
-            </a>
+            </Link>
           </div>
         </div>
         <div className="relative h-full min-h-[400px]">
@@ -125,6 +138,15 @@ function PopularCategories() {
 }
 
 function ProductCard({ product }: { product: Product }) {
+  const { add } = useCart();
+  const [added, setAdded] = useState(false);
+
+  function handleAdd() {
+    add({ id: product.id, name: product.name, price: product.price, image: product.image });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1500);
+  }
+
   return (
     <div className="bg-surface rounded-xl border border-outline-variant overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col group">
       <div className="h-48 bg-surface-container-lowest relative overflow-hidden">
@@ -142,10 +164,16 @@ function ProductCard({ product }: { product: Product }) {
         </div>
         <h3 className="font-headline-md text-headline-md text-on-surface text-xl font-bold">{product.name}</h3>
         <div className="mt-auto pt-sm space-y-sm">
-          <div className="font-headline-lg text-headline-lg text-primary font-bold">{product.price}</div>
-          <button className="w-full h-12 bg-primary text-on-primary rounded-lg flex items-center justify-center gap-xs hover:shadow-md transition-all active:opacity-80 hover:opacity-90">
-            <span className="material-symbols-outlined">shopping_cart</span>
-            <span className="font-label-md">В корзину</span>
+          <div className="font-headline-lg text-headline-lg text-primary font-bold">{formatRub(product.price)}</div>
+          <button
+            type="button"
+            onClick={handleAdd}
+            className={`w-full h-12 rounded-lg flex items-center justify-center gap-xs hover:shadow-md transition-all active:opacity-80 ${
+              added ? 'bg-secondary text-on-secondary' : 'bg-primary text-on-primary hover:opacity-90'
+            }`}
+          >
+            <span className="material-symbols-outlined">{added ? 'check' : 'shopping_cart'}</span>
+            <span className="font-label-md">{added ? 'Добавлено' : 'В корзину'}</span>
           </button>
         </div>
       </div>
@@ -159,7 +187,7 @@ function FeaturedProducts() {
       <h2 className="font-headline-lg text-headline-lg text-on-surface">Рекомендуемые товары</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
         {PRODUCTS.map((product) => (
-          <ProductCard key={product.name} product={product} />
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </section>

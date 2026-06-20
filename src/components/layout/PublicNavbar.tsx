@@ -1,13 +1,17 @@
 import { Link } from 'react-router-dom';
+import { useCart } from '../../cart/CartContext';
 
 const NAV_LINKS = [
   { label: 'Каталог', to: '#' },
   { label: 'Готовые сборки', to: '#' },
-  { label: 'Ремонт', to: '#' },
+  { label: 'Ремонт', to: '/repair' },
   { label: 'О нас', to: '#' },
 ];
 
+const linkClass = 'font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors';
+
 export function PublicNavbar() {
+  const { count } = useCart();
   return (
     <header className="bg-surface border-b border-outline-variant sticky top-0 z-50">
       <div className="max-w-container-max mx-auto px-lg w-full h-16 flex items-center justify-between gap-md">
@@ -21,15 +25,17 @@ export function PublicNavbar() {
 
         {/* Навигация */}
         <nav className="hidden md:flex items-center gap-md">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.to}
-              className="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
+          {NAV_LINKS.map((link) =>
+            link.to.startsWith('/') ? (
+              <Link key={link.label} to={link.to} className={linkClass}>
+                {link.label}
+              </Link>
+            ) : (
+              <a key={link.label} href={link.to} className={linkClass}>
+                {link.label}
+              </a>
+            ),
+          )}
         </nav>
 
         {/* Поиск + действия */}
@@ -44,13 +50,18 @@ export function PublicNavbar() {
               search
             </span>
           </div>
-          <a
-            href="#"
-            className="text-on-surface-variant hover:text-primary transition-colors p-2 active:opacity-80"
+          <Link
+            to="/cart"
+            className="relative text-on-surface-variant hover:text-primary transition-colors p-2 active:opacity-80"
             aria-label="Корзина"
           >
             <span className="material-symbols-outlined">shopping_cart</span>
-          </a>
+            {count > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 rounded-full bg-primary text-on-primary text-label-sm font-bold flex items-center justify-center">
+                {count}
+              </span>
+            )}
+          </Link>
           <Link
             to="/auth"
             className="text-on-surface-variant hover:text-primary transition-colors p-2 active:opacity-80"

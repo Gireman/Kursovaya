@@ -24,3 +24,13 @@ export function updateOrderStatus(id: string, status: string): Promise<Order> {
 export function fetchServices(): Promise<ServiceRef[]> {
   return apiRequest<ServiceRef[]>('/api/refs/services');
 }
+
+export interface CheckoutInput {
+  products: { productId: number; quantity: number }[];
+  services: { serviceId: number }[];
+}
+
+// Самооформление корзины клиентом: клиент и сотрудник определяются на сервере.
+export function checkoutCart(input: CheckoutInput): Promise<Order> {
+  return apiRequest<Order>('/api/orders/checkout', { method: 'POST', body: JSON.stringify(input) });
+}

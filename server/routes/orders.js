@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { pool } from '../db.js';
+import { requireAuth } from '../middleware/auth.js';
 
 const router = Router();
 
@@ -95,13 +96,8 @@ async function fetchOrderById(id) {
   return mapOrder(rows[0], productsBy, servicesBy);
 }
 
-// Проверка тела заказа. Возвращает { error } или очищенные поля.
-function validateOrder(body) {
-  const clientId = Number(body.clientId);
-  const employeeId = Number(body.employeeId);
-  if (!Number.isInteger(clientId) || clientId <= 0) return { error: 'Выберите клиента' };
-  if (!Number.isInteger(employeeId) || employeeId <= 0) return { error: 'Выберите сотрудника' };
-
+// Разбор товаров/услуг заказа. Возвращает { error } или { products, services }.
+function parseItems(body) {
   const products = [];
   for (const raw of body.products ?? []) {
     const productId = Number(raw.productId);
@@ -122,7 +118,20 @@ function validateOrder(body) {
     return { error: 'Добавьте хотя бы один товар или услугу' };
   }
 
-  return { clientId, employeeId, products, services };
+  return { products, services };
+}
+
+// Проверка тела заказа (админ-форма). Возвращает { error } или очищенные поля.
+function validateOrder(body) {
+  const clientId = Number(body.clientId);
+  const employeeId = Number(body.employeeId);
+  if (!Number.isInteger(clientId) || clientId <= 0) return { error: 'Выберите клиента' };
+  if (!Number.isInteger(employeeId) || employeeId <= 0) return { error: 'Выберите сотрудника' };
+
+  const items = parseItems(body);
+  if (items.error) return items;
+
+  return { clientId, employeeId, products: items.products, services: items.services };
 }
 
 // Сумму считаем на сервере из products.Cost и services.Price — не доверяем клиенту.
@@ -213,6 +222,56 @@ router.post('/', async (req, res) => {
     if (refError(err, res)) return;
     console.error('POST /orders:', err.message);
     res.status(500).json({ error: 'Ошибка создания заказа' });
+  } finally {
+    if (conn) conn.release();
+  }
+});
+
+// POST /api/orders/checkout — самооформление клиентом своей корзины.
+// Клиент берётся из сессии, сотрудник-обработчик — по умолчанию, статус — «Оплачено».
+router.post('/checkout', requireAuth, async (req, res) => {
+  const items = parseItems(req.body);
+  if (items.error) return res.status(400).json({ error: items.error });
+
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    // Клиент = профиль текущего пользователя.
+    const [clientRows] = await conn.query('SELECT Id FROM clients WHERE Id_user = ?', [req.session.userId]);
+    if (clientRows.length === 0) {
+      conn.release();
+      return res.status(403).json({ error: 'Оформление доступно только клиентам' });
+    }
+    const clientId = clientRows[0].Id;
+
+    // Продавца-сессии нет → назначаем первого сотрудника как обработчика.
+    const [empRows] = await conn.query('SELECT Id FROM employees ORDER BY Id LIMIT 1');
+    if (empRows.length === 0) {
+      conn.release();
+      return res.status(500).json({ error: 'Нет сотрудника для оформления заказа' });
+    }
+    const employeeId = empRows[0].Id;
+
+    const sum = await computeSum(conn, items.products, items.services);
+    if (sum && sum.error) { conn.release(); return res.status(400).json({ error: sum.error }); }
+
+    await conn.beginTransaction();
+    const [result] = await conn.query(
+      `INSERT INTO purchases (Id_client, Id_employee, Sum, Tax, FillingDate, Status)
+       VALUES (?, ?, ?, 0, CURDATE(), ?)`,
+      [clientId, employeeId, sum, DEFAULT_STATUS],
+    );
+    const purchaseId = result.insertId;
+    await insertItems(conn, purchaseId, items.products, items.services);
+    await conn.commit();
+
+    res.status(201).json(await fetchOrderById(purchaseId));
+  } catch (err) {
+    if (conn) await conn.rollback().catch(() => {});
+    if (refError(err, res)) return;
+    console.error('POST /orders/checkout:', err.message);
+    res.status(500).json({ error: 'Ошибка оформления заказа' });
   } finally {
     if (conn) conn.release();
   }

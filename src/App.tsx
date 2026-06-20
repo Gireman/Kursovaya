@@ -3,8 +3,11 @@ import type { ReactNode } from 'react';
 import { PublicLayout } from './components/layout/PublicLayout';
 import { AdminLayout } from './components/layout/AdminLayout';
 import { AuthProvider, useAuth } from './auth/AuthContext';
+import { CartProvider } from './cart/CartContext';
 import { ROLE_EMPLOYEE } from './api/auth';
 import Home from './pages/Home';
+import Repair from './pages/Repair';
+import Cart from './pages/Cart';
 import Auth from './pages/Auth';
 import Inventory from './pages/admin/Inventory';
 import Users from './pages/admin/Users';
@@ -42,6 +45,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <CartProvider>
         <Routes>
           <Route
             path="/"
@@ -52,6 +56,8 @@ export default function App() {
             }
           >
             <Route index element={<Home />} />
+            <Route path="repair" element={<Repair />} />
+            <Route path="cart" element={<Cart />} />
           </Route>
           <Route
             path="/auth"
@@ -70,6 +76,7 @@ export default function App() {
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </CartProvider>
       </AuthProvider>
     </BrowserRouter>
   );
