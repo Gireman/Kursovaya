@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ru" style="">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Компьютерный Сервис &amp; Магазин</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#4ae176",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-bright": "#f8f9ff",
+                        "tertiary-container": "#c53802",
+                        "inverse-primary": "#b5c4ff",
+                        "surface-container-high": "#dee9fc",
+                        "surface-container-highest": "#d9e3f6",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#ffe8e2",
+                        "background": "#f8f9ff",
+                        "surface-tint": "#0050e2",
+                        "primary-fixed": "#dce1ff",
+                        "secondary-container": "#6bff8f",
+                        "on-secondary-fixed": "#002109",
+                        "on-primary-container": "#eaecff",
+                        "on-primary-fixed-variant": "#003cae",
+                        "primary-container": "#005bff",
+                        "inverse-surface": "#27313f",
+                        "on-background": "#121c2a",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#9b2900",
+                        "on-secondary-fixed-variant": "#005321",
+                        "on-primary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-fixed": "#3a0a00",
+                        "surface-variant": "#d9e3f6",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#424656",
+                        "tertiary-fixed": "#ffdbd1",
+                        "tertiary-fixed-dim": "#ffb59f",
+                        "primary": "#0046c9",
+                        "on-primary-fixed": "#00164e",
+                        "on-tertiary-fixed-variant": "#862300",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d0dbed",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#c3c5d9",
+                        "secondary": "#006e2f",
+                        "on-surface": "#121c2a",
+                        "outline": "#737688",
+                        "secondary-fixed": "#6bff8f",
+                        "on-secondary-container": "#007432",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container": "#e6eeff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "24px",
+                        "xs": "8px",
+                        "base": "4px",
+                        "xl": "48px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "lg": "32px",
+                        "sm": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+    <!-- TopNavBar -->
+    <header
+        class="bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline docked full-width top-0 sticky z-50">
+
+    </header>
+    <main class="flex-grow max-w-container-max mx-auto px-lg w-full py-xl space-y-xl">
+        <section class="relative overflow-hidden rounded-xl bg-surface-container-low border border-outline-variant">
+            <div class="grid grid-cols-1 md:grid-cols-2 items-center">
+                <div class="p-xl space-y-md z-10">
+                    <h1 class="font-display-lg text-display-lg text-on-surface">Профессиональный <span
+                            class="text-primary">ремонт</span> и <span class="text-primary">мощные решения</span> для
+                        вашего ПК</h1>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant">
+                        От быстрой диагностики до сборки игровых станций мечты. Официальная гарантия и оригинальные
+                        комплектующие.
+                    </p>
+                    <div class="flex flex-wrap gap-sm pt-sm">
+                        <button
+                            class="bg-primary text-on-primary px-lg h-12 rounded-lg font-label-md hover:shadow-md transition-all active:opacity-80 flex items-center justify-center hover:opacity-90 transition-colors duration-200">Перейти
+                            в каталог</button>
+                        <button
+                            class="border border-primary text-primary px-lg h-12 rounded-lg font-label-md hover:bg-primary/5 transition-all active:opacity-80 flex items-center justify-center">Подробнее
+                            о ремонте</button>
+                    </div>
+                </div>
+                <div class="relative h-full min-h-[400px]">
+                    <img alt="Professional computer service workspace"
+                        class="absolute inset-0 w-full h-full object-cover"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBys0ck2IZef9POzBkHjo3aWeuiP2r_2pIrEKFxIxJ1fev5AafC8kc2a9D_DqgrRGgLik3UUgQIJS6iVd5x6faUvl00HA2uw2F-hauiKJp_Pz3daBGGRj4wNuS7_wYsHCFR5XPlVrxQ8KHNsrKvuyuks2rHDMVxdpUmP_jePYL0Cp-cOvDdgql2CG1IkdIX_ioqHj8mTFDEnu06LxD1lpOQvUihFXlIVhL_RgnFj-cIhNGrSPe0wqBwQ7vioj0EJ0fLVmcGD7X2Ud4">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-surface-container-low via-transparent to-transparent md:block hidden">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Hero Section -->
+        <!-- Popular Categories -->
+        <section class="space-y-md">
+            <h2 class="font-headline-lg text-headline-lg text-on-surface">Популярные категории</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+                <a class="bg-surface rounded-xl p-md flex flex-col items-center justify-center gap-sm shadow-sm hover:shadow-md transition-shadow border border-outline-variant hover:border-primary group"
+                    href="#">
+                    <div
+                        class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                        <span class="material-symbols-outlined text-4xl">memory</span>
+                    </div>
+                    <span class="font-label-md text-label-md text-on-surface">Процессоры</span>
+                </a>
+                <a class="bg-surface rounded-xl p-md flex flex-col items-center justify-center gap-sm shadow-sm hover:shadow-md transition-shadow border border-outline-variant hover:border-primary group"
+                    href="#">
+                    <div
+                        class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                        <span class="material-symbols-outlined text-4xl">developer_board</span>
+                    </div>
+                    <span class="font-label-md text-label-md text-on-surface">Видеокарты</span>
+                </a>
+                <a class="bg-surface rounded-xl p-md flex flex-col items-center justify-center gap-sm shadow-sm hover:shadow-md transition-shadow border border-outline-variant hover:border-primary group"
+                    href="#">
+                    <div
+                        class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                        <span class="material-symbols-outlined text-4xl">computer</span>
+                    </div>
+                    <span class="font-label-md text-label-md text-on-surface">Готовые сборки</span>
+                </a>
+                <a class="bg-surface rounded-xl p-md flex flex-col items-center justify-center gap-sm shadow-sm hover:shadow-md transition-shadow border border-outline-variant hover:border-primary group"
+                    href="#">
+                    <div
+                        class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                        <span class="material-symbols-outlined text-4xl">laptop_mac</span>
+                    </div>
+                    <span class="font-label-md text-label-md text-on-surface">Ноутбуки</span>
+                </a>
+            </div>
+        </section>
+        <!-- Product Grid -->
+        <section class="space-y-md">
+            <h2 class="font-headline-lg text-headline-lg text-on-surface">Рекомендуемые товары</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+                <!-- Product Card 1 -->
+                <div
+                    class="bg-surface rounded-xl border border-outline-variant overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col group">
+                    <div class="h-48 bg-surface-container-lowest relative overflow-hidden"><img
+                            src="https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQO1DqRVX94ToAhCE54A-3GlBIRbdYBSfzrVyceJg950MrA6uzpvYZjuLcoOp1e-oKwmYNDgC5bFESFdRw48BqeDWpOGVcIlBT-7X5ZbzjeqgJFqYZP2rZTMCodeuQZ088iF-7UsA&amp;usqp=CAc"
+                            alt="Intel Core i9-14900K" class="w-full h-full object-contain">
+                        <div class="absolute top-2 left-2 bg-secondary/20 text-secondary px-3 py-1 rounded-full font-label-sm text-label-sm shadow-sm"
+                            style="background-color: rgb(220, 252, 231); color: rgb(21, 128, 61);">
+                            В наличии
+                        </div>
+                    </div>
+                    <div class="p-md flex flex-col flex-grow gap-xs">
+                        <div class="flex items-center text-secondary gap-1"><span
+                                class="material-symbols-outlined text-sm"
+                                style="font-variation-settings: &quot;FILL&quot; 1;">star</span><span
+                                class="font-label-md text-label-md">4.9 (128 отзывов)</span></div>
+                        <h3 class="font-headline-md text-headline-md text-on-surface text-xl font-bold">Intel Core
+                            i9-14900K</h3>
+                        <div class="mt-auto pt-sm space-y-sm">
+                            <div class="font-headline-lg text-headline-lg text-primary font-bold">65 990 ₽</div>
+                            <button
+                                class="w-full h-12 bg-primary text-on-primary rounded-lg flex items-center justify-center gap-xs hover:shadow-md transition-all active:opacity-80 hover:bg-[#1a6bff]"
+                                style="--hover-bg: #1a6bff;">
+                                <span class="material-symbols-outlined">shopping_cart</span>
+                                <span class="font-label-md">В корзину</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product Card 2 -->
+                <div
+                    class="bg-surface rounded-xl border border-outline-variant overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col group">
+                    <div class="h-48 bg-surface-container-lowest relative overflow-hidden"><img
+                            src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTeTDR2PIa7n-BZHWnzNvpjUn_ZysJW6npBr7kG1HCXaM3NoSbfdgeVF8UXG75ziuSWS8lT8mQXEqg7Ykbp_taQT_c5BZwaNI5EJMat9VZW&amp;usqp=CAc"
+                            alt="NVIDIA GeForce RTX 4080 Super" class="w-full h-full object-contain">
+                        <div class="absolute top-2 left-2 bg-secondary/20 text-secondary px-3 py-1 rounded-full font-label-sm text-label-sm shadow-sm"
+                            style="background-color: rgb(220, 252, 231); color: rgb(21, 128, 61);">
+                            В наличии
+                        </div>
+                    </div>
+                    <div class="p-md flex flex-col flex-grow gap-xs">
+                        <div class="flex items-center text-secondary gap-1"><span
+                                class="material-symbols-outlined text-sm"
+                                style="font-variation-settings: &quot;FILL&quot; 1;">star</span><span
+                                class="font-label-md text-label-md">5.0 (84 отзыва)</span></div>
+                        <h3 class="font-headline-md text-headline-md text-on-surface text-xl font-bold">NVIDIA GeForce
+                            RTX 4080 Super</h3>
+                        <div class="mt-auto pt-sm space-y-sm">
+                            <div class="font-headline-lg text-headline-lg text-primary font-bold">124 500 ₽</div>
+                            <button
+                                class="w-full h-12 bg-primary text-on-primary rounded-lg flex items-center justify-center gap-xs hover:shadow-md transition-all active:opacity-80 hover:bg-[#1a6bff]">
+                                <span class="material-symbols-outlined">shopping_cart</span>
+                                <span class="font-label-md">В корзину</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product Card 3 -->
+                <div
+                    class="bg-surface rounded-xl border border-outline-variant overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col group">
+                    <div class="h-48 bg-surface-container-lowest relative overflow-hidden"><img
+                            src="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRzFFUpJGD5M59brPe-CwFXvXCCw09jaJF2b_UACM9RoIFNF8_Je7wG9rSA_poqC7uU9ptnamXBOOhabsa2pM2I4LfjCZBi9ydRgqWg-zu4xXnPAAe6lUQly9OYVqhWSJDg8K-4J38Fug&amp;usqp=CAc"
+                            alt="Cyber PRO PC" class="w-full h-full object-contain">
+                        <div class="absolute top-2 left-2 bg-secondary/20 text-secondary px-3 py-1 rounded-full font-label-sm text-label-sm shadow-sm"
+                            style="background-color: rgb(220, 252, 231); color: rgb(21, 128, 61);">
+                            Сборка
+                        </div>
+                    </div>
+                    <div class="p-md flex flex-col flex-grow gap-xs">
+                        <div class="flex items-center text-secondary gap-1"><span
+                                class="material-symbols-outlined text-sm"
+                                style="font-variation-settings: &quot;FILL&quot; 1;">star</span><span
+                                class="font-label-md text-label-md">4.8 (45 отзывов)</span></div>
+                        <h3 class="font-headline-md text-headline-md text-on-surface text-xl font-bold">Сборка 'Cyber
+                            PRO' (i7/RTX4070)</h3>
+                        <div class="mt-auto pt-sm space-y-sm">
+                            <div class="font-headline-lg text-headline-lg text-primary font-bold">189 000 ₽</div>
+                            <button
+                                class="w-full h-12 bg-primary text-on-primary rounded-lg flex items-center justify-center gap-xs hover:shadow-md transition-all active:opacity-80 hover:bg-[#1a6bff]">
+                                <span class="material-symbols-outlined">shopping_cart</span>
+                                <span class="font-label-md">В корзину</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product Card 4 -->
+                <div
+                    class="bg-surface rounded-xl border border-outline-variant overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col group">
+                    <div class="h-48 bg-surface-container-lowest relative overflow-hidden"><img
+                            src="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTWsDFELX0IWDyYea-3ollTmEakmpvS6dvV-DWcq3PkE8fAuF5pz6Cu_AV-KxRnxprg9RcDa-9x4eWTyqKr2xbtBXPLh7tF8_vCbN7Ze-Zs1NM8PVZx68BQSEKHNiv5r-60arY1Gw&amp;usqp=CAc"
+                            alt="ASUS ROG Zephyrus G16" class="w-full h-full object-contain">
+                        <div class="absolute top-2 left-2 bg-secondary/20 text-secondary px-3 py-1 rounded-full font-label-sm text-label-sm shadow-sm"
+                            style="background-color: rgb(220, 252, 231); color: rgb(21, 128, 61);">
+                            Новинка
+                        </div>
+                    </div>
+                    <div class="p-md flex flex-col flex-grow gap-xs">
+                        <div class="flex items-center text-secondary gap-1"><span
+                                class="material-symbols-outlined text-sm"
+                                style="font-variation-settings: &quot;FILL&quot; 1;">star</span><span
+                                class="font-label-md text-label-md">4.9 (32 отзыва)</span></div>
+                        <h3 class="font-headline-md text-headline-md text-on-surface text-xl font-bold">ASUS ROG
+                            Zephyrus G16</h3>
+                        <div class="mt-auto pt-sm space-y-sm">
+                            <div class="font-headline-lg text-headline-lg text-primary font-bold">215 900 ₽</div>
+                            <button
+                                class="w-full h-12 bg-primary text-on-primary rounded-lg flex items-center justify-center gap-xs hover:shadow-md transition-all active:opacity-80 hover:bg-[#1a6bff]">
+                                <span class="material-symbols-outlined">shopping_cart</span>
+                                <span class="font-label-md">В корзину</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer
+        class="bg-surface-container-low dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline full-width mt-auto">
+
+    </footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

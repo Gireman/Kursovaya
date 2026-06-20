@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru" style="">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Вход/Регистрация - Компьютерный Сервис &amp; Магазин</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#4ae176",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-bright": "#f8f9ff",
+                        "tertiary-container": "#c53802",
+                        "inverse-primary": "#b5c4ff",
+                        "surface-container-high": "#dee9fc",
+                        "surface-container-highest": "#d9e3f6",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#ffe8e2",
+                        "background": "#f8f9ff",
+                        "surface-tint": "#0050e2",
+                        "primary-fixed": "#dce1ff",
+                        "secondary-container": "#6bff8f",
+                        "on-secondary-fixed": "#002109",
+                        "on-primary-container": "#eaecff",
+                        "on-primary-fixed-variant": "#003cae",
+                        "primary-container": "#005bff",
+                        "inverse-surface": "#27313f",
+                        "on-background": "#121c2a",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#9b2900",
+                        "on-secondary-fixed-variant": "#005321",
+                        "on-primary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-fixed": "#3a0a00",
+                        "surface-variant": "#d9e3f6",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#424656",
+                        "tertiary-fixed": "#ffdbd1",
+                        "tertiary-fixed-dim": "#ffb59f",
+                        "primary": "#0046c9",
+                        "on-primary-fixed": "#00164e",
+                        "on-tertiary-fixed-variant": "#862300",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d0dbed",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#c3c5d9",
+                        "secondary": "#006e2f",
+                        "on-surface": "#121c2a",
+                        "outline": "#737688",
+                        "secondary-fixed": "#6bff8f",
+                        "on-secondary-container": "#007432",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container": "#e6eeff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "24px",
+                        "xs": "8px",
+                        "base": "4px",
+                        "xl": "48px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "lg": "32px",
+                        "sm": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+
+        /* Custom Input Styling */
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: theme('borderRadius.lg');
+            border: 1px solid theme('colors.outline-variant');
+            background-color: theme('colors.surface-container-lowest');
+            color: theme('colors.on-surface');
+            transition: all 0.2s ease-in-out;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: theme('colors.primary');
+            box-shadow: 0 0 0 2px theme('colors.primary-fixed-dim');
+        }
+
+        .auth-container {
+            min-height: calc(100vh - 64px - 100px);
+            /* Approx calc taking header/footer into account */
+        }
+
+        /* Level 1 Shadow as per style guidance */
+        .card-shadow {
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Hide elements by default for toggle logic */
+        .hidden-section {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+    <!-- TopNavBar: Automatic Suppression due to Transactional/Login intent -->
+    <!-- Content Canvas prioritized -->
+    <!-- Main Content -->
+    <main class="flex-grow auth-container flex items-center justify-center py-xl px-md">
+        <div
+            class="w-full max-w-md bg-surface-container-lowest rounded-xl card-shadow border border-outline-variant p-lg relative overflow-hidden">
+            <!-- Minimal Decorative Background Element -->
+            <div
+                class="absolute -top-10 -right-10 w-32 h-32 bg-primary-fixed-dim rounded-full blur-3xl opacity-30 pointer-events-none">
+            </div>
+            <!-- Header Section -->
+            <div class="text-center mb-md relative z-10">
+                <span class="material-symbols-outlined text-primary" style="font-size: 48px;">computer</span>
+                <h1 class="font-headline-lg text-headline-lg text-on-surface mt-sm" id="form-title">Войти</h1>
+                <p class="font-body-md text-body-md text-on-surface-variant mt-base" id="form-subtitle">Добро пожаловать
+                    обратно</p>
+            </div>
+            <!-- Login Form -->
+            <form class="space-y-md relative z-10 block" id="login-form">
+                <div class="space-y-base">
+                    <label class="font-label-md text-label-md text-on-surface" for="login-email">Почта / Логин</label>
+                    <input class="form-input font-body-md text-body-md rounded border-outline-variant" id="login-email"
+                        placeholder="user@example.com" required="" type="email">
+                </div>
+                <div class="space-y-base">
+                    <label class="font-label-md text-label-md text-on-surface" for="login-password">Пароль</label>
+                    <input class="form-input font-body-md text-body-md rounded border-outline-variant"
+                        id="login-password" placeholder="••••••••" required="" type="password">
+                </div>
+                <div class="pt-sm">
+                    <button
+                        class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm rounded-lg transition-colors active:opacity-80 hover:bg-primary-container"
+                        type="submit">
+                        Войти
+                    </button>
+                </div>
+                <div class="text-center mt-md">
+                    <p class="font-body-md text-body-md text-on-surface-variant">
+                        Нет аккаунта?
+                        <button
+                            class="text-primary font-label-md text-label-md hover:underline bg-transparent border-none cursor-pointer"
+                            id="show-register" type="button">
+                            Зарегистрироваться
+                        </button>
+                    </p>
+                </div>
+            </form>
+            <!-- Registration Form (Hidden by default) -->
+            <form class="space-y-md relative z-10 hidden-section" id="register-form">
+                <div class="space-y-base">
+                    <label class="font-label-md text-label-md text-on-surface" for="reg-name">ФИО</label>
+                    <input class="form-input font-body-md text-body-md rounded border-outline-variant" id="reg-name"
+                        placeholder="Иванов Иван Иванович" required="" type="text">
+                </div>
+                <div class="space-y-base">
+                    <label class="font-label-md text-label-md text-on-surface" for="reg-login">Логин</label>
+                    <input class="form-input font-body-md text-body-md rounded border-outline-variant" id="reg-login"
+                        placeholder="Придумайте логин" required="" type="text">
+                </div>
+                <div class="space-y-base">
+                    <label class="font-label-md text-label-md text-on-surface" for="reg-dob">Дата рождения</label>
+                    <input class="form-input font-body-md text-body-md rounded border-outline-variant" id="reg-dob"
+                        required="" type="date">
+                </div>
+                <div class="space-y-base">
+                    <label class="font-label-md text-label-md text-on-surface" for="reg-phone">Телефон</label>
+                    <input class="form-input font-body-md text-body-md rounded border-outline-variant" id="reg-phone"
+                        placeholder="+7 (___) ___-__-__" required="" type="tel">
+                </div>
+                <div class="space-y-base">
+                    <label class="font-label-md text-label-md text-on-surface" for="reg-email">Почта</label>
+                    <input class="form-input font-body-md text-body-md rounded border-outline-variant" id="reg-email"
+                        placeholder="user@example.com" required="" type="email">
+                </div>
+                <div class="space-y-base">
+                    <label class="font-label-md text-label-md text-on-surface" for="reg-password">Пароль</label>
+                    <input class="form-input font-body-md text-body-md rounded border-outline-variant" id="reg-password"
+                        placeholder="Создайте надежный пароль" required="" type="password">
+                </div>
+                <div class="space-y-base">
+                    <label class="font-label-md text-label-md text-on-surface" for="reg-address">Адрес</label>
+                    <textarea class="form-input font-body-md text-body-md rounded border-outline-variant"
+                        id="reg-address" placeholder="г. Москва, ул. Примерная, д. 1" rows="2"></textarea>
+                </div>
+                <div class="pt-sm">
+                    <button
+                        class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm rounded-lg transition-colors active:opacity-80 hover:bg-primary-container"
+                        type="submit">
+                        Создать аккаунт
+                    </button>
+                </div>
+                <div class="text-center mt-md">
+                    <p class="font-body-md text-body-md text-on-surface-variant">
+                        Уже есть аккаунт?
+                        <button
+                            class="text-primary font-label-md text-label-md hover:underline bg-transparent border-none cursor-pointer"
+                            id="show-login" type="button">
+                            Войти
+                        </button>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-surface-container-low border-t border-outline-variant w-full">
+
+    </footer>
+    <!-- Form Toggle Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const btnShowRegister = document.getElementById('show-register');
+            const btnShowLogin = document.getElementById('show-login');
+
+            const formTitle = document.getElementById('form-title');
+            const formSubtitle = document.getElementById('form-subtitle');
+
+            btnShowRegister.addEventListener('click', () => {
+                loginForm.classList.add('hidden-section');
+                loginForm.classList.remove('block');
+
+                registerForm.classList.remove('hidden-section');
+                registerForm.classList.add('block');
+
+                formTitle.textContent = 'Регистрация';
+                formSubtitle.textContent = 'Создайте новый аккаунт';
+            });
+
+            btnShowLogin.addEventListener('click', () => {
+                registerForm.classList.add('hidden-section');
+                registerForm.classList.remove('block');
+
+                loginForm.classList.remove('hidden-section');
+                loginForm.classList.add('block');
+
+                formTitle.textContent = 'Войти';
+                formSubtitle.textContent = 'Добро пожаловать обратно';
+            });
+        });
+    </script>
+
+
+
+
+
+
+</body>
+
+</html>

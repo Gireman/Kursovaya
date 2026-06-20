@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { pool } from '../db.js';
+import auth from './auth.js';
 import clients from './clients.js';
 import employees from './employees.js';
 import purchases from './purchases.js';
@@ -19,6 +20,7 @@ router.get('/status', async (_req, res) => {
   }
 });
 
+router.use('/auth', auth);
 router.use('/clients', clients);
 router.use('/employees', employees);
 router.use('/purchases', purchases);
