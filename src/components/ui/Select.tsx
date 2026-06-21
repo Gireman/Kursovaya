@@ -32,13 +32,30 @@ export function Select({
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-  const [rect, setRect] = useState<{ top: number; left: number; width: number } | null>(null);
+  const [rect, setRect] = useState<{
+    top?: number;
+    bottom?: number;
+    left: number;
+    width: number;
+    maxHeight: number;
+  } | null>(null);
 
   const updateRect = () => {
     const el = triggerRef.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
-    setRect({ top: r.bottom + 4, left: r.left, width: r.width });
+    const PANEL_MAX_H = 240;
+    const GAP = 4;
+    const spaceBelow = window.innerHeight - r.bottom - GAP;
+    const spaceAbove = r.top - GAP;
+    const openUpward = spaceBelow < PANEL_MAX_H && spaceAbove > spaceBelow;
+    setRect({
+      top: openUpward ? undefined : r.bottom + GAP,
+      bottom: openUpward ? window.innerHeight - r.top + GAP : undefined,
+      left: r.left,
+      width: r.width,
+      maxHeight: Math.min(PANEL_MAX_H, openUpward ? spaceAbove : spaceBelow),
+    });
   };
 
   useLayoutEffect(() => {
@@ -98,8 +115,8 @@ export function Select({
       {open && rect && createPortal(
         <div
           ref={panelRef}
-          className="fixed z-[60] bg-surface rounded-lg border border-outline-variant shadow-lg py-1 max-h-60 overflow-y-auto"
-          style={{ top: rect.top, left: rect.left, width: fullWidth ? rect.width : undefined, minWidth: fullWidth ? undefined : Math.max(rect.width, 224) }}
+          className="fixed z-[60] bg-surface rounded-lg border border-outline-variant shadow-lg py-1 overflow-y-auto"
+          style={{ top: rect.top, bottom: rect.bottom, left: rect.left, width: fullWidth ? rect.width : undefined, minWidth: fullWidth ? undefined : Math.max(rect.width, 224), maxHeight: rect.maxHeight }}
         >
           {options.map((o) => {
             const active = o.value === value;

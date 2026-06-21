@@ -4,11 +4,13 @@ import { PublicLayout } from './components/layout/PublicLayout';
 import { AdminLayout } from './components/layout/AdminLayout';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import { CartProvider } from './cart/CartContext';
-import { ROLE_EMPLOYEE } from './api/auth';
+import { ROLE_EMPLOYEE, ROLE_CLIENT } from './api/auth';
 import Home from './pages/Home';
+import Catalog from './pages/Catalog';
 import Repair from './pages/Repair';
 import Cart from './pages/Cart';
 import Auth from './pages/Auth';
+import Account from './pages/Account';
 import Inventory from './pages/admin/Inventory';
 import Users from './pages/admin/Users';
 import Orders from './pages/admin/Orders';
@@ -31,6 +33,15 @@ function RequireAdmin() {
   if (!user) return <Navigate to="/auth" replace />;
   if (user.role !== ROLE_EMPLOYEE) return <Navigate to="/" replace />;
   return <AdminLayout />;
+}
+
+// Доступ только клиентам (роль 1). Аноним → на вход, сотрудник → в админ-панель.
+function RequireClient({ children }: { children: ReactNode }) {
+  const { user, loading } = useAuth();
+  if (loading) return <FullScreenLoader />;
+  if (!user) return <Navigate to="/auth" replace />;
+  if (user.role !== ROLE_CLIENT) return <Navigate to="/admin" replace />;
+  return <>{children}</>;
 }
 
 // Не-админские страницы: сотрудника всегда уводим в админ-панель.
@@ -56,6 +67,7 @@ export default function App() {
             }
           >
             <Route index element={<Home />} />
+            <Route path="catalog" element={<Catalog />} />
             <Route path="repair" element={<Repair />} />
             <Route path="cart" element={<Cart />} />
           </Route>
@@ -65,6 +77,14 @@ export default function App() {
               <NonAdminOnly>
                 <Auth />
               </NonAdminOnly>
+            }
+          />
+          <Route
+            path="/account"
+            element={
+              <RequireClient>
+                <Account />
+              </RequireClient>
             }
           />
           <Route path="/admin" element={<RequireAdmin />}>

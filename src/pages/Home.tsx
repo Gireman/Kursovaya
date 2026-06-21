@@ -88,12 +88,12 @@ function Hero() {
             комплектующие.
           </p>
           <div className="flex flex-wrap gap-sm pt-sm">
-            <a
-              href="#"
+            <Link
+              to="/catalog"
               className="bg-primary text-on-primary px-lg h-12 rounded-lg font-label-md hover:shadow-md transition-all active:opacity-80 flex items-center justify-center hover:opacity-90"
             >
               Перейти в каталог
-            </a>
+            </Link>
             <Link
               to="/repair"
               className="border border-primary text-primary px-lg h-12 rounded-lg font-label-md hover:bg-primary/5 transition-all active:opacity-80 flex items-center justify-center"

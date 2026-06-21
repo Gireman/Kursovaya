@@ -9,8 +9,14 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react(), tailwindcss()],
     server: {
+      host: `127.0.0.1`,
+      port: 5173,
       proxy: {
-        '/api': `http://127.0.0.1:${serverPort}`,
+        '/api': {
+          target: `http://127.0.0.1:${serverPort}`,
+          changeOrigin: true,
+          secure: false,
+        },
       },
     },
   };

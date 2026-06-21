@@ -6,6 +6,7 @@ import type { CartLine } from '../cart/CartContext';
 import { useAuth } from '../auth/AuthContext';
 import { fetchServices, checkoutCart } from '../api/orders';
 import type { ServiceRef } from '../types';
+import { getProductIcon } from '../utils/productMeta';
 
 function formatRub(value: number): string {
   return value.toLocaleString('ru-RU') + ' ₽';
@@ -23,8 +24,14 @@ function CartItem({
 }) {
   return (
     <div className="bg-surface rounded-lg p-md shadow-[0px_4px_12px_rgba(0,0,0,0.05)] flex flex-col sm:flex-row items-center gap-md border border-outline-variant/30">
-      <div className="w-24 h-24 bg-surface-container rounded-md overflow-hidden flex-shrink-0">
-        <img alt={item.name} className="w-full h-full object-cover" src={item.image} />
+      <div className="w-24 h-24 bg-surface-container rounded-md overflow-hidden flex-shrink-0 flex items-center justify-center">
+        {item.image ? (
+          <img alt={item.name} className="w-full h-full object-contain" src={item.image} />
+        ) : (
+          <span className="material-symbols-outlined text-primary/40 select-none" style={{ fontSize: 44 }}>
+            {getProductIcon(item.name)}
+          </span>
+        )}
       </div>
       <div className="flex-grow flex flex-col justify-center">
         <h3 className="font-headline-md text-body-lg text-on-background mb-xs">{item.name}</h3>
@@ -81,7 +88,7 @@ function EmptyCart() {
         Добавьте товары из каталога, чтобы оформить заказ.
       </p>
       <Link
-        to="/"
+        to="/catalog"
         className="mt-sm bg-primary text-on-primary px-lg h-12 rounded-lg font-label-md flex items-center justify-center hover:bg-primary-container transition-colors active:opacity-80"
       >
         Перейти в каталог

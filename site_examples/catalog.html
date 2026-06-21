@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ru" style="">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Каталог товаров - Компьютерный Сервис &amp; Магазин</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#3a0a00",
+                        "background": "#f8f9ff",
+                        "inverse-surface": "#27313f",
+                        "surface-container-low": "#eff4ff",
+                        "secondary-container": "#6bff8f",
+                        "outline-variant": "#c3c5d9",
+                        "surface-dim": "#d0dbed",
+                        "outline": "#737688",
+                        "tertiary": "#9b2900",
+                        "primary": "#0046c9",
+                        "surface-container": "#e6eeff",
+                        "inverse-primary": "#b5c4ff",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-fixed-variant": "#862300",
+                        "surface-container-high": "#dee9fc",
+                        "secondary-fixed": "#6bff8f",
+                        "on-surface": "#121c2a",
+                        "on-primary-container": "#eaecff",
+                        "on-error": "#ffffff",
+                        "on-background": "#121c2a",
+                        "on-primary-fixed-variant": "#003cae",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005321",
+                        "on-primary-fixed": "#00164e",
+                        "secondary-fixed-dim": "#4ae176",
+                        "on-surface-variant": "#424656",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#0050e2",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#ffdbd1",
+                        "primary-fixed": "#dce1ff",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#d9e3f6",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#007432",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb59f",
+                        "secondary": "#006e2f",
+                        "primary-container": "#005bff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-secondary-fixed": "#002109",
+                        "on-tertiary-container": "#ffe8e2",
+                        "tertiary-container": "#c53802",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "surface-container-highest": "#d9e3f6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "md": "24px",
+                        "lg": "32px",
+                        "container-max": "1280px",
+                        "xs": "8px",
+                        "xl": "48px",
+                        "gutter": "24px",
+                        "sm": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-background text-on-background font-body-md text-body-md antialiased flex flex-col min-h-screen">
+    <!-- TopNavBar -->
+    <header class="bg-surface-container-lowest border-b border-outline-variant w-full sticky top-0 z-50">
+
+    </header>
+    <!-- Main Content -->
+    <main class="flex-grow w-full max-w-container-max mx-auto px-md py-lg flex flex-col md:flex-row gap-gutter">
+        <!-- Sidebar Filter -->
+        <aside class="w-full md:w-64 flex-shrink-0 flex flex-col gap-lg">
+            <div class="bg-surface-container-lowest rounded-lg p-sm border border-outline-variant">
+                <h3 class="text-headline-md font-headline-md text-on-surface mb-sm">Категории</h3>
+                <ul class="space-y-xs text-body-md font-body-md text-on-surface-variant">
+                    <li class=""><label
+                            class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input
+                                checked="" class="rounded border-outline-variant text-primary focus:ring-primary"
+                                type="checkbox"> Процессоры</label></li>
+                    <li class=""><label
+                            class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input
+                                class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox">
+                            Видеокарты</label></li>
+                    <li class=""><label
+                            class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input
+                                class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox">
+                            Материнские платы</label></li>
+                    <li class=""><label
+                            class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input
+                                class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox">
+                            Оперативная память</label></li>
+                    <li class=""><label
+                            class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input
+                                class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox">
+                            Ноутбуки</label></li>
+                </ul>
+            </div>
+            <div class="bg-surface-container-lowest rounded-lg p-sm border border-outline-variant">
+                <h3 class="text-headline-md font-headline-md text-on-surface mb-sm">Цена</h3>
+                <div class="flex gap-2 items-center mb-sm">
+                    <input
+                        class="w-full border border-outline-variant rounded-md px-2 py-1 text-sm focus:ring-primary focus:border-primary"
+                        placeholder="0" type="number">
+                    <span class="text-on-surface-variant">-</span>
+                    <input
+                        class="w-full border border-outline-variant rounded-md px-2 py-1 text-sm focus:ring-primary focus:border-primary"
+                        placeholder="До" type="number">
+                </div>
+                <input class="w-full accent-primary" max="100000" min="0" type="range">
+            </div>
+            <div class="bg-surface-container-lowest rounded-lg p-sm border border-outline-variant">
+                <h3 class="text-headline-md font-headline-md text-on-surface mb-sm">Бренды</h3>
+                <ul class="space-y-xs text-body-md font-body-md text-on-surface-variant">
+                    <li class=""><label
+                            class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input
+                                checked="" class="rounded border-outline-variant text-primary focus:ring-primary"
+                                type="checkbox"> AMD</label></li>
+                    <li class=""><label
+                            class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input
+                                class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox">
+                            Intel</label></li>
+                    <li class=""><label
+                            class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input
+                                class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox">
+                            NVIDIA</label></li>
+                    <li class=""><label
+                            class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input
+                                class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox">
+                            ASUS</label></li>
+                </ul>
+            </div>
+            <div
+                class="bg-surface-container-lowest rounded-lg p-sm border border-outline-variant flex items-center justify-between">
+                <span class="text-body-md font-body-md text-on-surface">В наличии</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input checked="" class="sr-only peer" type="checkbox" value="">
+                    <div
+                        class="w-11 h-6 bg-surface-variant peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-fixed rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                    </div>
+                </label>
+            </div>
+        </aside>
+        <!-- Product Grid Area -->
+        <div class="flex-grow flex flex-col gap-lg">
+            <!-- Breadcrumbs & Header -->
+            <div class="flex flex-col gap-sm">
+
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-sm mb-sm">
+                    <h1 class="text-headline-lg font-headline-lg text-on-surface">Каталог товаров</h1>
+                    <select
+                        class="bg-surface-container-lowest border border-outline-variant text-body-md font-body-md text-on-surface rounded-lg py-xs px-sm focus:ring-primary focus:border-primary cursor-pointer hover:bg-surface-container-low transition-colors duration-200 h-10 pr-10">
+                        <option>По популярности</option>
+                        <option>Сначала дешевые</option>
+                        <option>Сначала дорогие</option>
+                        <option>По рейтингу</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+                <!-- Product Card 1 -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl border border-outline-variant p-sm flex flex-col gap-sm hover:shadow-[0px_8px_24px_rgba(0,0,0,0.1)] transition-shadow duration-300 group">
+                    <div class="aspect-square bg-surface-container rounded-lg overflow-hidden relative">
+                        <img alt="High-end AMD Ryzen processor in its original packaging, resting on a clean, modern white studio surface. Studio lighting highlights the sleek, geometric box design and the metallic lettering. The aesthetic is purely technological and premium retail, focusing on sharp details and cool tones."
+                            class="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                            data-alt="High-end AMD Ryzen processor in its original packaging, resting on a clean, modern white studio surface. Studio lighting highlights the sleek, geometric box design and the metallic lettering. The aesthetic is purely technological and premium retail, focusing on sharp details and cool tones."
+                            src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSbDWWNGQYGNNJOhgIeGz3djCiU8ElCiajUNjBBSRF_Cfvkkmhrb7DMeQSEYlei1Y_oKlEZdoKbTvFkKpd0cQvN2iBdkUvbHw7gmykdBPcM_1gIo3dttvQiSpyMJRg2X4wTSHylV_HG4A&amp;usqp=CAc">
+                        <div class="absolute top-2 left-2 bg-secondary-container text-on-secondary-container text-label-sm font-label-sm px-2 py-1 rounded-full"
+                            style="background-color: rgb(220, 252, 231); color: rgb(21, 128, 61);">В наличии</div>
+                    </div>
+                    <div class="flex flex-col flex-grow gap-xs">
+                        <div class="flex items-center gap-1 text-on-surface-variant text-label-sm font-label-sm"><span
+                                class="material-symbols-outlined text-[18px] text-secondary" data-icon="star"
+                                data-weight="fill"
+                                style="font-variation-settings: &quot;FILL&quot; 1, &quot;wght&quot; 400, &quot;GRAD&quot; 0, &quot;opsz&quot; 24;">star</span><span
+                                class="font-bold text-secondary">4.9</span><span class="text-secondary">(128
+                                отзывов)</span></div>
+                        <h2
+                            class="text-body-lg font-body-lg text-on-surface font-semibold leading-tight line-clamp-2 flex-grow">
+                            AMD Ryzen 9 7950X OEM</h2>
+                        <div class="text-headline-md font-headline-md text-primary mt-auto">62 990 ₽</div>
+                        <button
+                            class="w-full bg-primary text-on-primary py-2 rounded-lg text-label-md font-label-md font-bold hover:bg-on-primary-fixed-variant transition-colors mt-2 flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-[20px]"
+                                data-icon="add_shopping_cart">add_shopping_cart</span>
+                            В корзину
+                        </button>
+                    </div>
+                </div>
+                <!-- Product Card 2 -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl border border-outline-variant p-sm flex flex-col gap-sm hover:shadow-[0px_8px_24px_rgba(0,0,0,0.1)] transition-shadow duration-300 group">
+                    <div class="aspect-square bg-surface-container rounded-lg overflow-hidden relative">
+                        <img alt="An Intel Core processor resting on a dark, reflective high-tech surface. Subtle blue LED lighting casts a soft glow on the metallic integrated heat spreader. The image conveys raw computing power and modern technological design, suitable for a premium hardware catalog."
+                            class="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                            data-alt="An Intel Core processor resting on a dark, reflective high-tech surface. Subtle blue LED lighting casts a soft glow on the metallic integrated heat spreader. The image conveys raw computing power and modern technological design, suitable for a premium hardware catalog."
+                            src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRSH24T4OUazvcmxglYwUo8fnXaYS8AJeI5GM9W9ySRAGfWPR6IADbUaH2rvD69jwAmJ3pWH6IRhoiSPJB_lvWh4-zaNgrlIjtRbl5hH9lRZTk_Ut8-38XJJCgrW31sRRIWaudBS_A&amp;usqp=CAc">
+                        <div class="absolute top-2 left-2 bg-secondary-container text-on-secondary-container text-label-sm font-label-sm px-2 py-1 rounded-full"
+                            style="background-color: rgb(220, 252, 231); color: rgb(21, 128, 61);">В наличии</div>
+                    </div>
+                    <div class="flex flex-col flex-grow gap-xs">
+                        <div class="flex items-center gap-1 text-on-surface-variant text-label-sm font-label-sm"><span
+                                class="material-symbols-outlined text-[18px] text-secondary" data-icon="star"
+                                data-weight="fill"
+                                style="font-variation-settings: &quot;FILL&quot; 1, &quot;wght&quot; 400, &quot;GRAD&quot; 0, &quot;opsz&quot; 24;">star</span><span
+                                class="font-bold text-secondary">5.0</span><span class="text-secondary">(84
+                                отзыва)</span></div>
+                        <h2
+                            class="text-body-lg font-body-lg text-on-surface font-semibold leading-tight line-clamp-2 flex-grow">
+                            Intel Core i9-14900K BOX</h2>
+                        <div class="text-headline-md font-headline-md text-primary mt-auto">68 490 ₽</div>
+                        <button
+                            class="w-full bg-primary text-on-primary py-2 rounded-lg text-label-md font-label-md font-bold hover:bg-on-primary-fixed-variant transition-colors mt-2 flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-[20px]"
+                                data-icon="add_shopping_cart">add_shopping_cart</span>
+                            В корзину
+                        </button>
+                    </div>
+                </div>
+                <!-- Product Card 3 -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl border border-outline-variant p-sm flex flex-col gap-sm hover:shadow-[0px_8px_24px_rgba(0,0,0,0.1)] transition-shadow duration-300 group">
+                    <div class="aspect-square bg-surface-container rounded-lg overflow-hidden relative">
+                        <img alt="A sleek modern laptop isolated against a bright white background, angled slightly to show its thin profile and illuminated keyboard. The lighting is even and professional, emphasizing the metallic finish and clean design lines of the device. Perfect for a high-end corporate or retail tech setting."
+                            class="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                            data-alt="A sleek modern laptop isolated against a bright white background, angled slightly to show its thin profile and illuminated keyboard. The lighting is even and professional, emphasizing the metallic finish and clean design lines of the device. Perfect for a high-end corporate or retail tech setting."
+                            src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQAFzy9HvlM0rG4qFNHtlB2IjF0rQGlBRxQKnpxM0Q55GFji8ZCg7V6sbNNEQmuGsiVUPHT6UVeiRPwJLahoMswG62P7ipm6Pof0F_YbJVEAUPHcU-_j9PEdoRjO2A47-TQNxA7ig&amp;usqp=CAc">
+                        <div class="absolute top-2 left-2 bg-secondary-container text-on-secondary-container text-label-sm font-label-sm px-2 py-1 rounded-full"
+                            style="background-color: rgb(220, 252, 231); color: rgb(21, 128, 61);">В наличии</div>
+                    </div>
+                    <div class="flex flex-col flex-grow gap-xs">
+                        <div class="flex items-center gap-1 text-on-surface-variant text-label-sm font-label-sm"
+                            style="color: rgb(154, 205, 50);"><span
+                                class="material-symbols-outlined text-[18px] text-secondary-fixed-dim" data-icon="star"
+                                data-weight="fill"
+                                style="color: rgb(154, 205, 50); font-variation-settings: &quot;FILL&quot; 1, &quot;wght&quot; 400, &quot;GRAD&quot; 0, &quot;opsz&quot; 24;">star</span><span
+                                class="font-bold text-secondary-fixed-dim"
+                                style="color: rgb(154, 205, 50); font-variation-settings: &quot;FILL&quot; 1, &quot;wght&quot; 400, &quot;GRAD&quot; 0, &quot;opsz&quot; 24;">4.0</span><span
+                                class="text-secondary-fixed-dim"
+                                style="color: rgb(154, 205, 50); font-variation-settings: &quot;FILL&quot; 1, &quot;wght&quot; 400, &quot;GRAD&quot; 0, &quot;opsz&quot; 24;">(32
+                                отзыва)</span></div>
+                        <h2
+                            class="text-body-lg font-body-lg text-on-surface font-semibold leading-tight line-clamp-2 flex-grow">
+                            ASUS ROG Zephyrus G14</h2>
+                        <div class="text-headline-md font-headline-md text-primary mt-auto">145 000 ₽</div>
+                        <button
+                            class="w-full bg-primary text-on-primary py-2 rounded-lg text-label-md font-label-md font-bold hover:bg-on-primary-fixed-variant transition-colors mt-2 flex items-center justify-center gap-2"><span
+                                class="material-symbols-outlined text-[20px]"
+                                data-icon="add_shopping_cart">add_shopping_cart</span>В корзину</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Pagination -->
+            <div class="flex justify-center mt-xl">
+                <nav class="flex gap-2">
+                    <button
+                        class="w-10 h-10 rounded-lg border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                        <span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+                    </button>
+                    <button
+                        class="w-10 h-10 rounded-lg bg-primary text-on-primary font-bold flex items-center justify-center">1</button>
+                    <button
+                        class="w-10 h-10 rounded-lg border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors font-medium">2</button>
+                    <button
+                        class="w-10 h-10 rounded-lg border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors font-medium">3</button>
+                    <button
+                        class="w-10 h-10 rounded-lg border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                        <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-surface-container-highest border-t border-outline-variant mt-auto">
+
+    </footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

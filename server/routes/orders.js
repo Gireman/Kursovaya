@@ -206,11 +206,12 @@ router.post('/', async (req, res) => {
     const sum = await computeSum(conn, v.products, v.services);
     if (sum && sum.error) { conn.release(); return res.status(400).json({ error: sum.error }); }
 
+    const tax = Math.round(sum * 5) / 100;
     await conn.beginTransaction();
     const [result] = await conn.query(
       `INSERT INTO purchases (Id_client, Id_employee, Sum, Tax, FillingDate, Status)
-       VALUES (?, ?, ?, 0, CURDATE(), ?)`,
-      [v.clientId, v.employeeId, sum, DEFAULT_STATUS],
+       VALUES (?, ?, ?, ?, CURDATE(), ?)`,
+      [v.clientId, v.employeeId, sum, tax, DEFAULT_STATUS],
     );
     const purchaseId = result.insertId;
     await insertItems(conn, purchaseId, v.products, v.services);
@@ -256,11 +257,12 @@ router.post('/checkout', requireAuth, async (req, res) => {
     const sum = await computeSum(conn, items.products, items.services);
     if (sum && sum.error) { conn.release(); return res.status(400).json({ error: sum.error }); }
 
+    const tax = Math.round(sum * 5) / 100;
     await conn.beginTransaction();
     const [result] = await conn.query(
       `INSERT INTO purchases (Id_client, Id_employee, Sum, Tax, FillingDate, Status)
-       VALUES (?, ?, ?, 0, CURDATE(), ?)`,
-      [clientId, employeeId, sum, DEFAULT_STATUS],
+       VALUES (?, ?, ?, ?, CURDATE(), ?)`,
+      [clientId, employeeId, sum, tax, DEFAULT_STATUS],
     );
     const purchaseId = result.insertId;
     await insertItems(conn, purchaseId, items.products, items.services);
@@ -293,8 +295,9 @@ router.put('/:id', async (req, res) => {
     const sum = await computeSum(conn, v.products, v.services);
     if (sum && sum.error) { conn.release(); return res.status(400).json({ error: sum.error }); }
 
+    const tax = Math.round(sum * 5) / 100;
     await conn.beginTransaction();
-    await conn.query('UPDATE purchases SET Id_client = ?, Id_employee = ?, Sum = ? WHERE Id = ?', [v.clientId, v.employeeId, sum, id]);
+    await conn.query('UPDATE purchases SET Id_client = ?, Id_employee = ?, Sum = ?, Tax = ? WHERE Id = ?', [v.clientId, v.employeeId, sum, tax, id]);
     await conn.query('DELETE FROM extra2 WHERE Id_purchase = ?', [id]);
     await conn.query('DELETE FROM extra1 WHERE Id_purchase = ?', [id]);
     await insertItems(conn, id, v.products, v.services);

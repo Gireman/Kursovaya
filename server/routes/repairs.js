@@ -106,10 +106,11 @@ router.post('/', async (req, res) => {
 
   try {
     const issued = v.status === ISSUED_STATUS;
+    const tax = Math.round(v.cost * 5) / 100;
     const [result] = await pool.query(
       `INSERT INTO repairs (Id_client, Id_employee, RepairObject, HomeVisit, FillingDate, ReturnDate, Repaired, Cost, Tax, Status)
-       VALUES (?, ?, ?, ?, CURDATE(), ${issued ? 'CURDATE()' : 'NULL'}, ?, ?, 0, ?)`,
-      [v.clientId, v.employeeId, v.deviceName, v.homeVisit, v.repaired, v.cost, v.status],
+       VALUES (?, ?, ?, ?, CURDATE(), ${issued ? 'CURDATE()' : 'NULL'}, ?, ?, ?, ?)`,
+      [v.clientId, v.employeeId, v.deviceName, v.homeVisit, v.repaired, v.cost, tax, v.status],
     );
     res.status(201).json(await fetchRepairById(result.insertId));
   } catch (err) {
@@ -131,12 +132,13 @@ router.put('/:id', async (req, res) => {
     if (existing.length === 0) return res.status(404).json({ error: 'Ремонт не найден' });
 
     const issued = v.status === ISSUED_STATUS;
+    const tax = Math.round(v.cost * 5) / 100;
     await pool.query(
       `UPDATE repairs
        SET Id_client = ?, Id_employee = ?, RepairObject = ?, HomeVisit = ?, Repaired = ?,
-           Cost = ?, Status = ?, ReturnDate = ${issued ? 'CURDATE()' : 'NULL'}
+           Cost = ?, Tax = ?, Status = ?, ReturnDate = ${issued ? 'CURDATE()' : 'NULL'}
        WHERE Id = ?`,
-      [v.clientId, v.employeeId, v.deviceName, v.homeVisit, v.repaired, v.cost, v.status, id],
+      [v.clientId, v.employeeId, v.deviceName, v.homeVisit, v.repaired, v.cost, tax, v.status, id],
     );
     res.json(await fetchRepairById(id));
   } catch (err) {

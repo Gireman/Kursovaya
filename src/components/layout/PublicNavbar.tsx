@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../../cart/CartContext';
+import { useAuth } from '../../auth/AuthContext';
 
 const NAV_LINKS = [
-  { label: 'Каталог', to: '#' },
+  { label: 'Каталог', to: '/catalog' },
   { label: 'Готовые сборки', to: '#' },
   { label: 'Ремонт', to: '/repair' },
   { label: 'О нас', to: '#' },
@@ -12,6 +13,8 @@ const linkClass = 'font-label-md text-label-md text-on-surface-variant hover:tex
 
 export function PublicNavbar() {
   const { count } = useCart();
+  const { user } = useAuth();
+  const accountTo = user ? '/account' : '/auth';
   return (
     <header className="bg-surface border-b border-outline-variant sticky top-0 z-50">
       <div className="max-w-container-max mx-auto px-lg w-full h-16 flex items-center justify-between gap-md">
@@ -63,7 +66,7 @@ export function PublicNavbar() {
             )}
           </Link>
           <Link
-            to="/auth"
+            to={accountTo}
             className="text-on-surface-variant hover:text-primary transition-colors p-2 active:opacity-80"
             aria-label="Личный кабинет"
           >

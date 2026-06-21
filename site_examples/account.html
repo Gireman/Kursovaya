@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html class="light" lang="ru" style="">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>User Profile Settings - Компьютерный Сервис &amp; Магазин</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#005321",
+                        "on-secondary-container": "#007432",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary-fixed-dim": "#4ae176",
+                        "inverse-primary": "#b5c4ff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#862300",
+                        "inverse-surface": "#27313f",
+                        "secondary": "#006e2f",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#d9e3f6",
+                        "on-primary-container": "#eaecff",
+                        "outline-variant": "#c3c5d9",
+                        "on-tertiary-fixed": "#3a0a00",
+                        "outline": "#737688",
+                        "surface-container": "#e6eeff",
+                        "background": "#f8f9ff",
+                        "surface": "#f8f9ff",
+                        "surface-variant": "#d9e3f6",
+                        "primary-fixed": "#dce1ff",
+                        "surface-tint": "#0050e2",
+                        "on-primary-fixed": "#00164e",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#dee9fc",
+                        "surface-bright": "#f8f9ff",
+                        "tertiary-fixed": "#ffdbd1",
+                        "primary": "#0046c9",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "on-tertiary-container": "#ffe8e2",
+                        "surface-container-low": "#eff4ff",
+                        "primary-container": "#005bff",
+                        "secondary-container": "#6bff8f",
+                        "tertiary-fixed-dim": "#ffb59f",
+                        "on-secondary-fixed": "#002109",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#121c2a",
+                        "tertiary-container": "#c53802",
+                        "secondary-fixed": "#6bff8f",
+                        "on-background": "#121c2a",
+                        "surface-dim": "#d0dbed",
+                        "on-surface-variant": "#424656",
+                        "on-primary-fixed-variant": "#003cae",
+                        "tertiary": "#9b2900"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "24px",
+                        "base": "4px",
+                        "xs": "8px",
+                        "container-max": "1280px",
+                        "sm": "16px",
+                        "xl": "48px",
+                        "gutter": "24px",
+                        "lg": "32px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md">
+    <!-- TopNavBar -->
+    <header
+        class="bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline full-width top-0 z-50 sticky">
+
+    </header>
+    <!-- Main Content Canvas -->
+    <main class="flex-grow flex items-center justify-center py-xl px-md">
+        <!-- Profile Settings Card -->
+        <div
+            class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] w-full max-w-2xl border border-outline-variant p-lg hover:shadow-[0px_8px_24px_rgba(0,0,0,0.1)] transition-shadow duration-300">
+            <div class="mb-lg border-b border-outline-variant pb-md flex items-center space-x-sm">
+                <span class="material-symbols-outlined text-primary text-3xl" data-icon="manage_accounts"
+                    data-weight="fill">manage_accounts</span>
+                <h1 class="text-headline-lg font-headline-lg text-on-surface">Настройки Профиля</h1>
+            </div>
+            <form class="space-y-md">
+                <!-- Avatar Section (Optional flair) -->
+                <div class="flex items-center space-x-md mb-md">
+                    <div
+                        class="w-20 h-20 rounded-full bg-surface-container flex items-center justify-center overflow-hidden border-2 border-outline-variant">
+                        <img class="w-full h-full object-cover"
+                            data-alt="A generic, professional placeholder avatar image for a corporate IT setting. The image should be a soft, light blue gradient or subtle geometric pattern conveying a sense of digital anonymity. It should fit perfectly within a small circular profile picture frame. The overall style is clean, modern, and aligned with a sleek, light-mode technology service interface."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjqtIGFbNF1o0ebonDyZRnFqt3DTR55w_B1ml8ffejzQciIJT4a2VfqORcwhDGMDdQozEm5APykYQICDi68raLz5vGr73xjgPj3LHBok0A3l_zUxY8FnUdaBZYvheyrqn7lXjxZMv253WWVKnd3mvGmduYHiJWuQM7zicp9EZRmTU7ke9L57ThIEq3IMsKNtbTakRmalfmy3EW40v9GZBRBpNfUJZZUDs5HgnCbINygvFN9fhxQ5PUXD6lI4HeoYI4KJ851N84rqk">
+                    </div>
+                    <div>
+                        <button
+                            class="text-label-md font-label-md text-primary font-semibold hover:text-primary-container transition-colors"
+                            type="button">Изменить фото</button>
+                        <p class="text-label-sm font-label-sm text-on-surface-variant mt-1">JPG, GIF или PNG.
+                            Максимальный размер 2MB.</p>
+                    </div>
+                </div>
+                <!-- Grid Layout for Inputs -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-md"><!-- Full Name -->
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-label-md font-label-md text-on-surface mb-xs"
+                            for="fullName">ФИО</label>
+                        <input
+                            class="w-full px-4 py-2 rounded-lg border bg-surface-container-lowest text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 border-outline-variant"
+                            id="fullName" type="text" value="Иванов Иван Иванович">
+                    </div>
+                    <!-- Login -->
+                    <div class="">
+                        <label class="block text-label-md font-label-md text-on-surface mb-xs" for="login">Логин</label>
+                        <input
+                            class="w-full px-4 py-2 rounded-lg border bg-surface-container-lowest text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 border-outline-variant"
+                            id="login" type="text" value="ivanov_tech">
+                    </div>
+                    <!-- Email -->
+                    <div class="">
+                        <label class="block text-label-md font-label-md text-on-surface mb-xs" for="email">Почта</label>
+                        <input
+                            class="w-full px-4 py-2 rounded-lg border bg-surface-container-lowest text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 border-outline-variant"
+                            id="email" type="email" value="ivanov@example.com">
+                    </div>
+                    <!-- Phone -->
+                    <div class="">
+                        <label class="block text-label-md font-label-md text-on-surface mb-xs"
+                            for="phone">Телефон</label>
+                        <input
+                            class="w-full px-4 py-2 rounded-lg border bg-surface-container-lowest text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 border-outline-variant"
+                            id="phone" placeholder="+7 (___) ___-__-__" type="tel" value="+7 (999) 123-45-67">
+                    </div>
+                    <!-- Date of Birth -->
+                    <div class="">
+                        <label class="block text-label-md font-label-md text-on-surface mb-xs" for="dob">Дата
+                            рождения</label>
+                        <input
+                            class="w-full px-4 py-2 rounded-lg border bg-surface-container-lowest text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 border-outline-variant"
+                            id="dob" type="date">
+                    </div>
+                    <!-- Password -->
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-label-md font-label-md text-on-surface mb-xs"
+                            for="password">Пароль</label>
+                        <input
+                            class="w-full px-4 py-2 rounded-lg border bg-surface-container-lowest text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 border-outline-variant"
+                            id="password" placeholder="••••••••" type="password">
+                    </div>
+                    <!-- Address -->
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-label-md font-label-md text-on-surface mb-xs"
+                            for="address">Адрес</label>
+                        <input
+                            class="w-full px-4 py-2 rounded-lg border bg-surface-container-lowest text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 border-outline-variant"
+                            id="address" placeholder="Введите ваш адрес" type="text">
+                    </div>
+                </div>
+                <!-- Action Buttons -->
+                <div class="mt-xl pt-md border-t border-outline-variant flex justify-end space-x-sm">
+                    <button
+                        class="px-6 py-2 rounded-lg bg-transparent border font-label-md text-label-md hover:bg-surface-container-low transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 border-outline-variant text-on-surface-variant"
+                        type="button">
+                        Отмена
+                    </button>
+                    <button
+                        class="px-6 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container hover:text-on-primary-container transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 shadow-sm"
+                        type="submit">
+                        Сохранить изменения
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer
+        class="bg-surface-container-highest dark:bg-on-surface-variant border-t border-outline-variant dark:border-outline full-width bottom mt-auto">
+
+    </footer>
+
+
+</body>
+
+</html>
